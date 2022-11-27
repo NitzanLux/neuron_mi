@@ -37,7 +37,6 @@ def get_exceptions(last_n_hours):
 
         if (time.time()-t)/3600<=last_n_hours:
             data_list_new.append(i)
-    out_str = ''
     for i in data_list_new:
         with open(os.path.join(b_path,i),'r') as f:
             cur_str = f.readlines()
