@@ -23,7 +23,7 @@ def get_works_on_cluster(match_filter:str):
     return filterd_names
 
 def get_exceptions(last_n_hours):
-    m = re.match('Traceback[\s\S]*')
+    m = re.compile('Traceback[\s\S]*')
     b_path='cluster_logs'
     if not os.path.exists(b_path):
         b_path = os.path.join('..',b_path)
