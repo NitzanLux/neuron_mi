@@ -1,34 +1,24 @@
-import gzip
-
-import matplotlib.pyplot as plt
-import EntropyHub as EH
-
-import os
-import numpy as np
-
-import multiprocessing
-from typing import List
 import argparse
-from multiprocessing import Process, Queue
+import gzip
+import multiprocessing
 import ntpath
 from enum import Enum
-import argparse
-import time
+from multiprocessing import Process, Queue
+
+import EntropyHub as EH
+import numpy as np
 
 ENTROPY_DATA_BASE_FOLDER = 'entropy_data'
 number_of_cpus = multiprocessing.cpu_count()
-import queue
 from typing import List
-import sys
+
 MAX_INTERVAL = 400
 print("start job")
 # from project_path import *
 import pickle as pickle
-from functools import partial
 
 number_of_jobs = number_of_cpus - 1 // 5
 # number_of_jobs=1
-import functools
 from utils.parse_file import parse_sim_experiment_file
 from tqdm import tqdm
 
@@ -295,6 +285,6 @@ if __name__ == "__main__":
         # use_voltage = args.sv == 'v'
         print(range(i * jumps, min((i + 1) * jumps, len(list_dir_parent))))
         job_factory.send_job(f"sample_entropy{args.tag}_{i}_{MAX_INTERVAL}d",
-                             f'python -c "from plot_module.sample_entropy import get_sample_entropy; get_sample_entropy(' + "'" + args.tag + "'" + f',{pathes},{entropies},{i * jumps},{use_derivative})"',
+                             f'python -c "from create_entropy_score import get_sample_entropy; get_sample_entropy(' + "'" + args.tag + "'" + f',{pathes},{entropies},{i * jumps},{use_derivative})"',
                              **keys)
         print('job sent')
