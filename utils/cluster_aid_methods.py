@@ -36,7 +36,8 @@ def get_exceptions(last_n_hours):
         t = os.path.getmtime(file_path)
 
         if (time.time()-t)/3600<=last_n_hours:
-            data_list_new.append((i,time.ctime(t)))
+            data_list_new.append((i,t))
+    sorted(data_list_new,key= lambda x:-x[1])
     out_str = ''
     for i,t in data_list_new:
         with open(os.path.join(b_path,i),'r') as f:
@@ -45,7 +46,7 @@ def get_exceptions(last_n_hours):
         traceback_arr = m.findall(cur_str)
         if len(traceback_arr)>0:
 
-            out_str+='\t\t\t',i, t,'*************************************************************************************'
+            out_str+='\t\t\t',i, time.ctime(t),'*************************************************************************************'
             out_str+='\n'.join(traceback_arr)
     with open('cluster_report.txt','w') as f:
         f.writelines(out_str)
