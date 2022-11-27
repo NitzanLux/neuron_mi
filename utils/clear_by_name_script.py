@@ -1,13 +1,12 @@
 import time
 import os
 import logging
-from project_path import *
 import argparse
 import json
 from utils.slurm_job import *
 import subprocess
 import re
-from utils.general_aid_function import get_works_on_cluster
+from utils.cluster_aid_methods import get_works_on_cluster
 parser = argparse.ArgumentParser(description='json file...')
 
 parser.add_argument('-re',dest="job_name_format", type=str,
