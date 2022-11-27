@@ -7,20 +7,26 @@ from multiprocessing import Process, Queue
 
 import EntropyHub as EH
 import numpy as np
+import pickle as pickle
+
+from typing import List
+from utils.parse_file import parse_sim_experiment_file
+from tqdm import tqdm
+import time
+
+
+
+
 
 ENTROPY_DATA_BASE_FOLDER = 'entropy_data'
 number_of_cpus = multiprocessing.cpu_count()
-from typing import List
-
 MAX_INTERVAL = 400
 print("start job")
-# from project_path import *
-import pickle as pickle
+
 
 number_of_jobs = number_of_cpus - 1 // 5
 # number_of_jobs=1
-from utils.parse_file import parse_sim_experiment_file
-from tqdm import tqdm
+
 
 SIMULATIONS_PATH = '/ems/elsc-labs/segev-i/nitzan.luxembourg/projects/dendritic_tree/ArtificialNeuron/simulations/data/'
 
