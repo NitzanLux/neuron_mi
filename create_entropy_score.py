@@ -35,7 +35,7 @@ class EntropyTypes(Enum):
     SAMPLE_ENTROPY = 'SampEn'
     APPROXIMATE_ENTROPY = 'ApEn'
     FUZZY_ENTROPY = 'FuzzEn'
-    K2_ENTROPY = 'K2En'
+    # K2_ENTROPY = 'K2En'
 
 
 class MultiScaleObj(Enum):

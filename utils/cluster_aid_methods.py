@@ -49,6 +49,6 @@ def get_exceptions(last_n_hours):
             print(type(i))
             out_str+='\n*************************************************************************************\n'+i+ time.ctime(t)+'\n*************************************************************************************\n'
             out_str+='\n'.join(traceback_arr)
-    with open('cluster_report.txt','w') as f:
+    with open('cluster_report.log','w') as f:
         f.writelines(out_str)
     print(out_str)
