@@ -40,6 +40,7 @@ def get_exceptions(last_n_hours):
     sorted(data_list_new,key= lambda x:-x[1])
     out_str = ''
     for i,t in data_list_new:
+        print(i,t)
         with open(os.path.join(b_path,i),'r') as f:
             cur_str = f.readlines()
         cur_str = '\n'.join(cur_str)
