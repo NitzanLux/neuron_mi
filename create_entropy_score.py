@@ -24,7 +24,7 @@ MAX_INTERVAL = 400
 print("start job")
 
 
-number_of_jobs = number_of_cpus - 1 // 5
+number_of_jobs = number_of_cpus - 1
 # number_of_jobs=1
 
 
