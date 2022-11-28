@@ -11,7 +11,7 @@ import matplotlib
 from matplotlib import colors
 import pandas as pd
 from scipy.stats import linregress
-
+from create_entropy_score import EntropyObject
 MSX_INDEX = 0
 COMPLEXITY_INDEX = 1
 FILE_INDEX = 2
@@ -34,13 +34,8 @@ class ModelsSEData():
     def __init__(self, tags):
         self.data_tags = [(i[:-len('.pkl')] if i.endswith('.pkl') else i) for i in tags]
         self.data = dict()
-        for i in self.data_tags:
-            try:
-                with open(os.path.join('../dendritic tree project', 'entropy_data', i + '.pkl'), 'rb') as f:
-                    self.data[i] = pickle.load(f).values()
-            except FileNotFoundError:
-                with open(os.path.join('entropy_data', i + '.pkl'), 'rb') as f:
-                    self.data[i] = pickle.load(f).values()
+        for i in tqdm(self.data_tags):
+            self.data[i] = EntropyObject.load_list(os.path.join('entropy_data',i+'.pkl'))
         keys = []
         for i in tqdm(self.data_tags):
             temp_data = dict()
@@ -152,16 +147,16 @@ def get_df_with_condition_balanced(df, condition, negate_condition=False):
 
 
 # %%
-tags = ['train_AMPA_gmax1_fnum_580_snum52829.pkl']
+tags = ['davids_ergodic_train_fnum_580_snum74240']
 d = ModelsSEData(tags)
 ##%%
 df, m_names = d.get_as_dataframe()
-name_order = ['train_AMPA_gmax1_fnum_580_snum52829']
-names_for_plots_dict = {'train_AMPA_gmax1_fnum_580_snum52829': 'gmax1'}#,
+name_order = ['davids_ergodic_train_fnum_580_snum74240']
+names_for_plots_dict = {'davids_ergodic_train_fnum_580_snum74240': 'gmax1'}#,
                         # 'v_reduction_ergodic_train_200d': 'L5PC NMDA reduction',
                         # 'v_AMPA_ergodic_train_200d': 'L5PC AMPA'}
 names_for_plots = [names_for_plots_dict[i] for i in name_order]
-exit(0)
+
 #%% print nans ci
 df = df.sort_values(['model'])
 print('number_of_nans', df['Ci'].isnull().sum())
