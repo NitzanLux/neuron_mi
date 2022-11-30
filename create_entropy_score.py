@@ -2,6 +2,7 @@ import argparse
 import gzip
 import multiprocessing
 import ntpath
+import traceback
 from enum import Enum
 from multiprocessing import Process, Queue
 
@@ -40,6 +41,10 @@ class EntropyTypes(Enum):
 
 class MultiScaleObj(Enum):
     MULTISCALE_ENTROPY = 'MSEn'
+
+    def get_return_params(self):
+        if self.name ==MultiScaleObj.MULTISCALE_ENTROPY.name:
+            return ['MSx', 'CI']
 
 
 class EntropyObject():
@@ -100,7 +105,13 @@ class EntropyObject():
 
     def generate_file_name(self):
         return self.generate_file_name_f(self.tag, self.file_index, self.sim_index)
-
+    def get_entropy_dict(self):
+        data_dict=dict()
+        return_params = self.multiscale_object.get_return_params()
+        for k,v in self.entropy_dict.items():
+            for tsv,vsv in v.items():
+                data_dict.update({f'{k}_{tsv}_{kk}':vv for kk,vv in zip(return_params,vsv)})
+        return data_dict
     def to_dict(self):
         data_dict= dict(s = self.s,
                         v = self.v,
@@ -158,17 +169,18 @@ class EntropyObject():
         for i in tqdm(data_list):
             file_set.add(i.file_index)
             data_dict[(i.file_index, i.sim_index)] = i
-        file_path = os.path.join(ENTROPY_DATA_BASE_FOLDER, f'{tag}_fnum_{len(file_set)}_snum{len(data_dict)}.pkl')
+        file_path = os.path.join(ENTROPY_DATA_BASE_FOLDER, f'{tag}_fnum_{len(file_set)}_snum_{len(data_dict)}.pkl')
         with open(file_path,'wb') as file:
             pickle.dump(data_dict, file)
-        cur_path = os.path.join(ENTROPY_DATA_BASE_FOLDER, tag)
-        for i in tqdm(os.listdir(cur_path)):
-            os.remove(os.path.join(cur_path, i))
-        os.rmdir(cur_path)
+        # cur_path = os.path.join(ENTROPY_DATA_BASE_FOLDER, tag)
+        # for i in tqdm(os.listdir(cur_path)):
+        #     os.remove(os.path.join(cur_path, i))
+        # os.rmdir(cur_path)
     @staticmethod
     def load_list(path):
         with open(path,'rb') as file:
             object = pickle.load(file)
+
         return object
 
 
