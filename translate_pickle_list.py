@@ -16,5 +16,5 @@ for i in tqdm(os.listdir(base_path)):
         suff = MSED.find_suffix_shared(files)
         for eo in l.values():
             with open(os.path.join(dir_path,f'{eo.file_name[:-len(suff)]}_{eo.sim_index}.pkl'),'wb') as feo:
-                pickle.dump(feo,eo.to_dict())
+                pickle.dump(eo.to_dict(),feo)
 
