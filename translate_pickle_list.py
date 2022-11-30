@@ -11,7 +11,7 @@ for i in tqdm(os.listdir(base_path)):
         os.mkdir(dir_path)
         l = EntropyObject.load_list(os.path.join(base_path,i))
         files=[]
-        for j in l:
+        for j in l.values():
             files.append(j.file_name)
         suff = MSED.find_suffix_shared(files)
         for eo in l:
