@@ -3,8 +3,10 @@ import pickle
 from utils.evaluations_utils import ModelsSEData as MSED
 from create_entropy_score import EntropyObject
 base_path = 'entropy_data'
-for i in os.listdir(base_path):
+from tqdm import tqdm
+for i in tqdm(os.listdir(base_path)):
     if i.endswith('.pkl'):
+        print(i,flush=True)
         dir_path=os.path.join(base_path,i[:-len('.pkl')])
         os.mkdir(dir_path)
         l = EntropyObject.load_list(os.path.join(base_path,i))
@@ -15,3 +17,4 @@ for i in os.listdir(base_path):
         for eo in l:
             with open(os.path.join(dir_path,f'{eo.file_name[:-len(suff)]}_{eo.sim_index}.pkl'),'wb') as feo:
                 pickle.dump(feo,eo.to_dict())
+
