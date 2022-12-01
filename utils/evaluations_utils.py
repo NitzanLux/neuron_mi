@@ -164,7 +164,6 @@ class ModelsSEData():
             shard_keys = self.get_by_shard_keys(i)
             for k, v in shard_keys.items():
                 yield k,v
-    def save(self):
 
     def get_as_dataframe(self, is_shared_keys=True):
         model_list = []
