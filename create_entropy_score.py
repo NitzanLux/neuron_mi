@@ -106,8 +106,8 @@ class EntropyObject():
             assert False, "smoothing is invalid right now."
         return v, s, keys
 
-    def generate_file_name(self):
-        return self.generate_file_name_f(self.file_name, self.sim_index)
+    def generate_file_name(self,remove_suffix_from_file=None):
+        return self.generate_file_name_f(self.file_name[:-len(remove_suffix_from_file)] if remove_suffix_from_file is not None else self.file_name, self.sim_index)
     def get_entropy_dict(self):
         data_dict=dict()
         return_params = self.multiscale_object.get_return_params()
