@@ -92,7 +92,7 @@ class EntropyObject():
         return np.sum(spike_number)
 
     def get_key(self):
-        return f'{self.file_name}_{self.sim_index}'
+        return (self.file_name,self.sim_index)
 
     def get_processed_data(self):
         s=None
@@ -107,7 +107,7 @@ class EntropyObject():
         return v, s, keys
 
     def generate_file_name(self):
-        return self.generate_file_name_f(self.tag, self.file_index, self.sim_index)
+        return self.generate_file_name_f(self.file_name, self.sim_index)
     def get_entropy_dict(self):
         data_dict=dict()
         return_params = self.multiscale_object.get_return_params()
@@ -130,8 +130,8 @@ class EntropyObject():
         return data_dict
 
     @staticmethod
-    def generate_file_name_f(tag, file_index, sim_index):
-        return f'{tag}_{file_index}_{sim_index}.pkl'
+    def generate_file_name_f(file_name, sim_index):
+        return f'{file_name}_{sim_index}.pkl'
 
     def save(self):
         current_path = ENTROPY_DATA_BASE_FOLDER
