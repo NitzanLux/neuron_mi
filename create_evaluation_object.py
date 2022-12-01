@@ -35,10 +35,11 @@ sim_num=min(len(keys),args.sim_num)
 sim_names = rng.sample(keys,sim_num)
 data_dict=dict()
 total_files=0
+print(len(sim_names))
 for i in tqdm(args.folders):
     cur_path=os.path.join(b_path,i)
     data_dict[i] = dict()
-    print(i)
+
     for sn in sim_names:
         total_files+=1
         eo = EntropyObject.load(os.path.join(cur_path,sn))
