@@ -5,6 +5,7 @@ import re
 from utils.evaluations_utils import ModelsSEData
 m = re.compile('.*randseed_[0-9]+')
 for folder in tqdm(os.listdir('entropy_data')):
+    print(folder)
     if not os.path.isdir(folder):
         continue
 
