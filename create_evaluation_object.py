@@ -3,6 +3,7 @@ import argparse
 import random
 import sys
 from create_entropy_score import EntropyObject
+from tqdm import tqdm
 import pickle
 # def create_dir_keys()
 seed = random.randrange(sys.maxsize)
@@ -34,7 +35,7 @@ sim_num=min(len(keys),args.sim_num)
 sim_names = rng.sample(keys,sim_num)
 data_dict=dict()
 total_files=0
-for i in args.folders:
+for i in tqdm(args.folders):
     cur_path=os.path.join(b_path,i)
     data_dict[i]=dict()
     for sn in sim_names:
