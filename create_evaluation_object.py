@@ -12,7 +12,7 @@ parser.add_argument('-f', dest="folders", type=str,nargs='+',
                     help='folders_to_sample_from')
 parser.add_argument('-s', dest="sim_num", type=str,nargs='+',
                     help='number of simulations')
-parser.add_argument('-name', dest="name_to_save", type=str,
+parser.add_argument('-n', dest="name_to_save", type=str,
                     help='name to save')
 args = parser.parse_args()
 b_path='entropy_data'
@@ -29,7 +29,7 @@ for i in i_keys:
     if i[0] in d_keys_f or i in d_keys:  # if theres a sim from file that do not exists
         continue
     keys.add(i)
-
+print(len(keys),args.sim_num)
 sim_num=min(len(keys),args.sim_num)
 sim_names = rng.sample(keys,sim_num)
 data_dict=dict()
