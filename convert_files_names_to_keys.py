@@ -18,7 +18,8 @@ for folder in tqdm(os.listdir('entropy_data')):
 
     for f in os.listdir(cur_path):
         eo = EntropyObject.load(os.path.join(cur_path,f))
-        pos= m.match(eo.file_name).regs[1]
-        file_name = eo.file_name[:pos]
-        print(file_name)
-        os.rename(os.path.join(cur_path,f),os.path.join(cur_path,eo.generate_file_name_f(file_name,eo.sim_index)+'.pkl'))
+        pos= m.match(eo.file_name).regs
+        print(pos)
+        # file_name = eo.file_name[:pos]
+        # print(file_name)
+        # os.rename(os.path.join(cur_path,f),os.path.join(cur_path,eo.generate_file_name_f(file_name,eo.sim_index)+'.pkl'))
