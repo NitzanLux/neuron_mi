@@ -51,7 +51,34 @@ def save_large_plot(fig, name, tags):
 
 
 class ModelsSEData():
-    def __init__(self, tags):
+    def __init__(self, tags=None,data_dict=None):
+        if data_dict is not None:
+            self.__construct_from_data(data_dict)
+        elif tags is not None:
+            self.__construct_from_tags(tags)
+
+    def __construct_from_data(self,data_dict):
+        self.data_tags = set(data_dict.keys())
+        self.data=dict()
+        keys=[]
+        for dn,d in data_dict.items():
+            self.data[dn]=[]
+            temp_set=set()
+            for k,v in d.items():
+                temp_set.add(k)
+                eo = EntropyObject(**v)
+                self.data[dn][k]=eo
+            keys.append(temp_set)
+        i_keys = set.intersection(*keys)
+        d_keys = set.union(*keys)
+        d_keys = d_keys.symmetric_difference(d_keys)
+        d_keys_f = set([i[0] for i in d_keys])
+        self.keys = set()
+        for i in i_keys:
+            if i[0] in d_keys_f or i in d_keys:  # if theres a sim from file that do not exists
+                continue
+            self.keys.add(i)
+    def __construct_from_tags(self,tags):
         self.data_tags = [(i[:-len('.pkl')] if i.endswith('.pkl') else i) for i in tags]
         self.data = dict()
         self.entropy_keys = set()
@@ -74,7 +101,6 @@ class ModelsSEData():
             if i[0] in d_keys_f or i in d_keys:  # if theres a sim from file that do not exists
                 continue
             self.keys.add(i)
-
     def load_data(self,ratio):
         self.sample_from_set(ratio)
         for i in tqdm(self.data_tags):

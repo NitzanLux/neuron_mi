@@ -91,6 +91,9 @@ class EntropyObject():
         spike_number = np.sum(self.s)
         return np.sum(spike_number)
 
+    def get_key(self):
+        return f'{self.file_name}_{self.sim_index}'
+
     def get_processed_data(self):
         s=None
         v=None
