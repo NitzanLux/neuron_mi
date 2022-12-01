@@ -17,6 +17,7 @@ from create_entropy_score import EntropyObject
 from itertools import combinations
 import random
 import warnings
+import re
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
 MSX_INDEX = 0
@@ -24,6 +25,7 @@ COMPLEXITY_INDEX = 1
 FILE_INDEX = 2
 SIM_INDEX = 3
 SPIKE_NUMBER = 4
+m = re.compile('.*randseed_[0-9]+')
 
 def combination_sorting(orderd_models):
     comb_set = set()
@@ -89,13 +91,14 @@ class ModelsSEData():
         self.entropy_keys = set()
         keys=[]
         for i in tqdm(self.data_tags):
-            files=[]
+            # files=[]
             entropy_list = list(EntropyObject.load_list(os.path.join('entropy_data', i + '.pkl')).values())
-            for j in entropy_list:
-                files.append(j.file_name)
-            suff = self.find_suffix_shared(files)
+            # for j in entropy_list:
+            #     files.append(j.file_name)
+            # suff = self.find_suffix_shared(files)
             for j,v in enumerate(entropy_list):
-                entropy_list[j].file_name = v.file_name[:-len(suff)]
+                pos= m.match(v.file_name).regs[1]
+                entropy_list[j].file_name = v.file_name[:pos]
             keys.append({(v.file_name,v.sim_index) for v in entropy_list})
         i_keys = set.intersection(*keys)
         d_keys = set.union(*keys)
@@ -113,11 +116,11 @@ class ModelsSEData():
             files=[]
             entropy_list = EntropyObject.load_list(os.path.join('entropy_data', i + '.pkl'))
             entropy_list = list(entropy_list.values())
-            for j in entropy_list:
-                files.append(j.file_name)
-            suff = self.find_suffix_shared(files)
+            # for j in entropy_list:
+            #     files.append(j.file_name)
+            # suff = self.find_suffix_shared(files)
             for j,v in enumerate(entropy_list):
-                entropy_list[j].file_name = v.file_name[:-len(suff)]
+                entropy_list[j].file_name = v.file_name[:]
             for v in entropy_list:
                 if (v.file_name,v.sim_index) in self.keys:
                     self.data[i][(v.file_name,v.sim_index)]=v
