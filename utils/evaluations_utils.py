@@ -62,7 +62,7 @@ class ModelsSEData():
         self.data=dict()
         keys=[]
         for dn,d in data_dict.items():
-            self.data[dn]=[]
+            self.data[dn]=dict()
             temp_set=set()
             for k,v in d.items():
                 temp_set.add(k)
@@ -78,6 +78,11 @@ class ModelsSEData():
             if i[0] in d_keys_f or i in d_keys:  # if theres a sim from file that do not exists
                 continue
             self.keys.add(i)
+        self.entropy_keys = set()
+
+        for i in self.data.values():
+            for j in i.values():
+                self.entropy_keys.update(set(j.get_entropy_dict().keys()))
     def __construct_from_tags(self,tags):
         self.data_tags = [(i[:-len('.pkl')] if i.endswith('.pkl') else i) for i in tags]
         self.data = dict()

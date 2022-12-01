@@ -30,17 +30,18 @@ for i in i_keys:
     if i[0] in d_keys_f or i in d_keys:  # if theres a sim from file that do not exists
         continue
     keys.add(i)
-print(len(keys),args.sim_num)
+print(args.folders)
 sim_num=min(len(keys),args.sim_num)
 sim_names = rng.sample(keys,sim_num)
 data_dict=dict()
 total_files=0
 for i in tqdm(args.folders):
     cur_path=os.path.join(b_path,i)
-    data_dict[i]=dict()
+    data_dict[i] = dict()
+    print(i)
     for sn in sim_names:
         total_files+=1
         eo = EntropyObject.load(os.path.join(cur_path,sn))
         data_dict[i][eo.get_key()]=eo.to_dict()
-with open(os.path.join(b_path,f'{args.name_to_save}_fnum{total_files}_seed{seed}.pkl'),'wb')as f:
+with open(os.path.join(b_path,f'{args.name_to_save}_fnum{total_files}_seed_{seed}.pkl'),'wb')as f:
     pickle.dump(data_dict,f)
