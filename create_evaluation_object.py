@@ -21,6 +21,7 @@ keys = []
 for i in args.folders:
     cur_path=os.path.join(b_path,i)
     keys.append(set(os.listdir(cur_path)))
+
 i_keys = set.intersection(*keys)
 d_keys = set.union(*keys)
 d_keys = d_keys.symmetric_difference(d_keys)

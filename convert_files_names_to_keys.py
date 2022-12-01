@@ -10,7 +10,9 @@ for folder in tqdm(os.listdir('entropy_data')):
     for f in os.listdir(cur_path):
         eo = EntropyObject.load(os.path.join(cur_path,f))
         files.append(eo.file_name)
+
     suffix=  ModelsSEData.find_suffix_shared(files)
+    print(suffix)
     if len(suffix)==0:
         suffix=None
     for f in os.listdir(cur_path):
