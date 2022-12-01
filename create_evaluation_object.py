@@ -10,7 +10,7 @@ rng = random.Random(seed)
 parser = argparse.ArgumentParser(description='Create evaluation object from file names')
 parser.add_argument('-f', dest="folders", type=str,nargs='+',
                     help='folders_to_sample_from')
-parser.add_argument('-s', dest="sim_num", type=str,nargs='+',
+parser.add_argument('-s', dest="sim_num", type=int,
                     help='number of simulations')
 parser.add_argument('-n', dest="name_to_save", type=str,
                     help='name to save')
