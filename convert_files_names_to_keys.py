@@ -6,10 +6,10 @@ from utils.evaluations_utils import ModelsSEData
 m = re.compile('.*randseed_[0-9]+')
 for folder in tqdm(os.listdir('entropy_data')):
     print(folder)
-    if not os.path.isdir(folder):
+    cur_path = os.path.join('entropy_data',folder)
+    if os.path.isfile(cur_path):
         continue
 
-    cur_path = os.path.join('entropy_data',folder)
     print(cur_path)
     # files=[]
     # for f in os.listdir(cur_path):
