@@ -7,14 +7,17 @@ m = re.compile('.*randseed_[0-9]+')
 for folder in tqdm(os.listdir('entropy_data')):
     if not os.path.isdir(folder):
         continue
+
     cur_path = os.path.join('entropy_data',folder)
-    files=[]
-    for f in os.listdir(cur_path):
-        eo = EntropyObject.load(os.path.join(cur_path,f))
-        files.append(eo.file_name)
+    print(cur_path)
+    # files=[]
+    # for f in os.listdir(cur_path):
+    #     eo = EntropyObject.load(os.path.join(cur_path,f))
+    #     files.append(eo.file_name)
 
     for f in os.listdir(cur_path):
         eo = EntropyObject.load(os.path.join(cur_path,f))
         pos= m.match(eo.file_name).regs[1]
         file_name = eo.file_name[:pos]
+        print(file_name)
         os.rename(os.path.join(cur_path,f),os.path.join(cur_path,eo.generate_file_name_f(file_name,eo.sim_index)+'.pkl'))
