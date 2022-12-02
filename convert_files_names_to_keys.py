@@ -23,6 +23,7 @@ def convert():
             file_name = eo.file_name[:pos]
             os.rename(os.path.join(cur_path,f),os.path.join(cur_path,eo.generate_file_name_f(file_name,eo.sim_index)+'.pkl'))
 if __name__ == '__main__':
-    from utils import slurm_job
-    sl = slurm_job.SlurmJobFactory('cluster_logs')
-    sl.send_job("convert_names",'python -c "from convert_files_names_to_key import convert ; convert()"')
+    # from utils import slurm_job
+    # sl = slurm_job.SlurmJobFactory('cluster_logs')
+    # sl.send_job("convert_names",'python -c "from convert_files_names_to_key import convert ; convert()"')
+    convert()
