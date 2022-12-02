@@ -21,7 +21,7 @@ def convert():
             eo = EntropyObject.load(os.path.join(cur_path,f))
             pos= m.match(eo.file_name).regs[0][1]
             file_name = eo.file_name[:pos]
-            os.rename(os.path.join(cur_path,f),os.path.join(cur_path,eo.generate_file_name_f(file_name,eo.sim_index)+'.pkl'))
+            os.rename(os.path.join(cur_path,f),os.path.join(cur_path,eo.generate_file_name_f(file_name,eo.sim_index)))
 if __name__ == '__main__':
     # from utils import slurm_job
     # sl = slurm_job.SlurmJobFactory('cluster_logs')
