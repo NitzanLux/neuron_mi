@@ -17,7 +17,7 @@ def convert():
         #     eo = EntropyObject.load(os.path.join(cur_path,f))
         #     files.append(eo.file_name)
 
-        for f in os.listdir(cur_path):
+        for f in reversed(os.listdir(cur_path)):
             eo = EntropyObject.load(os.path.join(cur_path,f))
             pos= m.match(eo.file_name).regs[0][1]
             file_name = eo.file_name[:pos]
