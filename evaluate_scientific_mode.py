@@ -11,23 +11,25 @@ import seaborn as sn
 #%%
 models = {'davids_ergodic_train':'NMDA','reduction_ergodic_train':'reduction','train_AMPA_gmax1':'AMPA1','train_AMPA_gmax2':'AMPA2','train_AMPA_gmax3':'AMPA3'}
 name_order = ['NMDA','reduction','AMPA1','AMPA2','AMPA3']
-file_dest = "small_eval_fnum5000_seed6577316389629133448.pkl"
+file_dest = "small_eval_fnum30000_seed_1623324578916768431.pkl"
 
 
 #%%
 with open(os.path.join('entropy_data',file_dest),'rb') as f:
     d_dict = pickle.load(f)
+# print(d_dict.keys())
 d = ModelsSEData(data_dict=d_dict)
 # d.sample_from_set(d_ratio)
-
 df, m_names = d.get_as_dataframe()
-models = {k[:k.find("_fnum")]:v for k,v in models.items()}
+models = {k:v for k,v in models.items()}
 # for i in models.keys():
     # df[df['model']==i]['model'] = models[i]
 # models = {v:v for v in models.values()}
 temp = {k:v for v,k in models.items()}
-# name_order = [temp[i] if i not in models else i for i in name_order]
+name_order = [temp[i] if i not in models else i for i in name_order]
 df.replace(inplace=True,to_replace=models)
+
+
 
 #%%
 

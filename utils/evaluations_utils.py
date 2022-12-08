@@ -67,19 +67,30 @@ class ModelsSEData():
             self.data[dn]=dict()
             temp_set=set()
             for k,v in d.items():
-                temp_set.add(k)
                 eo = EntropyObject(**v)
-                self.data[dn][k]=eo
+                # print(k)
+                # for j, v in enumerate(entropy_list):
+                pos = m.match(eo.file_name).regs[0][1]
+                eo.file_name = eo.file_name[:pos]
+                # print(eo.file_name)
+                temp_set.add(eo.get_key())
+
+                self.data[dn][eo.get_key()]=eo
             keys.append(temp_set)
         i_keys = set.intersection(*keys)
+        print(len(i_keys))
+
         d_keys = set.union(*keys)
-        d_keys = d_keys.symmetric_difference(d_keys)
-        d_keys_f = set([i[0] for i in d_keys])
+        print(len(d_keys))
+        # d_keys = d_keys.symmetric_difference(d_keys)
+        d_keys = d_keys - i_keys
+        print(len(d_keys))
         self.keys = set()
         for i in i_keys:
-            if i[0] in d_keys_f or i in d_keys:  # if theres a sim from file that do not exists
+            if i in d_keys:  # if theres a sim from file that do not exists
                 continue
             self.keys.add(i)
+
         self.entropy_keys = set()
 
         for i in self.data.values():
@@ -102,7 +113,7 @@ class ModelsSEData():
             keys.append({(v.file_name,v.sim_index) for v in entropy_list})
         i_keys = set.intersection(*keys)
         d_keys = set.union(*keys)
-        d_keys = d_keys.symmetric_difference(d_keys)
+        d_keys = d_keys - i_keys
         d_keys_f = set([i[0] for i in d_keys])
         self.keys = set()
         for i in i_keys:
@@ -206,6 +217,8 @@ class ModelsSEData():
         input_data.update(entropy_dict)
         df = pd.DataFrame(data=input_data)
         model_names = df['model'].unique()
+        # print(df['file'])
+        # print(df['sim_ind'].astype('str'))
         df['key'] = df['file'] + '#$#' + df['sim_ind'].astype('str')
         # df = pd.get_dummies(df, columns=['model'])
         return df, model_names.tolist()
