@@ -9,6 +9,8 @@ for i in os.listdir(cur_path):
     cwd_path=os.path.join('~',cur_path,i)
     command = ["nrnivmodl " ,os.path.join('.','mods')]
     print(''.join(command),flush=True)
+    if os.path.isfile(cwd_path):
+        continue
     res = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,shell=True,cwd=cwd_path)
     output,error = res.communicate()
     if output:
