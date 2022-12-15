@@ -36,11 +36,17 @@ class EntropyTypes(Enum):
     SAMPLE_ENTROPY = 'SampEn'
     APPROXIMATE_ENTROPY = 'ApEn'
     FUZZY_ENTROPY = 'FuzzEn'
+    PERMUTATION_ENTROPY = 'PermEn'
+    DISPERSION_ENTROPY = 'DispEn'
+    SPECTRAL_ENTROPY = 'SpecEn'
+    COSINE_ENTROPY = 'CoSiEn'
     # K2_ENTROPY = 'K2En'
 
 
 class MultiScaleObj(Enum):
     MULTISCALE_ENTROPY = 'MSEn'
+    R_MULTISCALE_ENTROPY = 'rMSEn'
+    C_MULTISCALE_ENTROPY = 'cMSEn'
 
     def get_return_params(self):
         if self.name ==MultiScaleObj.MULTISCALE_ENTROPY.name:
@@ -49,10 +55,11 @@ class MultiScaleObj(Enum):
 
 class EntropyObject():
     def __init__(self, tag, file_name, file_index, sim_index, s, v, use_derivative=False, smoothing_kernel=None,
-                 max_scale=MAX_INTERVAL, multiscale_object=MultiScaleObj.MULTISCALE_ENTROPY,entropy_dict=None):
+                 max_scale=MAX_INTERVAL, multiscale_object=None,entropy_dict=None,multiscale_object_params=None):
         self.s = s
         self.v = v
         self.tag = tag
+        self.multiscale_object= multiscale_object
         self.max_scale = max_scale
         self.file_index = file_index
         self.use_derivative = use_derivative
@@ -60,7 +67,7 @@ class EntropyObject():
         self.entropy_dict = entropy_dict if entropy_dict is not None else dict()
         self.sim_index = sim_index
         self.file_name = file_name
-        self.multiscale_object = multiscale_object
+        self.multiscale_object_params = multiscale_object_params if multiscale_object_params is not None else {}
 
     def add_entropies(self, entropy_types: [EntropyTypes, List[EntropyTypes]]):
         if not isinstance(entropy_types, list):
@@ -68,19 +75,28 @@ class EntropyObject():
         v, s, keys = self.get_processed_data()
         for i in entropy_types:
             self.add_entropy_measure(i, v, s, keys)
-
-    def add_entropy_measure(self, entropy_type: EntropyTypes, v=None, s=None, keys=None):
+    def creat_entropy_function(self,entropy_type: EntropyTypes,keys=None):
         keys = {} if keys is None else keys
+        if self.multiscale_object is not None:
+            Mobj = EH.MSobject(entropy_type.value, **keys)
+            return lambda x:getattr(EH, self.multiscale_object.value)(x, Mobj, Scales=self.max_scale, **self.multiscale_object_params)
+        else:
+            return lambda x:getattr(EH,str(entropy_type.value))(x,m=self.max_scale,**keys)
+    def add_entropy_measure(self, entropy_type: EntropyTypes, v=None, s=None, keys=None):
+        # keys = {} if keys is None else keys
         if s is None and v is None:
             v, s, keys = self.get_processed_data()
         print(f"Current Entropy Measure {entropy_type.name} fidx{self.file_index} sidx{self.sim_index}", flush=True)
         start_time = time.time()
-        Mobj = EH.MSobject(entropy_type.value, **keys)
+        # Mobj = EH.MSobject(entropy_type.value, **keys)\
+        mobj = self.creat_entropy_function(entropy_type,keys)
         e_output_s, e_output_v = None, None
         if s is not None:
-            e_output_s = getattr(EH, self.multiscale_object.value)(s, Mobj, Scales=MAX_INTERVAL)
+            e_output_s = mobj(s)
+            # e_output_s = getattr(EH, self.multiscale_object.value)(s, Mobj, Scales=MAX_INTERVAL,**self.multiscale_object_params)
         if v is not None:
-            e_output_v = getattr(EH, self.multiscale_object.value)(v, Mobj, Scales=MAX_INTERVAL)
+            e_output_v = mobj(v)
+            # e_output_v = getattr(EH, self.multiscale_object.value)(v, Mobj, Scales=MAX_INTERVAL,**self.multiscale_object_params)
         print(
             f"Current Entropy Measure {entropy_type.name} fidx{self.file_index} sidx{self.sim_index}\n \t\t\t time:{time.time() - start_time}",
             flush=True)
