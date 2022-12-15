@@ -7,7 +7,7 @@ cur_path = os.path.join(base_path,'neuron_models')
 for i in os.listdir(cur_path):
     # try:
     cwd_path=os.path.join('~',cur_path,i)
-    command = ["nrnivmodl " ,os.path.join('.','mods')]
+    command = ["nrnivmodl " ,os.path.join('.','mechanisms')]
     print(''.join(command),flush=True)
     if os.path.isfile(cwd_path):
         continue
