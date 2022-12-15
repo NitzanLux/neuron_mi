@@ -17,7 +17,7 @@ for i in os.listdir(cur_path):
         if error:
             print ("ret> ",res.returncode)
             print ("Error> error ",error.strip())
-            exit(0)
+            # exit(0)
     except OSError as e:
         print("OSError > ", e.errno)
         print("OSError > ", e.strerror)
