@@ -6,9 +6,10 @@ base_path= os.getcwd()
 cur_path = os.path.join(base_path,'neuron_models')
 for i in os.listdir(cur_path):
     try:
-        command = [' '.join(["cd" ,os.path.join('~',cur_path,i)])]+["&&" ]+[' '.join(["nrnivmodl" ,os.path.join('.','mechanisms')])]
+        cwd_path=os.path.join('~',cur_path,i)
+        command = ' '.join(["nrnivmodl" ,os.path.join('.','mechanisms')])
         print(' '.join(command),flush=True)
-        res = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        res = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,shell=True,cwd=cwd_path)
         output,error = res.communicate()
         if output:
             print ("ret> ",res.returncode)
