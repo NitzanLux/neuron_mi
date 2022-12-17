@@ -3,7 +3,7 @@ import pathlib
 import importlib
 import copy
 import os
-import peakutils
+# import peakutils
 import h5py
 import sys
 import numpy as np
@@ -1151,56 +1151,56 @@ def main():
 if __name__ == "__main__":
     main()
 
-def create_dataset():
-    parser = argparse.ArgumentParser(description='Simulate a neuron save input')
-    parser.add_argument('--simulation_folder', action=AddOutFileAction)
-    saver = get_simulation_args()
-    saver.add_to_parser(parser)
-
-    logger.info("Going to run simulation with args:")
-    logger.info("{}".format(args))
-    logger.info("...")
-
-    if args.simple_stimulation:
-        args.multiple_connections_prob = 0.0
-
-        args.multiply_count_initial_synapses_per_super_synapse_prob = 0.0
-        args.same_exc_inh_count_initial_synapses_per_super_synapse_prob = 0.0
-        args.force_count_initial_synapses_per_super_synapse = 1
-        args.force_multiply_count_spikes_per_synapse_per_100ms_range_by_average_segment_length = True
-
-        args.synchronization_prob = 0.0
-        args.remove_inhibition_prob = 0.0
-        args.deactivate_synapses_prob = 0.0
-        args.spatial_clustering_prob = 0.0
-        args.same_exc_inh_inst_rate_prob = 0.0
-        args.same_exc_inh_spikes_bin_prob = 0.0
-        args.same_exc_inh_all_kernels_prob = 0.0
-        args.same_exc_inh_kernels_prob = 0.0
-
-    if args.default_weighted:
-        args.exc_weights_ratio_range = [0.0, 5.0]
-        args.inh_weights_ratio_range = [0.0, 5.0]
-
-    logger.info("After shortcuts, args are:")
-    logger.info("{}".format(args))
-
-    os.makedirs(args.simulation_folder, exist_ok=True)
-
-    run_simulation_start_time = time.time()
-
-    random_seed = args.random_seed
-    if random_seed is None:
-        random_seed = int(time.time())
-    logger.info(f"seeding with random_seed={random_seed}")
-    np.random.seed(random_seed)
-
-
-    simulation_duration_in_seconds = args.simulation_duration_in_seconds
-    simulation_duration_in_ms = simulation_duration_in_seconds * 1000
-    generate_spike_times_and_weights_for_kernel_based_weights(args, syns, simulation_duration_in_ms)
-
-
-
-    sparse.save_npz(f'{args.simulation_folder}/exc_weighted_spikes.npz', sparse.csr_matrix(exc_weighted_spikes))
-    sparse.save_npz(f'{args.simulation_folder}/inh_weighted_spikes.npz', sparse.csr_matrix(inh_weighted_spikes))
+# def create_dataset():
+#     parser = argparse.ArgumentParser(description='Simulate a neuron save input')
+#     parser.add_argument('--simulation_folder', action=AddOutFileAction)
+#     saver = get_simulation_args()
+#     saver.add_to_parser(parser)
+#
+#     logger.info("Going to run simulation with args:")
+#     logger.info("{}".format(args))
+#     logger.info("...")
+#
+#     if args.simple_stimulation:
+#         args.multiple_connections_prob = 0.0
+#
+#         args.multiply_count_initial_synapses_per_super_synapse_prob = 0.0
+#         args.same_exc_inh_count_initial_synapses_per_super_synapse_prob = 0.0
+#         args.force_count_initial_synapses_per_super_synapse = 1
+#         args.force_multiply_count_spikes_per_synapse_per_100ms_range_by_average_segment_length = True
+#
+#         args.synchronization_prob = 0.0
+#         args.remove_inhibition_prob = 0.0
+#         args.deactivate_synapses_prob = 0.0
+#         args.spatial_clustering_prob = 0.0
+#         args.same_exc_inh_inst_rate_prob = 0.0
+#         args.same_exc_inh_spikes_bin_prob = 0.0
+#         args.same_exc_inh_all_kernels_prob = 0.0
+#         args.same_exc_inh_kernels_prob = 0.0
+#
+#     if args.default_weighted:
+#         args.exc_weights_ratio_range = [0.0, 5.0]
+#         args.inh_weights_ratio_range = [0.0, 5.0]
+#
+#     logger.info("After shortcuts, args are:")
+#     logger.info("{}".format(args))
+#
+#     os.makedirs(args.simulation_folder, exist_ok=True)
+#
+#     run_simulation_start_time = time.time()
+#
+#     random_seed = args.random_seed
+#     if random_seed is None:
+#         random_seed = int(time.time())
+#     logger.info(f"seeding with random_seed={random_seed}")
+#     np.random.seed(random_seed)
+#
+#
+#     simulation_duration_in_seconds = args.simulation_duration_in_seconds
+#     simulation_duration_in_ms = simulation_duration_in_seconds * 1000
+#     generate_spike_times_and_weights_for_kernel_based_weights(args, syns, simulation_duration_in_ms)
+#
+#
+#
+#     sparse.save_npz(f'{args.simulation_folder}/exc_weighted_spikes.npz', sparse.csr_matrix(exc_weighted_spikes))
+#     sparse.save_npz(f'{args.simulation_folder}/inh_weighted_spikes.npz', sparse.csr_matrix(inh_weighted_spikes))
