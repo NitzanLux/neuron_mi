@@ -664,6 +664,7 @@ input_inh_sptimes = {}
 
 def run_actual_simulation(args):
     logger.info("About to import neuron module...")
+    logger.info(f'model path for debugging {args.neuron_model_folder.replace("/",".")}.get_standard_model')
     tm = importlib.import_module(f'{args.neuron_model_folder.replace("/",".")}.get_standard_model')
     logger.info("neuron module imported fine.")
 
