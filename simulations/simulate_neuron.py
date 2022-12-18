@@ -1133,7 +1133,6 @@ def get_args():
     parser.add_argument('--simulation_folder', action=AddOutFileAction)
     parser.add_argument('--weights_file', default=None)
     parser.add_argument('--input_file', default=None)
-    
     saver = get_simulation_args()
     saver.add_to_parser(parser)
     
@@ -1152,8 +1151,10 @@ def main():
 if __name__ == "__main__":
     s = SlurmJobFactory('cluster_logs')
     args = ' '.join(sys.argv[1:])
+    args_v = get_args()
     print('send job: ',f"python3 -c 'main()' {args}")
-    s.send_job(f"simulation_{np.random.randint(0,100000)}",f"python3 -c 'from simulations.simulate_neuron import main; main()' {args}")
+    # cluster_name= os.path.join('cluster_logs',f"simulation_{np.random.randint(0,100000)}")
+    s.send_job(f"simulation_{args_v.simulation_folder}",f"python3 -c 'from simulations.simulate_neuron import main; main()' {args}")
     # main()
 
 # def create_dataset():
