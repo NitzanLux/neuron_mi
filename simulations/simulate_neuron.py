@@ -1128,9 +1128,12 @@ def get_simulation_args():
     saver.add_argument('--default_weighted', type=str2bool, nargs='?', const=True, default=False) # a shortcut
     return saver
 
-def get_args():
+def get_args(include_sim_amount=False):
     parser = argparse.ArgumentParser(description='Simulate a neuron')
+    if include_sim_amount:
+        parser.add_argument('--amount',type=int,default=1)
     parser.add_argument('--neuron_model_folder')
+
     parser.add_argument('--simulation_folder', action=AddOutFileAction)
     parser.add_argument('--weights_file', default=None)
     parser.add_argument('--input_file', default=None)
@@ -1152,62 +1155,14 @@ def main():
 if __name__ == "__main__":
     s = SlurmJobFactory('cluster_logs')
     args = ' '.join(sys.argv[1:])
-    args_v = get_args()
-    print('send job: ',f"python3 -c 'main()' {args}")
-    # cluster_name= os.path.join('cluster_logs',f"simulation_{np.random.randint(0,100000)}")
-    s.send_job(f"simulation_{args_v.simulation_folder}",f"python3 -c 'from simulations.simulate_neuron import main; main()' {args}")
-    # main()
-
-# def create_dataset():
-#     parser = argparse.ArgumentParser(description='Simulate a neuron save input')
-#     parser.add_argument('--simulation_folder', action=AddOutFileAction)
-#     saver = get_simulation_args()
-#     saver.add_to_parser(parser)
-#
-#     logger.info("Going to run simulation with args:")
-#     logger.info("{}".format(args))
-#     logger.info("...")
-#
-#     if args.simple_stimulation:
-#         args.multiple_connections_prob = 0.0
-#
-#         args.multiply_count_initial_synapses_per_super_synapse_prob = 0.0
-#         args.same_exc_inh_count_initial_synapses_per_super_synapse_prob = 0.0
-#         args.force_count_initial_synapses_per_super_synapse = 1
-#         args.force_multiply_count_spikes_per_synapse_per_100ms_range_by_average_segment_length = True
-#
-#         args.synchronization_prob = 0.0
-#         args.remove_inhibition_prob = 0.0
-#         args.deactivate_synapses_prob = 0.0
-#         args.spatial_clustering_prob = 0.0
-#         args.same_exc_inh_inst_rate_prob = 0.0
-#         args.same_exc_inh_spikes_bin_prob = 0.0
-#         args.same_exc_inh_all_kernels_prob = 0.0
-#         args.same_exc_inh_kernels_prob = 0.0
-#
-#     if args.default_weighted:
-#         args.exc_weights_ratio_range = [0.0, 5.0]
-#         args.inh_weights_ratio_range = [0.0, 5.0]
-#
-#     logger.info("After shortcuts, args are:")
-#     logger.info("{}".format(args))
-#
-#     os.makedirs(args.simulation_folder, exist_ok=True)
-#
-#     run_simulation_start_time = time.time()
-#
-#     random_seed = args.random_seed
-#     if random_seed is None:
-#         random_seed = int(time.time())
-#     logger.info(f"seeding with random_seed={random_seed}")
-#     np.random.seed(random_seed)
-#
-#
-#     simulation_duration_in_seconds = args.simulation_duration_in_seconds
-#     simulation_duration_in_ms = simulation_duration_in_seconds * 1000
-#     generate_spike_times_and_weights_for_kernel_based_weights(args, syns, simulation_duration_in_ms)
-#
-#
-#
-#     sparse.save_npz(f'{args.simulation_folder}/exc_weighted_spikes.npz', sparse.csr_matrix(exc_weighted_spikes))
-#     sparse.save_npz(f'{args.simulation_folder}/inh_weighted_spikes.npz', sparse.csr_matrix(inh_weighted_spikes))
+    args_v = get_args(True)
+    sim_name= os.path.basename(args_v.simulation_folder)
+    initial_idx=0
+    if os.path.exists(args_v.simulation_folder):
+        l = os.listdir(args_v.simulation_folder)
+        initial_idx=len(l)
+    for i in range(args_v.amount):
+        ID=f'ID_{initial_idx+i}_{np.random.randint(1000000)}_{sim_name}'
+        cur_args = args.replace(args_v.simulation_folder,os.path.join(args_v.simulation_folder,ID))
+        print('Send Job: ',f"python3 -c 'main()' {args}")
+        s.send_job(f"simulation_{ID}",f"python3 -c 'from simulations.simulate_neuron import main; main()' {cur_args}")
