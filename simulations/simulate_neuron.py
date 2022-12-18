@@ -1128,10 +1128,9 @@ def get_simulation_args():
     saver.add_argument('--default_weighted', type=str2bool, nargs='?', const=True, default=False) # a shortcut
     return saver
 
-def get_args(include_sim_amount=False):
+def get_args():
     parser = argparse.ArgumentParser(description='Simulate a neuron')
-    if include_sim_amount:
-        parser.add_argument('--amount',type=int,default=1)
+    parser.add_argument('--amount',type=int,default=1)
     parser.add_argument('--neuron_model_folder')
 
     parser.add_argument('--simulation_folder', action=AddOutFileAction)
@@ -1155,7 +1154,7 @@ def main():
 if __name__ == "__main__":
     s = SlurmJobFactory('cluster_logs')
     args = ' '.join(sys.argv[1:])
-    args_v = get_args(True)
+    args_v = get_args()
     sim_name= os.path.basename(args_v.simulation_folder)
     initial_idx=0
     if os.path.exists(args_v.simulation_folder):
