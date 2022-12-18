@@ -19,6 +19,7 @@ from scipy import sparse
 # sys.path.append(str(pathlib.Path(__file__).parent.parent.absolute()))
 
 from utils.utils import str2bool, ArgumentSaver, AddOutFileAction, TeeAll
+from utils.slurm_job import SlurmJobFactory
 
 logger = logging.getLogger(__name__)
 
@@ -1149,7 +1150,10 @@ def main():
     logger.info(f"Goodbye from neuron simulator! running on {os.uname()} (pid={os.getpid()}, ppid={os.getppid()})")
 
 if __name__ == "__main__":
-    main()
+    s = SlurmJobFactory('cluster_logs')
+    args = ' '.join(sys.argv[1:])
+    s.send_job(f"simulation_{np.random.randint(0,100000)}",f"python3 -c 'main()' {args}")
+    # main()
 
 # def create_dataset():
 #     parser = argparse.ArgumentParser(description='Simulate a neuron save input')
