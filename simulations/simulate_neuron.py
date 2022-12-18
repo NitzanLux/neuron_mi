@@ -1161,6 +1161,7 @@ if __name__ == "__main__":
     if os.path.exists(args_v.simulation_folder):
         l = os.listdir(args_v.simulation_folder)
         initial_idx=len(l)
+    print('start')
     for i in range(args_v.amount):
         ID= f'ID_{initial_idx+i}_{np.random.randint(1000000)}_{sim_name}'
         cur_args = args.replace(args_v.simulation_folder,os.path.join(args_v.simulation_folder,ID))
