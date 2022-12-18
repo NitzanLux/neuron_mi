@@ -3,7 +3,7 @@ import pathlib
 import importlib
 import copy
 import os
-# import peakutils
+import peakutils
 import h5py
 import sys
 import numpy as np
