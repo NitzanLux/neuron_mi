@@ -1153,7 +1153,7 @@ if __name__ == "__main__":
     s = SlurmJobFactory('cluster_logs')
     args = ' '.join(sys.argv[1:])
     print('send job: ',f"python3 -c 'main()' {args}")
-    s.send_job(f"simulation_{np.random.randint(0,100000)}",f"python3 -c 'main()' {args}")
+    s.send_job(f"simulation_{np.random.randint(0,100000)}",f"python3 -c 'from simulations.simulate_neuron import main; main()' {args}")
     # main()
 
 # def create_dataset():
