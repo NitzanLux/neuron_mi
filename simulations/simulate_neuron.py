@@ -1160,9 +1160,8 @@ if __name__ == "__main__":
     if os.path.exists(args_v.simulation_folder):
         l = os.listdir(args_v.simulation_folder)
         initial_idx=len(l)
-    print('start')
     for i in range(args_v.amount):
         ID= f'ID_{initial_idx+i}_{np.random.randint(1000000)}_{sim_name}'
         cur_args = args.replace(args_v.simulation_folder,os.path.join(args_v.simulation_folder,ID))
-        print('Send Job: ',f"python3 -c 'main()' {args}",flush=True)
         s.send_job(f"simulation_{ID}",f"python3 -c 'from simulations.simulate_neuron import main; main()' {cur_args}")
+        print(f'Send job with {ID}')
