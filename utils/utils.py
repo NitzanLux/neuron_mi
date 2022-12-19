@@ -49,8 +49,10 @@ class ArgumentSaver:
         arg_name = arg_0[2:] if arg_0.startswith("--") else arg_0[1:] if arg_0.startswith("-") else arg_0
         self.arguments[arg_name] = (args, kwargs)
 
-    def add_to_parser(self, parser):
+    def add_to_parser(self, parser,exclude=None):
         for arg_name, (args, kwargs) in self.arguments.items():
+            if exclude is not None and arg_name in exclude:
+                continue
             parser.add_argument(*args, **kwargs)
 
 class AddOutFileAction(argparse.Action):

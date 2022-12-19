@@ -15,7 +15,7 @@ import argparse
 import logging
 import pathlib
 from scipy import sparse
-
+import re
 # sys.path.append(str(pathlib.Path(__file__).parent.parent.absolute()))
 
 from utils.utils import str2bool, ArgumentSaver, AddOutFileAction, TeeAll
@@ -309,7 +309,7 @@ def generate_spike_times_and_weights_for_kernel_based_weights(args, syns, simula
 
     multiple_connections = np.random.rand() < args.multiple_connections_prob
     multiply_count_initial_synapses_per_super_synapse = np.random.rand() < args.multiply_count_initial_synapses_per_super_synapse_prob
-    
+
     auxiliary_information['multiple_connections'] = multiple_connections
     auxiliary_information['multiply_count_initial_synapses_per_super_synapse'] = multiply_count_initial_synapses_per_super_synapse
     auxiliary_information['seg_lens'] = syns.seg_lens
@@ -337,7 +337,7 @@ def generate_spike_times_and_weights_for_kernel_based_weights(args, syns, simula
         count_exc_initial_synapses_per_super_synapse = np.array([average_number_of_initial_synapses_per_super_synapse for _ in count_exc_initial_synapses_per_super_synapse])
         for _ in range(args.force_count_initial_synapses_per_tree % len(count_exc_initial_synapses_per_super_synapse)):
             count_exc_initial_synapses_per_super_synapse[np.random.randint(len(count_exc_initial_synapses_per_super_synapse))] += 1
-        
+
         count_inh_initial_synapses_per_super_synapse = count_exc_initial_synapses_per_super_synapse
 
     auxiliary_information['count_exc_initial_synapses_per_super_synapse'] = count_exc_initial_synapses_per_super_synapse
@@ -353,7 +353,7 @@ def generate_spike_times_and_weights_for_kernel_based_weights(args, syns, simula
             average_inh_multiple_connections = average_exc_multiple_connections
         else:
             average_inh_multiple_connections = min(args.inh_multiple_connections_upperbound, max(args.average_inh_multiple_connections_avg_std_min[2], abs(np.random.normal(args.average_inh_multiple_connections_avg_std_min[0], args.average_inh_multiple_connections_avg_std_min[1]))))
-    
+
         count_exc_initial_neurons = int(count_exc_initial_neurons / average_exc_multiple_connections)
         count_inh_initial_neurons = int(count_inh_initial_neurons / average_inh_multiple_connections)
         auxiliary_information['average_exc_multiple_connections'] = average_exc_multiple_connections
@@ -370,7 +370,7 @@ def generate_spike_times_and_weights_for_kernel_based_weights(args, syns, simula
         args.effective_count_inh_spikes_per_synapse_per_100ms_range = args.count_inh_spikes_per_synapse_per_100ms_range
 
     exc_initial_neurons_spikes_bin, inh_initial_neurons_spikes_bin, initial_neurons_aux_info = generate_input_spike_trains_for_simulation_new(args, simulation_duration_in_ms, count_exc_initial_neurons, count_inh_initial_neurons)
-    
+
     auxiliary_information['initial_neurons_spike_trains_information'] = initial_neurons_aux_info
     auxiliary_information['exc_initial_neurons_spikes_bin'] = exc_initial_neurons_spikes_bin
     auxiliary_information['inh_initial_neurons_spikes_bin'] = inh_initial_neurons_spikes_bin
@@ -386,7 +386,7 @@ def generate_spike_times_and_weights_for_kernel_based_weights(args, syns, simula
     count_exc_spikes = 0
     count_weighted_exc_spikes = 0
     exc_initial_neurons_weights = []
-    for exc_netcon_index, exc_netcon in enumerate(exc_netcons):    
+    for exc_netcon_index, exc_netcon in enumerate(exc_netcons):
         if multiple_connections:
             kernel_density = (count_exc_initial_synapses_per_super_synapse[exc_netcon_index] + 0.0)  / count_exc_initial_neurons
             get_random_exc_weight_ratio = lambda s : np.random.uniform(args.exc_weights_ratio_range[0], args.exc_weights_ratio_range[1], s)
@@ -397,11 +397,11 @@ def generate_spike_times_and_weights_for_kernel_based_weights(args, syns, simula
                     new_index = np.random.choice(np.intersect1d(np.where(exc_initial_neuron_connection_counts < args.exc_multiple_connections_upperbound), np.where(exc_super_synapse_random_kernel == 0)[1]))
                     exc_super_synapse_random_kernel[0, new_index] = exc_super_synapse_random_kernel[0, i]
                     exc_super_synapse_random_kernel[0, i] = 0
-                    exc_initial_neuron_connection_counts[new_index] += 1        
+                    exc_initial_neuron_connection_counts[new_index] += 1
                 else:
                     exc_initial_neuron_connection_counts[i] += 1
 
-            
+
             exc_super_synpase_kernels.append(exc_super_synapse_random_kernel)
             exc_initial_neurons_weights += list(exc_super_synapse_random_kernel[exc_super_synapse_random_kernel!=0])
             weighted_spikes = np.dot(exc_super_synapse_random_kernel, exc_initial_neurons_spikes_bin).flatten()
@@ -421,13 +421,13 @@ def generate_spike_times_and_weights_for_kernel_based_weights(args, syns, simula
     if multiple_connections:
         logger.info(f'min, max, avg, std, med exc initial neuron connection count are {np.min(exc_initial_neuron_connection_counts):.3f}, {np.max(exc_initial_neuron_connection_counts):.3f}, {np.mean(exc_initial_neuron_connection_counts):.3f}, {np.std(exc_initial_neuron_connection_counts):.3f}, {np.median(exc_initial_neuron_connection_counts):.3f}')
         auxiliary_information['exc_initial_neuron_connection_counts'] = exc_initial_neuron_connection_counts
-    
+
     auxiliary_information['exc_super_synpase_kernels'] = exc_super_synpase_kernels
-    
+
     average_exc_spikes_per_second = count_exc_spikes / (simulation_duration_in_ms / 1000)
     count_exc_spikes_per_super_synapse = count_exc_spikes / (len(exc_netcons) + 0.0)
     average_exc_spikes_per_super_synapse_per_second = count_exc_spikes_per_super_synapse / (simulation_duration_in_ms/1000.0)
-    
+
     auxiliary_information['count_exc_spikes'] = count_exc_spikes
     auxiliary_information['average_exc_spikes_per_second'] = average_exc_spikes_per_second
     auxiliary_information['count_exc_spikes_per_super_synapse'] = count_exc_spikes_per_super_synapse
@@ -438,7 +438,7 @@ def generate_spike_times_and_weights_for_kernel_based_weights(args, syns, simula
     average_weighted_exc_spikes_per_second = count_weighted_exc_spikes / (simulation_duration_in_ms / 1000)
     count_weighted_exc_spikes_per_super_synapse = count_weighted_exc_spikes / (len(exc_netcons) + 0.0)
     average_weighted_exc_spikes_per_super_synapse_per_second = count_weighted_exc_spikes_per_super_synapse / (simulation_duration_in_ms/1000.0)
-    
+
     auxiliary_information['count_weighted_exc_spikes'] = count_weighted_exc_spikes
     auxiliary_information['average_weighted_exc_spikes_per_second'] = average_weighted_exc_spikes_per_second
     auxiliary_information['count_weighted_exc_spikes_per_super_synapse'] = count_weighted_exc_spikes_per_super_synapse
@@ -467,7 +467,7 @@ def generate_spike_times_and_weights_for_kernel_based_weights(args, syns, simula
     count_inh_spikes = 0
     count_weighted_inh_spikes = 0
     inh_initial_neurons_weights = []
-    for inh_netcon_index, inh_netcon in enumerate(inh_netcons):    
+    for inh_netcon_index, inh_netcon in enumerate(inh_netcons):
         if multiple_connections:
             kernel_density = (count_inh_initial_synapses_per_super_synapse[inh_netcon_index] + 0.0)  / count_inh_initial_neurons
             get_random_inh_weight_ratio = lambda s : np.random.uniform(args.inh_weights_ratio_range[0], args.inh_weights_ratio_range[1], s)
@@ -487,7 +487,7 @@ def generate_spike_times_and_weights_for_kernel_based_weights(args, syns, simula
                         new_index = np.random.choice(np.intersect1d(np.where(inh_initial_neuron_connection_counts < args.inh_multiple_connections_upperbound), np.where(inh_super_synapse_random_kernel == 0)[1]))
                         inh_super_synapse_random_kernel[0, new_index] = inh_super_synapse_random_kernel[0, i]
                         inh_super_synapse_random_kernel[0, i] = 0
-                        inh_initial_neuron_connection_counts[new_index] += 1        
+                        inh_initial_neuron_connection_counts[new_index] += 1
                     else:
                         inh_initial_neuron_connection_counts[i] += 1
 
@@ -510,9 +510,9 @@ def generate_spike_times_and_weights_for_kernel_based_weights(args, syns, simula
     if multiple_connections:
         logger.info(f'min, max, avg, std, med inh initial neuron connection count are {np.min(inh_initial_neuron_connection_counts):.3f}, {np.max(inh_initial_neuron_connection_counts):.3f}, {np.mean(inh_initial_neuron_connection_counts):.3f}, {np.std(inh_initial_neuron_connection_counts):.3f}, {np.median(inh_initial_neuron_connection_counts):.3f}')
         auxiliary_information['inh_initial_neuron_connection_counts'] = inh_initial_neuron_connection_counts
-    
+
     auxiliary_information['inh_super_synpase_kernels'] = inh_super_synpase_kernels
-    
+
     average_inh_spikes_per_second = count_inh_spikes / (simulation_duration_in_ms / 1000)
     count_inh_spikes_per_super_synapse = count_inh_spikes / (len(inh_netcons) + 0.0)
     average_inh_spikes_per_super_synapse_per_second = count_inh_spikes_per_super_synapse / (simulation_duration_in_ms/1000.0)
@@ -527,7 +527,7 @@ def generate_spike_times_and_weights_for_kernel_based_weights(args, syns, simula
     average_weighted_inh_spikes_per_second = count_weighted_inh_spikes / (simulation_duration_in_ms / 1000)
     count_weighted_inh_spikes_per_super_synapse = count_weighted_inh_spikes / (len(inh_netcons) + 0.0)
     average_weighted_inh_spikes_per_super_synapse_per_second = count_weighted_inh_spikes_per_super_synapse / (simulation_duration_in_ms/1000.0)
-    
+
     auxiliary_information['count_weighted_inh_spikes'] = count_weighted_inh_spikes
     auxiliary_information['average_weighted_inh_spikes_per_second'] = average_weighted_inh_spikes_per_second
     auxiliary_information['count_weighted_inh_spikes_per_super_synapse'] = count_weighted_inh_spikes_per_super_synapse
@@ -544,28 +544,33 @@ def generate_spike_times_and_weights_for_kernel_based_weights(args, syns, simula
     return simulation_duration_in_ms, exc_ncon_to_input_spike_times, inh_ncon_to_input_spike_times, exc_weighted_spikes, inh_weighted_spikes, auxiliary_information
 
 def generate_spike_times_and_weights_from_input_file(args, syns):
+
     exc_netcons = syns.exc_netcons
     inh_netcons = syns.inh_netcons
 
     auxiliary_information = {}
 
-    input_dict = pickle.load(open(args.input_file, "rb"))
-    auxiliary_information["input_file"] = args.input_file
-    auxiliary_information["full_input_dict"] = input_dict
+    sim_folder = args.input_file
+    exc_weighted_spikes = sparse.load_npz(os.path.join(sim_folder, "exc_weighted_spikes.npz")).A
+    inh_weighted_spikes = sparse.load_npz(os.path.join(sim_folder, "inh_weighted_spikes.npz")).A
+    weighted_spikes = np.concatenate([exc_weighted_spikes, inh_weighted_spikes], axis=0)
 
-    weighted_spikes = input_dict["weighted_spikes"]
+    auxiliary_information["input_file"] = args.input_file
+    # auxiliary_information["full_input_dict"] = input_dict
+
+    # weighted_spikes = input_dict["weighted_spikes"]
     if weighted_spikes.min() < 0:
         raise ValueError("weighted_spikes contains negative values")
 
-    input_dict_no_aux = copy.deepcopy(input_dict)
-    del input_dict_no_aux["weighted_spikes"]
-    del input_dict_no_aux["auxiliary_information"]
-    auxiliary_information["input_dict"] = input_dict_no_aux
+    # input_dict_no_aux = copy.deepcopy(input_dict)
+    # del input_dict_no_aux["weighted_spikes"]
+    # del input_dict_no_aux["auxiliary_information"]
+    # auxiliary_information["input_dict"] = input_dict_no_aux
 
-    logger.info(f'input_dict is {input_dict_no_aux}')
+    # logger.info(f'input_dict is {input_dict_no_aux}')
 
     simulation_duration_in_ms = args.simulation_initialization_duration_in_ms + weighted_spikes.shape[1]
-    
+
     exc_weighted_spikes = np.zeros((len(exc_netcons), simulation_duration_in_ms))
     exc_ncon_to_input_spike_times = {}
     count_exc_spikes = 0
@@ -580,7 +585,7 @@ def generate_spike_times_and_weights_from_input_file(args, syns):
     average_exc_spikes_per_second = count_exc_spikes / (simulation_duration_in_ms / 1000)
     count_exc_spikes_per_super_synapse = count_exc_spikes / (len(exc_netcons) + 0.0)
     average_exc_spikes_per_super_synapse_per_second = count_exc_spikes_per_super_synapse / (simulation_duration_in_ms/1000.0)
-    
+
     auxiliary_information['count_exc_spikes'] = count_exc_spikes
     auxiliary_information['average_exc_spikes_per_second'] = average_exc_spikes_per_second
     auxiliary_information['count_exc_spikes_per_super_synapse'] = count_exc_spikes_per_super_synapse
@@ -591,7 +596,7 @@ def generate_spike_times_and_weights_from_input_file(args, syns):
     average_weighted_exc_spikes_per_second = count_weighted_exc_spikes / (simulation_duration_in_ms / 1000)
     count_weighted_exc_spikes_per_super_synapse = count_weighted_exc_spikes / (len(exc_netcons) + 0.0)
     average_weighted_exc_spikes_per_super_synapse_per_second = count_weighted_exc_spikes_per_super_synapse / (simulation_duration_in_ms/1000.0)
-    
+
     auxiliary_information['count_weighted_exc_spikes'] = count_weighted_exc_spikes
     auxiliary_information['average_weighted_exc_spikes_per_second'] = average_weighted_exc_spikes_per_second
     auxiliary_information['count_weighted_exc_spikes_per_super_synapse'] = count_weighted_exc_spikes_per_super_synapse
@@ -621,7 +626,7 @@ def generate_spike_times_and_weights_from_input_file(args, syns):
     average_inh_spikes_per_second = count_inh_spikes / (simulation_duration_in_ms / 1000)
     count_inh_spikes_per_super_synapse = count_inh_spikes / (len(inh_netcons) + 0.0)
     average_inh_spikes_per_super_synapse_per_second = count_inh_spikes_per_super_synapse / (simulation_duration_in_ms/1000.0)
-    
+
     auxiliary_information['count_inh_spikes'] = count_inh_spikes
     auxiliary_information['average_inh_spikes_per_second'] = average_inh_spikes_per_second
     auxiliary_information['count_inh_spikes_per_super_synapse'] = count_inh_spikes_per_super_synapse
@@ -632,7 +637,7 @@ def generate_spike_times_and_weights_from_input_file(args, syns):
     average_weighted_inh_spikes_per_second = count_weighted_inh_spikes / (simulation_duration_in_ms / 1000)
     count_weighted_inh_spikes_per_super_synapse = count_weighted_inh_spikes / (len(inh_netcons) + 0.0)
     average_weighted_inh_spikes_per_super_synapse_per_second = count_weighted_inh_spikes_per_super_synapse / (simulation_duration_in_ms/1000.0)
-    
+
     auxiliary_information['count_weighted_inh_spikes'] = count_weighted_inh_spikes
     auxiliary_information['average_weighted_inh_spikes_per_second'] = average_weighted_inh_spikes_per_second
     auxiliary_information['count_weighted_inh_spikes_per_super_synapse'] = count_weighted_inh_spikes_per_super_synapse
@@ -1130,14 +1135,14 @@ def get_simulation_args():
 
 def get_args():
     parser = argparse.ArgumentParser(description='Simulate a neuron')
-    parser.add_argument('--amount',type=int,default=1)
+    parser.add_argument('--amount',type=int,default=1) #for general runinng
     parser.add_argument('--neuron_model_folder')
 
     parser.add_argument('--simulation_folder', action=AddOutFileAction)
     parser.add_argument('--weights_file', default=None)
     parser.add_argument('--input_file', default=None)
     saver = get_simulation_args()
-    saver.add_to_parser(parser)
+    saver.add_to_parser(parser,exclude='amount')
     
     parser.add_argument('--save_plots', type=str2bool, nargs='?', const=True, default=True)
     return parser.parse_args()
@@ -1151,15 +1156,25 @@ def main():
     run_simulation(args)
     logger.info(f"Goodbye from neuron simulator! running on {os.uname()} (pid={os.getpid()}, ppid={os.getppid()})")
 
+
 if __name__ == "__main__":
     s = SlurmJobFactory('cluster_logs')
     args = ' '.join(sys.argv[1:])
     args_v = get_args()
     sim_name= os.path.basename(args_v.simulation_folder)
     initial_idx=0
+    input_path = None
+    if args_v.input_file is not None:
+        input_path = args_v.input_file
+        l=os.listdir(args_v.simulation_folder)
+
     if os.path.exists(args_v.simulation_folder):
         l = os.listdir(args_v.simulation_folder)
-        initial_idx=len(l)
+        m = re.compile('ID_[0-9]+_[0-9]+')
+        for i in l:
+            cur_input_file=os.path.join(args_v.simulation_folder,i)
+            ID=m.match(i).group(0)
+
     for i in range(args_v.amount):
         ID= f'ID_{initial_idx+i}_{np.random.randint(1000000)}_{sim_name}'
         cur_args = args.replace(args_v.simulation_folder,os.path.join(args_v.simulation_folder,ID))
