@@ -551,11 +551,12 @@ def generate_spike_times_and_weights_from_input_file(args, syns):
     auxiliary_information = {}
 
     sim_folder = args.input_file
-    exc_weighted_spikes = sparse.load_npz(os.path.join(sim_folder, "exc_weighted_spikes.npz")).A
-    inh_weighted_spikes = sparse.load_npz(os.path.join(sim_folder, "inh_weighted_spikes.npz")).A
+    exc_weighted_spikes = sparse.load_npz(os.path.join(sim_folder, "exc_weighted_spikes.npz")).A*args.weight_scale_factor
+    inh_weighted_spikes = sparse.load_npz(os.path.join(sim_folder, "inh_weighted_spikes.npz")).A*args.weight_scale_factor
     weighted_spikes = np.concatenate([exc_weighted_spikes, inh_weighted_spikes], axis=0)
 
     auxiliary_information["input_file"] = args.input_file
+
     # auxiliary_information["full_input_dict"] = input_dict
 
     # weighted_spikes = input_dict["weighted_spikes"]
@@ -1141,6 +1142,7 @@ def get_args():
     parser.add_argument('--simulation_folder', action=AddOutFileAction)
     parser.add_argument('--weights_file', default=None)
     parser.add_argument('--input_file', default=None)
+    parser.add_argument('--weight_scale_factor',type=float, default=1.)
     saver = get_simulation_args()
     saver.add_to_parser(parser,exclude='amount')
     

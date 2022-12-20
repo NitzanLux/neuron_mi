@@ -13,7 +13,7 @@ m = re.compile('ID_[0-9]+_[0-9]+')
 def cheack_sim_validity(f):
     if os.path.exists(os.path.join(args.path,f,'voltage.h5')):
         if os.path.exists(os.path.join(args.path,f,'inh_weighted_spikes.npz')) and\
-            os.path.exists(os.path.join(args.path,f,'exc_weighted_spikes.npz')):
+                os.path.exists(os.path.join(args.path,f,'exc_weighted_spikes.npz')):
             return True
         else:
             ID = m.match(f).group(0)

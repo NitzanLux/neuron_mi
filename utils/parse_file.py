@@ -1,6 +1,9 @@
 import numpy as np
 import time
 import pickle
+import os
+from scipy import sparse
+import h5py
 
 def bin2dict(bin_spikes_matrix):
     spike_row_inds, spike_times = np.nonzero(bin_spikes_matrix)
@@ -21,7 +24,30 @@ def dict2bin(row_inds_spike_times_map, num_segments, sim_duration_ms):
             bin_spikes_matrix[row_ind, spike_time] = 1.0
 
     return bin_spikes_matrix
+def parse_sim_experiment_file_ido(sim_experiment_folder, print_logs=False):
+    # ido_base_path="/ems/elsc-labs/segev-i/Sandbox Shared/Rat_L5b_PC_2_Hay_simple_pipeline_1/simulation_dataset/"
+    exc_weighted_spikes = sparse.load_npz(f'{sim_experiment_folder}/exc_weighted_spikes.npz').A
+    inh_weighted_spikes = sparse.load_npz(f'{sim_experiment_folder}/inh_weighted_spikes.npz').A
+
+    exc_weighted_spikes_for_window = exc_weighted_spikes
+    inh_weighted_spikes_for_window = inh_weighted_spikes
+
+    all_weighted_spikes_for_window = np.vstack((exc_weighted_spikes_for_window, inh_weighted_spikes_for_window))
+
+    somatic_voltage = h5py.File(f'{sim_experiment_folder}/voltage.h5', 'r')['somatic_voltage']
+    somatic_voltage = np.array(somatic_voltage)
+    summary = pickle.load(open(f'{sim_experiment_folder}/summary.pkl', 'rb'))
+
+    output_spikes_for_window = np.zeros(somatic_voltage.shape[0])
+    spike_times = summary['output_spike_times']
+    output_spikes_for_window[spike_times.astype(int)] = 1
+    return all_weighted_spikes_for_window, output_spikes_for_window, somatic_voltage
+
+
+
 def parse_sim_experiment_file(sim_experiment_file):
+    if not os.path.isfile(sim_experiment_file):
+        return parse_sim_experiment_file_ido(sim_experiment_file)
     print('-----------------------------------------------------------------')
     print("loading file: '" + sim_experiment_file.split("\\")[-1] + "'")
     loading_start_time = time.time()
