@@ -34,7 +34,6 @@ for i in os.listdir(args.path):
             res = input()
         if res=='y':
             shutil.rmtree(os.path.join(args.path,i))
-exit(0)
 
 #move input files
 for i in os.listdir(args.path):
