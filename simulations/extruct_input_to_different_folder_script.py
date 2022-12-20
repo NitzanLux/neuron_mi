@@ -18,7 +18,7 @@ for i in os.listdir(args.path):
             os.path.exists(os.path.join(args.path,i,'voltage.h5')):
         continue
     else:
-        print(f'Should I delete {i}?...',flush=True)
+        print(f'Should I delete {os.path.join(args.path,i)}?...',flush=True)
         time.sleep(0.5)
         list_dir = os.listdir(os.path.join(args.path,i))
         out_str=[]
