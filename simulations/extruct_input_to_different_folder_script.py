@@ -10,18 +10,21 @@ args = parser.parse_args()
 dest_dir = str(Path(args.path).parent.absolute())
 # os.makedirs('')
 m = re.compile('ID_[0-9]+_[0-9]+')
-
-#clean faulted files
-for i in os.listdir(args.path):
-    if os.path.exists(os.path.join(args.path,i,'voltage.h5')):
-        if os.path.exists(os.path.join(args.path,i,'inh_weighted_spikes.npz')) and\
-            os.path.exists(os.path.join(args.path,i,'exc_weighted_spikes.npz')):
-            continue
+def cheack_sim_validity(f):
+    if os.path.exists(os.path.join(args.path,f,'voltage.h5')):
+        if os.path.exists(os.path.join(args.path,f,'inh_weighted_spikes.npz')) and\
+            os.path.exists(os.path.join(args.path,f,'exc_weighted_spikes.npz')):
+            return True
         else:
-            ID = m.match(i).group(0)
+            ID = m.match(f).group(0)
             if os.path.exists(os.path.join(dest_dir,'inputs',ID,'inh_weighted_spikes.npz')) and \
                     os.path.exists(os.path.join(dest_dir,'inputs',ID,'inh_weighted_spikes.npz')):
-                continue
+                return True
+    return False
+#clean faulted files
+for i in os.listdir(args.path):
+    if cheack_sim_validity(i):
+        continue
 
     else:
         print(f'Should I delete {os.path.join(args.path,i)}?...',flush=True)
@@ -43,9 +46,11 @@ for i in os.listdir(args.path):
 
 #move input files
 for i in os.listdir(args.path):
+    if not cheack_sim_validity(i):
+        continue
     ID = m.match(i).group(0)
     os.makedirs(os.path.join(dest_dir,'inputs',ID),exist_ok=True)
-    if not os.path.exists(os.path.join(dest_dir,'inputs',ID,'inh_weighted_spikes.npz')) and os.path.exists(os.path.join(args.path,i,'inh_weighted_spikes.npz')):
+    if not os.path.exists(os.path.join(dest_dir,'inputs',ID,'inh_weighted_spikes.npz')) :
         shutil.move(os.path.join(args.path,i,'inh_weighted_spikes.npz'),os.path.join(dest_dir,'inputs',ID,'inh_weighted_spikes.npz'))
-    if not os.path.exists(os.path.join(dest_dir, 'inputs', ID, 'exc_weighted_spikes.npz')) and os.path.exists(os.path.join(args.path,i,'exc_weighted_spikes.npz')):
+    if not os.path.exists(os.path.join(dest_dir, 'inputs', ID, 'exc_weighted_spikes.npz')) :
         shutil.move(os.path.join(args.path,i,'exc_weighted_spikes.npz'),os.path.join(dest_dir,'inputs',ID,'exc_weighted_spikes.npz'))
