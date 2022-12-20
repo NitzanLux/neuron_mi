@@ -1164,7 +1164,6 @@ if __name__ == "__main__":
     args = ' '.join(sys.argv[1:])
     args_v = get_args()
     sim_name= os.path.basename(args_v.simulation_folder)
-    print(sim_name)
     initial_idx=0
     input_path = None
     if args_v.input_file is not None:
@@ -1174,8 +1173,6 @@ if __name__ == "__main__":
             ID=i
             cur_input_file=os.path.join(input_path,ID)
             ID_name = f'{ID}_{sim_name}'
-            print(ID_name)
-            continue
             cur_args = args.replace(args_v.simulation_folder, os.path.join(args_v.simulation_folder, ID_name))
             cur_args = cur_args.replace(args_v.input_file, os.path.join(args_v.input_file,ID))
             s.send_job(f"simulation_{ID_name}",f"python3 -c 'from simulations.simulate_neuron import main; main()' {cur_args}")
