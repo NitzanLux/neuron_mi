@@ -1164,6 +1164,7 @@ if __name__ == "__main__":
     args = ' '.join(sys.argv[1:])
     args_v = get_args()
     sim_name= os.path.basename(args_v.simulation_folder)
+    print(sim_name)
     initial_idx=0
     input_path = None
     if args_v.input_file is not None:
