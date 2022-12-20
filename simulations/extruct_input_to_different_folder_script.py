@@ -13,10 +13,16 @@ m = re.compile('ID_[0-9]+_[0-9]+')
 
 #clean faulted files
 for i in os.listdir(args.path):
-    if os.path.exists(os.path.join(args.path,i,'inh_weighted_spikes.npz')) and\
-        os.path.exists(os.path.join(args.path,i,'exc_weighted_spikes.npz')) and \
-            os.path.exists(os.path.join(args.path,i,'voltage.h5')):
-        continue
+    if os.path.exists(os.path.join(args.path,i,'voltage.h5')):
+        if os.path.exists(os.path.join(args.path,i,'inh_weighted_spikes.npz')) and\
+            os.path.exists(os.path.join(args.path,i,'exc_weighted_spikes.npz')):
+            continue
+        else:
+            ID = m.match(i).group(0)
+            if os.path.exists(os.path.join(dest_dir,'inputs',ID,'inh_weighted_spikes.npz')) and \
+                    os.path.exists(os.path.join(dest_dir,'inputs',ID,'inh_weighted_spikes.npz')):
+                continue
+
     else:
         print(f'Should I delete {os.path.join(args.path,i)}?...',flush=True)
         time.sleep(0.5)
