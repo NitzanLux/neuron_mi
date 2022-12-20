@@ -3,7 +3,7 @@ import argparse
 from pathlib import Path
 import re
 import shutil
-
+import time
 parser = argparse.ArgumentParser(description='Simulate a neuron')
 parser.add_argument('--path', type=str, default=1)  # for general runinng
 args = parser.parse_args()
@@ -18,7 +18,22 @@ for i in os.listdir(args.path):
             os.path.exists(os.path.join(args.path,i,'voltage.h5')):
         continue
     else:
-        print(i)
+        print(f'Should I delete {i}?...',flush=True)
+        time.sleep(0.5)
+        list_dir = os.listdir(os.path.join(args.path,i))
+        out_str=[]
+        for j,f in enumerate(list_dir):
+            file_stats = os.stat(os.path.join(args.path,i,f))
+            out_str.append(f"({j})\t{f} with size: {file_stats.st_size} KB")
+        out_str = "\n".join(out_str)
+        print(f'The files inside are: {out_str}')
+        time.sleep(5)
+        print('Delete y/n')
+        res=input()
+        while(res not in {'y','n'}):
+            res = input()
+        if res=='y':
+            shutil.rmtree(os.path.join(args.path,i))
 exit(0)
 
 #move input files
