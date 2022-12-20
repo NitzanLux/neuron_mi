@@ -1168,17 +1168,20 @@ if __name__ == "__main__":
     input_path = None
     if args_v.input_file is not None:
         input_path = args_v.input_file
-        l=os.listdir(args_v.simulation_folder)
-
-    if os.path.exists(args_v.simulation_folder):
-        l = os.listdir(args_v.simulation_folder)
-        m = re.compile('ID_[0-9]+_[0-9]+')
+        l = os.listdir(args_v.input_file)
         for i in l:
-            cur_input_file=os.path.join(args_v.simulation_folder,i)
-            ID=m.match(i).group(0)
-
-    for i in range(args_v.amount):
-        ID= f'ID_{initial_idx+i}_{np.random.randint(1000000)}_{sim_name}'
-        cur_args = args.replace(args_v.simulation_folder,os.path.join(args_v.simulation_folder,ID))
-        s.send_job(f"simulation_{ID}",f"python3 -c 'from simulations.simulate_neuron import main; main()' {cur_args}")
-        print(f'Send job with {ID}')
+            ID=i
+            cur_input_file=os.path.join(input_path,ID)
+            ID_name = f'{ID}_{sim_name}'
+            cur_args = args.replace(args_v.simulation_folder, os.path.join(args_v.simulation_folder, ID_name))
+            cur_args = cur_args.replace(args_v.input_file, os.path.join(args_v.input_file,ID))
+            s.send_job(f"simulation_{ID_name}",f"python3 -c 'from simulations.simulate_neuron import main; main()' {cur_args}")
+            print(f'Send job with {ID_name}')
+    else:
+        if os.path.exists(args_v.simulation_folder):
+            initial_idx+=len(os.listdir(args_v.simulation_folder))
+        for i in range(args_v.amount):
+            ID= f'ID_{initial_idx+i}_{np.random.randint(1000000)}_{sim_name}'
+            cur_args = args.replace(args_v.simulation_folder,os.path.join(args_v.simulation_folder,ID))
+            s.send_job(f"simulation_{ID}",f"python3 -c 'from simulations.simulate_neuron import main; main()' {cur_args}")
+            print(f'Send job with {ID}')
