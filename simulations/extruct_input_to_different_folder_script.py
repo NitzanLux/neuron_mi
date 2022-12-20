@@ -10,6 +10,18 @@ args = parser.parse_args()
 dest_dir = str(Path(args.path).parent.absolute())
 # os.makedirs('')
 m = re.compile('ID_[0-9]+_[0-9]+')
+
+#clean faulted files
+for i in os.listdir(args.path):
+    if os.path.exists(os.path.join(args.path,i,'inh_weighted_spikes.npz')) and\
+        os.path.exists(os.path.join(args.path,i,'exc_weighted_spikes.npz')) and \
+            os.path.exists(os.path.join(args.path,i,'voltage.h5')):
+        continue
+    else:
+        print(i)
+exit(0)
+
+#move input files
 for i in os.listdir(args.path):
     ID = m.match(i).group(0)
     os.makedirs(os.path.join(dest_dir,'inputs',ID),exist_ok=True)
