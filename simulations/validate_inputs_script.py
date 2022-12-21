@@ -15,7 +15,7 @@ for d_dir in os.listdir(base_path):
             for i in to_com:
                 ID= m_id.match(f_dir).group(0)
                 a = sparse.load_npz(os.path.join(f_dir_path,i))
-                b = sparse.load_npz(os.path.join('data','input',ID,i))
+                b = sparse.load_npz(os.path.join('data','inputs',ID,i))
                 if a==b:
                     continue
                 print(f_dir,d_dir)
