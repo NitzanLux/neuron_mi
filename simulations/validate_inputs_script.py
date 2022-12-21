@@ -1,5 +1,6 @@
 import os
 import re
+import numpy as np
 from scipy import sparse
 m = re.compile('[a-z]{3}_weighted_spikes.npz')
 m_id = re.compile('ID_[0-9]+_[0-9]+')
@@ -16,7 +17,7 @@ for d_dir in os.listdir(base_path):
                 ID= m_id.match(f_dir).group(0)
                 a = sparse.load_npz(os.path.join(f_dir_path,i))
                 b = sparse.load_npz(os.path.join('data','inputs',ID,i))
-                if a==b:
+                if np.all(a.data==b.data):
                     continue
                 print(f_dir,d_dir)
                 break
