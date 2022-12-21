@@ -20,6 +20,7 @@ for d_dir in os.listdir(base_path):
                 b = sparse.load_npz(os.path.join('data','inputs',ID,i))
                 b[b>0]=1
                 if np.all(a==b.data):
-                    print(f_dir,d_dir)
+                    continue
+                print(f_dir,d_dir)
                 break
 
