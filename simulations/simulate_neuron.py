@@ -571,7 +571,7 @@ def generate_spike_times_and_weights_from_input_file(args, syns):
     # logger.info(f'input_dict is {input_dict_no_aux}')
 
     # simulation_duration_in_ms = args.simulation_initialization_duration_in_ms + weighted_spikes.shape[1]
-    simulation_duration_in_ms = weighted_spikes.shape[1]
+    simulation_duration_in_ms = args.simulation_initialization_duration_in_ms + weighted_spikes.shape[1]
 
     exc_weighted_spikes = np.zeros((len(exc_netcons), simulation_duration_in_ms))
     exc_ncon_to_input_spike_times = {}
