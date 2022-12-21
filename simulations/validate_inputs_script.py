@@ -19,7 +19,7 @@ for d_dir in os.listdir(base_path):
                 a[a>0]=1
                 b = sparse.load_npz(os.path.join('data','inputs',ID,i))
                 b[b>0]=1
-                print(b.max())
+                print(b.sum(),a.sum())
                 if np.all(a==b.data):
                     continue
                 print(f_dir,d_dir)
