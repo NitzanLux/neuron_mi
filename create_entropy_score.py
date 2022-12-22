@@ -331,7 +331,7 @@ if __name__ == "__main__":
         print(range(cur_start,min(end_point, len(list_dir_parent))))
 
         job_factory.send_job(f"entropy_{args.tag}_{i}_{MAX_INTERVAL}d",
-                             f'python -c "from create_entropy_score import get_sample_entropy; get_entropy(' + "'" + args.tag + "'" + f',{pathes},{entropies},{i * jumps},{use_derivative})"',
+                             f'python -c "from create_entropy_score import get_entropy; get_entropy(' + "'" + args.tag + "'" + f',{pathes},{entropies},{i * jumps},{use_derivative})"',
                              **keys)
         print('job sent')
 
