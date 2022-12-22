@@ -281,7 +281,6 @@ if __name__ == "__main__":
     parser.add_argument('-mp', dest="multiscale_object_params", help='Multiscale object params if needed', required=False,default=None)
     parser.add_argument('-ex', dest="files_that_do_not_exist", type=bool,
                         help='simulate only files that do not exist', default=False)
-    parser.add_argument()
     args = parser.parse_args()
 
     use_derivative = not args.use_derivative.lower() in {"false", '0', ''}
