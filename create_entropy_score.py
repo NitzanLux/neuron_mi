@@ -228,6 +228,7 @@ def create_sample_entropy_file(q, tag, entropies_types,entropies_params=None,mul
         f_path, f_index = data
         _, y_spike, y_soma = parse_sim_experiment_file(f_path)
         path, f = ntpath.split(f_path)
+        print(y_spike.shape,y_soma.shape)
         for index in range(y_spike.shape[0]):
             v = y_soma[index].astype(np.float64)
             s = y_spike[index].astype(np.float64)
