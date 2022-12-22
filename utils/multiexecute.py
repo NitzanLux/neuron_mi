@@ -4,6 +4,7 @@ from art import tprint
 
 params = ' '.join(sys.argv[1:])
 lines = params.split('\n')
+print(lines)
 for i in lines:
     # process = Popen('ls -la', shell=True)
     # stdout, stderr = process.communicate()
