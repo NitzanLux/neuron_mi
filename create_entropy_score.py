@@ -308,7 +308,8 @@ if __name__ == "__main__":
         parent_dir_path = os.path.join(SIMULATIONS_PATH, parent_dir_path)
     list_dir_parent = os.listdir(parent_dir_path)
     list_dir_parent = [os.path.join(parent_dir_path, i) for i in list_dir_parent]
-    jumps = len(list_dir_parent) // (number_of_clusters+int(len(list_dir_parent)%number_of_clusters!=0))
+    jumps = len(list_dir_parent) // (number_of_clusters)
+    modulu_res = len(list_dir_parent) % (number_of_clusters)
     keys = {}
     print(f'jumps {jumps} c_num = {number_of_clusters}')
     if args.memory > 0:
@@ -320,14 +321,17 @@ if __name__ == "__main__":
             assert False,'implement'
             pass  # todo implemnt
 
+    cur_start=0
     for i in range(number_of_clusters):
-        pathes = list_dir_parent[i * jumps:min((i + 1) * jumps, len(list_dir_parent))]
+        end_point= cur_start+jumps+(i<modulu_res)
+        pathes = list_dir_parent[cur_start:min(cur_start + end_point, len(list_dir_parent))]
 
         print(len(pathes))
         # use_voltage = args.sv == 'v'
-        print(range(i * jumps, min((i + 1) * jumps, len(list_dir_parent))))
+        print(range(cur_start, cur_start + end_point, len(list_dir_parent)))
 
         # job_factory.send_job(f"entropy_{args.tag}_{i}_{MAX_INTERVAL}d",
         #                      f'python -c "from create_entropy_score import get_sample_entropy; get_entropy(' + "'" + args.tag + "'" + f',{pathes},{entropies},{i * jumps},{use_derivative})"',
         #                      **keys)
         print('job sent')
+        cur_start = end_point
