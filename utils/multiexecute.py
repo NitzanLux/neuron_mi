@@ -12,3 +12,4 @@ for i in lines:
     print(stderr,file=sys.stderr)
     print(i)
     tprint(f'Finished')
+#
