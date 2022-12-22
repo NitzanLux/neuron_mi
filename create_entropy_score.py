@@ -328,7 +328,7 @@ if __name__ == "__main__":
 
         print(len(pathes))
         # use_voltage = args.sv == 'v'
-        print(range(cur_start, cur_start + end_point, len(list_dir_parent)))
+        print(range(cur_start,min(cur_start + end_point, len(list_dir_parent))))
 
         # job_factory.send_job(f"entropy_{args.tag}_{i}_{MAX_INTERVAL}d",
         #                      f'python -c "from create_entropy_score import get_sample_entropy; get_entropy(' + "'" + args.tag + "'" + f',{pathes},{entropies},{i * jumps},{use_derivative})"',
