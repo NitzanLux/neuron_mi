@@ -17,7 +17,7 @@ for d_dir in os.listdir(base_path):
                 ID= m_id.match(f_dir).group(0)
                 a = sparse.load_npz(os.path.join(f_dir_path,i)).toarray()
                 a[a!=0]=1
-                a= a[:,500:]
+                # a= a[:,500:]
                 b = sparse.load_npz(os.path.join('data','inputs',ID,i)).toarray()
                 b[b!=0]=1
                 print(a.shape,b.shape)
