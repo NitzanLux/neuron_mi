@@ -228,9 +228,9 @@ def create_sample_entropy_file(q, tag, entropies_types,entropies_params=None,mul
         f_path, f_index = data
         _, y_spike, y_soma = parse_sim_experiment_file(f_path)
         path, f = ntpath.split(f_path)
-        for index in range(y_spike.shape[1]):
-            v = y_soma[:, index].astype(np.float64)
-            s = y_spike[:, index].astype(np.float64)
+        for index in range(y_spike.shape[0]):
+            v = y_soma[index].astype(np.float64)
+            s = y_spike[index].astype(np.float64)
             eo = EntropyObject(tag, f, f_index, sim_index=index, s=s, v=v, multiscale_object=multiscale_object,multiscale_object_params=multiscale_object_params,
                                use_derivative=use_derivative, max_scale=MAX_INTERVAL)
             eo.add_entropies(entropies_types,entropies_params)
