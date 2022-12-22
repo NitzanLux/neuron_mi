@@ -308,7 +308,7 @@ if __name__ == "__main__":
         parent_dir_path = os.path.join(SIMULATIONS_PATH, parent_dir_path)
     list_dir_parent = os.listdir(parent_dir_path)
     list_dir_parent = [os.path.join(parent_dir_path, i) for i in list_dir_parent]
-    jumps = int(len(list_dir_parent)%number_of_clusters!=0)+ len(list_dir_parent) // (number_of_clusters)
+    jumps = len(list_dir_parent) // (number_of_clusters+int(len(list_dir_parent)%number_of_clusters!=0))
     keys = {}
 
     if args.memory > 0:
