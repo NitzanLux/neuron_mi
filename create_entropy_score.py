@@ -310,13 +310,14 @@ if __name__ == "__main__":
     list_dir_parent = [os.path.join(parent_dir_path, i) for i in list_dir_parent]
     jumps = len(list_dir_parent) // (number_of_clusters+int(len(list_dir_parent)%number_of_clusters!=0))
     keys = {}
-
+    print(f'jumps {jumps} c_num = {number_of_clusters}')
     if args.memory > 0:
         keys['mem'] = args.memory
         print("Mem:", args.memory)
     if args.files_that_do_not_exist:
         files_that_exists = []
         for i in enumerate(os.listdir(os.path.join(ENTROPY_DATA_BASE_FOLDER, args.tag))):
+            assert False,'implement'
             pass  # todo implemnt
 
     for i in range(number_of_clusters):
@@ -325,7 +326,8 @@ if __name__ == "__main__":
         print(len(pathes))
         # use_voltage = args.sv == 'v'
         print(range(i * jumps, min((i + 1) * jumps, len(list_dir_parent))))
-        job_factory.send_job(f"entropy_{args.tag}_{i}_{MAX_INTERVAL}d",
-                             f'python -c "from create_entropy_score import get_sample_entropy; get_entropy(' + "'" + args.tag + "'" + f',{pathes},{entropies},{i * jumps},{use_derivative})"',
-                             **keys)
+
+        # job_factory.send_job(f"entropy_{args.tag}_{i}_{MAX_INTERVAL}d",
+        #                      f'python -c "from create_entropy_score import get_sample_entropy; get_entropy(' + "'" + args.tag + "'" + f',{pathes},{entropies},{i * jumps},{use_derivative})"',
+        #                      **keys)
         print('job sent')
