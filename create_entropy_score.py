@@ -5,7 +5,7 @@ import ntpath
 import traceback
 from enum import Enum
 from multiprocessing import Process, Queue
-
+from EntropyHub import SampEn
 import EntropyHub as EH
 import numpy as np
 import pickle as pickle
@@ -18,7 +18,7 @@ import time
 
 ENTROPY_DATA_BASE_FOLDER = os.path.join(os.getcwd(), 'entropy_data')
 number_of_cpus = multiprocessing.cpu_count()
-MAX_INTERVAL = 400
+MAX_INTERVAL = 150
 print("start job")
 
 number_of_jobs = number_of_cpus - 1
@@ -286,7 +286,7 @@ if __name__ == "__main__":
     parser.add_argument('-mem', dest="memory", type=int,
                         help='set memory', default=-1)
     parser.add_argument('-e', dest="entropies", nargs='+', help='<Required> entropies type', required=False)
-    parser.add_argument('-ep', dest="entropies_params", nargs='+', help='<Required> entropies type params', required=False,default=None)
+    parser.add_argument('-edp', dest="entropies_params", nargs='+', help='<Required> entropies type params', required=False,default=None)
     parser.add_argument('-m', dest="multiscale_object", help='Multiscale object if needed', required=False,default=None)
     parser.add_argument('-mp', dest="multiscale_object_params", help='Multiscale object params if needed', required=False,default=None)
     parser.add_argument('-ex', dest="files_that_do_not_exist", type=bool,
