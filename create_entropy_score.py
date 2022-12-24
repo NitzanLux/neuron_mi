@@ -37,6 +37,7 @@ class EntropyTypes(Enum):
     SPECTRAL_ENTROPY = 'SpecEn'
     COSINE_ENTROPY = 'CoSiEn'
     # K2_ENTROPY = 'K2En'
+    DISCRETE_SAMPLE_ENTROPY='DSampEn'
     def get_return_params(self):
         if self.name == EntropyTypes.SAMPLE_ENTROPY.name:
             return ['MSx','A', 'B']
