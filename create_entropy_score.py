@@ -9,13 +9,12 @@ import EntropyHub as EH
 from EntropyHub import SampEn
 import numpy as np
 import pickle as pickle
-from entropy import entropy
+import entropy.DSampEN as DSEN
 from typing import List,Dict
 from utils.parse_file import parse_sim_experiment_file
 from tqdm import tqdm
 import os
 import time
-
 ENTROPY_DATA_BASE_FOLDER = os.path.join(os.getcwd(), 'entropy_data')
 number_of_cpus = multiprocessing.cpu_count()
 MAX_INTERVAL = 150
@@ -43,7 +42,7 @@ class EntropyTypes(Enum):
             return ['MSx','A', 'B']
     def get_function(self):
         if self.value in {'DSampEn'}:
-            return getattr(entropy,'DSampEN')
+            return getattr(DSEN,'DSampEN')
         else:
             return getattr(EH, str(self.value))
 
