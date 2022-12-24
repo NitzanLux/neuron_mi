@@ -42,7 +42,7 @@ class EntropyTypes(Enum):
             return ['MSx','A', 'B']
     def get_function(self):
         if self.value in {'DSampEn'}:
-            return getattr(DSEN,'DSampEN')
+            return getattr(DSEN,'DSampEn')
         else:
             return getattr(EH, str(self.value))
 
