@@ -39,13 +39,9 @@ def DSampEn(Sig, m=2, Logx=np.exp(1)):
 
     Sig = np.squeeze(Sig)
     N = Sig.shape[0]
-    if r is None:
-        r = 0.2 * np.std(Sig)
 
     assert N > 10 and Sig.ndim == 1, "Sig:   must be a numpy vector"
     assert isinstance(m, int) and (m > 0), "m:     must be an integer > 0"
-    assert isinstance(tau, int) and (tau > 0), "tau:   must be an integer > 0"
-    assert isinstance(r, (int, float)) and (r >= 0), "r:     must be a positive value"
     assert isinstance(Logx, (int, float)) and (Logx > 0), "Logx:     must be a positive value"
     A = np.zeros((m+1,))
     for k in range(1, m + 2):
