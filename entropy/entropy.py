@@ -1,1 +1,1 @@
-from DSampEN import DSampEn
+from entropy.DSampEN import DSampEn
