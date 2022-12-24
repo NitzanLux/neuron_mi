@@ -6,31 +6,88 @@ from utils.evaluations_utils import *
 import numpy as np
 import matplotlib
 import seaborn as sn
+#%%{tag:plot name}
+# models = {'davids_ergodic_train':'NMDA','reduction_ergodic_train':'reduction','train_AMPA_gmax1':'AMPA gmax 0.0004','train_AMPA_gmax2':'AMPA gmax 0.0008','train_AMPA_gmax3':'AMPA gmax 0.0012','train_AMPA_gmax4':'AMPA gmax 0.0016'}
+# name_order = ['NMDA','reduction','AMPA gmax 0.0004','AMPA gmax 0.0008','AMPA gmax 0.0012','AMPA gmax 0.0016']
+# file_dest = "small_eval_fnum30000_seed_1623324578916768431.pkl"
+models={'Rat_L5b_PC_2_Hay_0-6':'L5PC 0.6'}
+name_order=['L5PC 0.6']
 
-
-#%%
-models = {'davids_ergodic_train':'NMDA','reduction_ergodic_train':'reduction','train_AMPA_gmax1':'AMPA1','train_AMPA_gmax2':'AMPA2','train_AMPA_gmax3':'AMPA3'}
-name_order = ['NMDA','reduction','AMPA1','AMPA2','AMPA3']
-file_dest = "small_eval_fnum30000_seed_1623324578916768431.pkl"
-
-
-#%%
-with open(os.path.join('entropy_data',file_dest),'rb') as f:
-    d_dict = pickle.load(f)
-# print(d_dict.keys())
-d = ModelsSEData(data_dict=d_dict)
+# with open(os.path.join('entropy_data',file_dest),'rb') as f:
+#     d_dict = pickle.load(f)
+#%% print(d_dict.keys())
+d = ModelsSEData(tags=list(models.keys()),is_folder=True)
+# d = ModelsSEData(data_dict=d_dict)
 # d.sample_from_set(d_ratio)
+#%%
 df, m_names = d.get_as_dataframe()
 models = {k:v for k,v in models.items()}
 # for i in models.keys():
     # df[df['model']==i]['model'] = models[i]
 # models = {v:v for v in models.values()}
-temp = {k:v for v,k in models.items()}
-name_order = [temp[i] if i not in models else i for i in name_order]
+# temp = {k:v for v,k in models.items()}
+# name_order = [temp[i] if i not in models else i for i in name_order]
 df.replace(inplace=True,to_replace=models)
 
+#%%
 
 
+# %% print temporal mean and error
+relevant_cols_msx=[]
+relevant_cols_ci=[]
+representative_msx=set()
+
+for i in df.columns:
+    if 'MSx'in i:
+        relevant_cols_msx.append(i)
+        representative_msx.add(i[:-len('_v_CI')])
+
+    elif 'CI' in i:
+        relevant_cols_ci.append(i)
+representative_msx = {k:i for i,k in enumerate(representative_msx)}
+df = df.sort_values(['key'])
+datas = {}
+ci_data={}
+threshold=None
+print(relevant_cols_msx)
+
+for m in tqdm(name_order):
+    datas[m]=[]
+    ci_data[m]=[]
+    for c in relevant_cols_msx:
+        print(df[df['model'] == m])
+        datas[m].append(np.vstack(df[df['model'] == m][c].tolist()))
+    for c in relevant_cols_ci:
+        ci_data[m].append(np.vstack(df[df['model'] == m][c].tolist()))
+
+# ci_data = np.hstack(ci_data)
+# indexes=np.arange(ci_data[0].shape[0])
+sorted(relevant_cols_msx,key = lambda x: representative_msx[x[:-len('_v_CI')]]+int('_v_' in x))
+for i,c in enumerate(relevant_cols_msx):
+    if i%2==0:
+        fig, ax = plt.subplots(1,2)
+    for m in tqdm(name_order):
+        if threshold is not None:
+            mean = np.mean(datas[m][i], axis=0)
+            std =  np.std(datas[m][i], axis=0)
+        else:
+            mean = np.mean(datas[m][i], axis=0)
+            std = np.std(datas[m][i], axis=0)
+        ax[i%2].plot(np.arange(datas[m][i].shape[1]), mean, label=f'{m}')
+        ax[i%2].fill_between(np.arange(datas[m][i].shape[1]), mean - std, mean + std, alpha=0.3)
+    ax[i%2].legend()
+    # if threshold is not None:
+    # ax.set_title(
+    # f'Average SE Across Different Time Scales (n = {len(datas[0]) * len(datas):,}) \nCi value {"greater" if direction > 0 else "lower"} than {threshold_value:0.4}')
+    # else:
+    #     ax.set_title(f'Average SE Across Different Time Scales (n = {len(datas[0]) * len(datas):,})')
+    ax[i%2].set_xlabel('Time Scales')
+    ax[i%2].set_ylabel('SE value')
+    ax[i%2].set_title(c.lower().replace('_',' ').capitalize())
+    if i%2==1:
+        save_large_plot(fig,f'temporal_msx_{c[:-len("_v_CI")]}_{len(d)}.png',tags=d.data_tags)
+
+    fig
 #%%
 
 inf_nan_columns = []
@@ -147,7 +204,7 @@ for c in tqdm(df.columns):
     for j, n in enumerate(name_order):
         frequency, bins = np.histogram(ci_data[j], bins=bins)
         frequency = frequency / np.sum(frequency)
-        ax.stairs(frequency, bins, fill=True, label=models[n], alpha=0.4)
+        ax.stairs(frequency, bins, fill=True, label=n, alpha=0.4)
     fig.legend(loc=1, borderaxespad=3)
     ax.set_title(c.lower().replace('_', ' ').capitalize())
     ax.set_ylabel('P(ci)')

@@ -5,11 +5,11 @@ import ntpath
 import traceback
 from enum import Enum
 from multiprocessing import Process, Queue
-from EntropyHub import SampEn
 import EntropyHub as EH
+from EntropyHub import SampEn
 import numpy as np
 import pickle as pickle
-
+from entropy import entropy
 from typing import List,Dict
 from utils.parse_file import parse_sim_experiment_file
 from tqdm import tqdm
@@ -37,7 +37,21 @@ class EntropyTypes(Enum):
     SPECTRAL_ENTROPY = 'SpecEn'
     COSINE_ENTROPY = 'CoSiEn'
     # K2_ENTROPY = 'K2En'
+    def get_return_params(self):
+        if self.name == EntropyTypes.SAMPLE_ENTROPY.name:
+            return ['MSx','A', 'B']
+    def get_function(self):
+        if self.value in {'DSampEn'}:
+            return getattr(entropy,'DSampEN')
+        else:
+            return getattr(EH, str(self.value))
 
+    @staticmethod
+    def get_by_name(name):
+        for i in EntropyTypes:
+            if i.name == name:
+                return i
+        return None
 
 class MultiScaleObj(Enum):
     MULTISCALE_ENTROPY = 'MSEn'
@@ -85,7 +99,7 @@ class EntropyObject():
             return lambda x: getattr(EH, self.multiscale_object.value)(x, Mobj, Scales=self.max_scale,
                                                                        **self.multiscale_object_params)
         else:
-            return lambda x: getattr(EH, str(entropy_type.value))(x, m=self.max_scale, **keys)
+            return lambda x: entropy_type.get_function()(x, m=self.max_scale, **keys)
 
     def add_entropy_measure(self, entropy_type: EntropyTypes, v=None, s=None, keys=None):
         # keys = {} if keys is None else keys
@@ -134,10 +148,17 @@ class EntropyObject():
 
     def get_entropy_dict(self):
         data_dict = dict()
-        return_params = self.multiscale_object.get_return_params()
-        for k, v in self.entropy_dict.items():
-            for tsv, vsv in v.items():
-                data_dict.update({f'{k}_{tsv}_{kk}': vv for kk, vv in zip(return_params, vsv)})
+        if self.multiscale_object is not None:
+            return_params = self.multiscale_object.get_return_params()
+            for k, v in self.entropy_dict.items():
+                for tsv, vsv in v.items():
+                    data_dict.update({f'{k}_{tsv}_{kk}': vv for kk, vv in zip(return_params, vsv)})
+        else:
+            for k, v in self.entropy_dict.items():
+                return_params =EntropyTypes.get_by_name(k).get_return_params()
+                for tsv, vsv in v.items():
+                    data_dict.update({f'{k}_{tsv}_{kk}': vv for kk, vv in  zip(return_params,vsv)})
+                    data_dict[f'{k}_{tsv}_CI']=data_dict[f'{k}_{tsv}_MSx'].sum()
         return data_dict
 
     def to_dict(self):

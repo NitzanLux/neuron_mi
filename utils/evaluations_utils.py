@@ -53,11 +53,12 @@ def save_large_plot(fig, name, tags):
 
 
 class ModelsSEData():
-    def __init__(self, tags=None,data_dict=None):
+    def __init__(self, tags=None,data_dict=None,is_folder=False):
         if data_dict is not None:
             self.__construct_from_data(data_dict)
         elif tags is not None:
-            self.__construct_from_tags(tags)
+            self.__construct_from_tags(tags,is_folder)
+            self.load_data(1.,True)
 
     def __construct_from_data(self,data_dict):
         self.data_tags = set(data_dict.keys())
@@ -96,20 +97,28 @@ class ModelsSEData():
         for i in self.data.values():
             for j in i.values():
                 self.entropy_keys.update(set(j.get_entropy_dict().keys()))
-    def __construct_from_tags(self,tags):
+    def __construct_from_tags(self,tags,is_folder=False):
         self.data_tags = [(i[:-len('.pkl')] if i.endswith('.pkl') else i) for i in tags]
         self.data = dict()
         self.entropy_keys = set()
         keys=[]
         for i in tqdm(self.data_tags):
             # files=[]
-            entropy_list = list(EntropyObject.load_list(os.path.join('entropy_data', i + '.pkl')).values())
+            if is_folder:
+                entropy_list = [EntropyObject.load(path=os.path.join('entropy_data', i,f))for f in os.listdir(os.path.join('entropy_data', i))]
+            else:
+                entropy_list = list(EntropyObject.load_list(os.path.join('entropy_data', i + '.pkl')).values())
             # for j in entropy_list:
             #     files.append(j.file_name)
             # suff = self.find_suffix_shared(files)
             for j,v in enumerate(entropy_list):
-                pos= m.match(v.file_name).regs[1]
-                entropy_list[j].file_name = v.file_name[:pos]
+                match = m.match(v.file_name)
+                if match is not None:
+                    pos = match.regs[1]
+                    entropy_list[j].file_name = v.file_name[:pos]
+                else:
+                    entropy_list[j].file_name = v.file_name.replace('_'+i,'')
+
             keys.append({(v.file_name,v.sim_index) for v in entropy_list})
         i_keys = set.intersection(*keys)
         d_keys = set.union(*keys)
@@ -120,18 +129,25 @@ class ModelsSEData():
             if i[0] in d_keys_f or i in d_keys:  # if theres a sim from file that do not exists
                 continue
             self.keys.add(i)
-    def load_data(self,ratio):
+    def load_data(self,ratio,is_folder=False):
         self.sample_from_set(ratio)
         for i in tqdm(self.data_tags):
             self.data[i]=dict()
             files=[]
-            entropy_list = EntropyObject.load_list(os.path.join('entropy_data', i + '.pkl'))
-            entropy_list = list(entropy_list.values())
+            if is_folder:
+                entropy_list = [EntropyObject.load(path=os.path.join('entropy_data', i,f))for f in os.listdir(os.path.join('entropy_data', i))]
+            else:
+                entropy_list = list(EntropyObject.load_list(os.path.join('entropy_data', i + '.pkl')).values())
             # for j in entropy_list:
             #     files.append(j.file_name)
             # suff = self.find_suffix_shared(files)
             for j,v in enumerate(entropy_list):
-                entropy_list[j].file_name = v.file_name[:]
+                match = m.match(v.file_name)
+                if match is not None:
+                    pos = match.regs[1]
+                    entropy_list[j].file_name = v.file_name[:pos]
+                else:
+                    entropy_list[j].file_name = v.file_name.replace('_'+i,'')
             for v in entropy_list:
                 if (v.file_name,v.sim_index) in self.keys:
                     self.data[i][(v.file_name,v.sim_index)]=v
@@ -209,6 +225,7 @@ class ModelsSEData():
                 if ent_k not in entropy_dict:
                     entropy_dict[ent_k]=[None]*(len(file_list)-1)
                 entropy_dict[ent_k].append(ent_v)
+
 
             spike_list.append(v.s)
             voltage_list.append(v.v)
