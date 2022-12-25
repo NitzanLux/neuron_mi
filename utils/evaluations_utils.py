@@ -26,7 +26,7 @@ FILE_INDEX = 2
 SIM_INDEX = 3
 SPIKE_NUMBER = 4
 m = re.compile('.*randseed_[0-9]+')
-
+m_id = re.compile('ID_[0-9]+_[0-9]+')
 def combination_sorting(orderd_models):
     comb_set = set()
     for i in combinations(np.arange(len(orderd_models)),2):
@@ -117,7 +117,8 @@ class ModelsSEData():
                     pos = match.regs[1]
                     entropy_list[j].file_name = v.file_name[:pos]
                 else:
-                    entropy_list[j].file_name = v.file_name.replace('_'+i,'')
+                    ID_f_name=m_id.match(v.file_name).group(0)
+                    entropy_list[j].file_name = ID_f_name
 
             keys.append({(v.file_name,v.sim_index) for v in entropy_list})
         i_keys = set.intersection(*keys)
@@ -147,7 +148,8 @@ class ModelsSEData():
                     pos = match.regs[1]
                     entropy_list[j].file_name = v.file_name[:pos]
                 else:
-                    entropy_list[j].file_name = v.file_name.replace('_'+i,'')
+                    ID_f_name = m_id.match(v.file_name).group(0)
+                    entropy_list[j].file_name = ID_f_name
             for v in entropy_list:
                 if (v.file_name,v.sim_index) in self.keys:
                     self.data[i][(v.file_name,v.sim_index)]=v

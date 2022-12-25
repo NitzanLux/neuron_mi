@@ -10,9 +10,8 @@ import seaborn as sn
 # models = {'davids_ergodic_train':'NMDA','reduction_ergodic_train':'reduction','train_AMPA_gmax1':'AMPA gmax 0.0004','train_AMPA_gmax2':'AMPA gmax 0.0008','train_AMPA_gmax3':'AMPA gmax 0.0012','train_AMPA_gmax4':'AMPA gmax 0.0016'}
 # name_order = ['NMDA','reduction','AMPA gmax 0.0004','AMPA gmax 0.0008','AMPA gmax 0.0012','AMPA gmax 0.0016']
 # file_dest = "small_eval_fnum30000_seed_1623324578916768431.pkl"
-models={'Rat_L5b_PC_2_Hay_0-6':'L5PC 0.6'}
-name_order=['L5PC 0.6']
-
+models={'Rat_L5b_PC_2_Hay_0-6_DSEN':'L5PC 0.6','Rat_L5b_PC_2_Hay_0-4_DSEN':'L5PC 0.4','Rat_L5b_PC_2_Hay_0-8_DSEN':'L5PC 0.8','Rat_L5b_PC_2_Hay_1_DSEN':'L5PC 1'}
+name_order=['L5PC 0.4','L5PC 0.6','L5PC 0.8','L5PC 1']
 # with open(os.path.join('entropy_data',file_dest),'rb') as f:
 #     d_dict = pickle.load(f)
 #%% print(d_dict.keys())
