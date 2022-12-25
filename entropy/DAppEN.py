@@ -4,7 +4,7 @@ from tqdm import tqdm
 NATURAL = np.exp(1)
 BASE_2 = 2
 
-def DSampEn(Sig, m=2, Logx=BASE_2):
+def DAppEn(Sig, m=2, Logx=BASE_2):
 
 
     Sig = np.squeeze(Sig)
