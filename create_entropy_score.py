@@ -19,7 +19,7 @@ ENTROPY_DATA_BASE_FOLDER = os.path.join(os.getcwd(), 'entropy_data')
 number_of_cpus = multiprocessing.cpu_count()
 MAX_INTERVAL = 1000
 print("start job")
-
+from utils.utils import *
 number_of_jobs = number_of_cpus - 1
 # number_of_jobs=1
 
@@ -309,8 +309,8 @@ if __name__ == "__main__":
     parser.add_argument('-mem', dest="memory", type=int,
                         help='set memory', default=-1)
     parser.add_argument('-e', dest="entropies", nargs='+', help='<Required> entropies type', required=False)
-    parser.add_argument('-v', dest="use_v", help='use voltage',type=bool, default=True)
-    parser.add_argument('-s', dest="use_s", help='use spike data',type=bool, default=True)
+    parser.add_argument('-v', dest="use_v", help='use voltage',type=str2bool, default=True)
+    parser.add_argument('-s', dest="use_s", help='use spike data',type=str2bool, default=True)
     parser.add_argument('-edp', dest="entropies_params", nargs='+', help='<Required> entropies type params', required=False,default=None)
     parser.add_argument('-m', dest="multiscale_object", help='Multiscale object if needed', required=False,default=None)
     parser.add_argument('-mp', dest="multiscale_object_params", help='Multiscale object params if needed', required=False,default=None)
