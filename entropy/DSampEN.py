@@ -47,7 +47,7 @@ def DSampEn(Sig, m=2, Logx=np.exp(1)):
     for k in range(1, m + 2):
         A[k-1] = count_occurence(Sig,k)
     with np.errstate(divide='ignore', invalid='ignore'):
-        Samp = -np.log(A[2:] / A[:-1] ) / np.log(Logx)
+        Samp = -np.log(A[1:] / A[:-1] ) / np.log(Logx)
     return Samp, A
 
 def count_occurence(sig,length):
