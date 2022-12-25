@@ -1,5 +1,5 @@
 import numpy as np
-
+from tqdm import tqdm
 """ Base Sample Entropy function."""
 
 
@@ -44,7 +44,7 @@ def DSampEn(Sig, m=2, Logx=np.exp(1)):
     assert isinstance(m, int) and (m > 0), "m:     must be an integer > 0"
     assert isinstance(Logx, (int, float)) and (Logx > 0), "Logx:     must be a positive value"
     A = np.zeros((m+1,))
-    for k in range(1, m + 2):
+    for k in tqdm(range(1, m + 2)):
         A[k-1] = count_occurence(Sig,k)
     with np.errstate(divide='ignore', invalid='ignore'):
         Samp = -np.log(A[1:] / A[:-1] ) / np.log(Logx)
