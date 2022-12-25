@@ -51,6 +51,6 @@ for i in os.listdir(args.path):
     ID = m.match(i).group(0)
     os.makedirs(os.path.join(dest_dir,'inputs',ID),exist_ok=True)
     if not os.path.exists(os.path.join(dest_dir,'inputs',ID,'inh_weighted_spikes.npz')) :
-        shutil.move(os.path.join(args.path,i,'inh_weighted_spikes.npz'),os.path.join(dest_dir,'inputs',ID,'inh_weighted_spikes.npz'))
+        shutil.copy(os.path.join(args.path,i,'inh_weighted_spikes.npz'),os.path.join(dest_dir,'inputs',ID,'inh_weighted_spikes.npz'))
     if not os.path.exists(os.path.join(dest_dir, 'inputs', ID, 'exc_weighted_spikes.npz')) :
-        shutil.move(os.path.join(args.path,i,'exc_weighted_spikes.npz'),os.path.join(dest_dir,'inputs',ID,'exc_weighted_spikes.npz'))
+        shutil.copy(os.path.join(args.path,i,'exc_weighted_spikes.npz'),os.path.join(dest_dir,'inputs',ID,'exc_weighted_spikes.npz'))

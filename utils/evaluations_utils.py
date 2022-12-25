@@ -39,6 +39,7 @@ def combination_sorting(orderd_models):
         yield i
 
 
+
 def save_large_plot(fig, name, tags):
     mng = plt.get_current_fig_manager()
     mng.full_screen_toggle()
