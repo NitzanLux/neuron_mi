@@ -45,7 +45,7 @@ class EntropyTypes(Enum):
         if self == EntropyTypes.SAMPLE_ENTROPY:
             return ['MSx', 'A', 'B']
         elif self == EntropyTypes.DISCRETE_SAMPLE_ENTROPY or self == EntropyTypes.DISCRETE_APPROXIMATE_ENTROPY:
-            return ['MSx', 'A']
+            return ['MSx', 'A','template_debugging']
 
     def get_function(self):
         if self.value in {'DSampEn'}:
