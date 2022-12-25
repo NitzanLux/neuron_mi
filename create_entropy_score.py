@@ -17,7 +17,7 @@ import os
 import time
 ENTROPY_DATA_BASE_FOLDER = os.path.join(os.getcwd(), 'entropy_data')
 number_of_cpus = multiprocessing.cpu_count()
-MAX_INTERVAL = 1000
+MAX_INTERVAL = 500
 print("start job")
 from utils.utils import *
 number_of_jobs = number_of_cpus - 1
