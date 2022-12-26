@@ -18,7 +18,7 @@ import time
 
 ENTROPY_DATA_BASE_FOLDER = os.path.join(os.getcwd(), 'entropy_data')
 number_of_cpus = multiprocessing.cpu_count()
-MAX_INTERVAL = 500
+MAX_INTERVAL = 750
 print("start job")
 from utils.utils import *
 
@@ -249,7 +249,7 @@ def load_file_path(base_dir):
 
 
 def create_sample_entropy_file(q, tag, entropies_types, entropies_params=None, multiscale_object=None,
-                               multiscale_object_params=None, use_derivative=False, use_v=True, use_s=True):
+                               multiscale_object_params=None, use_derivative=False, use_v=True, use_s=True,max_scale=MAX_INTERVAL):
     while True:
         if q.empty():
             return
@@ -264,7 +264,7 @@ def create_sample_entropy_file(q, tag, entropies_types, entropies_params=None, m
             s = y_spike.astype(np.float64)
             eo = EntropyObject(tag, f, f_index, sim_index=0, s=s, v=v, multiscale_object=multiscale_object,
                                multiscale_object_params=multiscale_object_params,
-                               use_derivative=use_derivative, max_scale=MAX_INTERVAL)
+                               use_derivative=use_derivative, max_scale=max_scale)
             eo.add_entropies(entropies_types, entropies_params)
             eo.save()
             t = time.time()
@@ -275,7 +275,7 @@ def create_sample_entropy_file(q, tag, entropies_types, entropies_params=None, m
                 s = y_spike[index].astype(np.float64) if use_s else None
                 eo = EntropyObject(tag, f, f_index, sim_index=index, s=s, v=v, multiscale_object=multiscale_object,
                                    multiscale_object_params=multiscale_object_params,
-                                   use_derivative=use_derivative, max_scale=MAX_INTERVAL)
+                                   use_derivative=use_derivative, max_scale=max_scale)
                 eo.add_entropies(entropies_types, entropies_params)
                 eo.save()
                 t = time.time()
@@ -283,7 +283,7 @@ def create_sample_entropy_file(q, tag, entropies_types, entropies_params=None, m
 
 
 def get_entropy(tag, pathes, entropies, file_index_start, use_derivative, entropies_params, multiscale_object,
-                multiscale_object_params, use_v, use_s):
+                multiscale_object_params, use_v, use_s,max_scale):
     number_of_jobs = min(number_of_cpus - 1, len(pathes))
     entropies_list = []
     # entropy_params_dict={}
@@ -295,7 +295,7 @@ def get_entropy(tag, pathes, entropies, file_index_start, use_derivative, entrop
     process = [
         Process(target=create_sample_entropy_file, args=(
         queue, tag, entropies_list, entropies_params, multiscale_object, multiscale_object_params, use_derivative,
-        use_v, use_s)) for i
+        use_v, use_s,max_scale)) for i
         in range(number_of_jobs)]
     print('starting')
     for j, fp in enumerate(pathes):
@@ -317,8 +317,10 @@ if __name__ == "__main__":
                         help='tag for saving')
     parser.add_argument('-j', dest="cluster_num", type=int,
                         help="number of jobs on cluster")
-    parser.add_argument('-der', dest="use_derivative", type=str,
-                        help='add_derivative', default='False')
+    parser.add_argument('-sc', dest="max_scale", type=int,
+                        help="maximal scale for entropy eval",default=MAX_INTERVAL)
+    parser.add_argument('-der', dest="use_derivative", type=str2bool,
+                        help='add_derivative', default=False)
     parser.add_argument('-mem', dest="memory", type=int,
                         help='set memory', default=-1)
     parser.add_argument('-e', dest="entropies", nargs='+', help='<Required> entropies type', required=False)
@@ -334,9 +336,6 @@ if __name__ == "__main__":
                         help='simulate only files that do not exist', default=False)
     args = parser.parse_args()
 
-    use_derivative = not args.use_derivative.lower() in {"false", '0', ''}
-
-    # use_derivative = not args.use_derivative.lower() in {"false", '0', ''}
     if 'entropies' not in args or args.entropies is None:
         entropies = [i.name for i in EntropyTypes]
     else:
@@ -384,7 +383,7 @@ if __name__ == "__main__":
         print(range(cur_start, min(end_point, len(list_dir_parent))))
 
         job_factory.send_job(f"entropy_{args.tag}_{i}_{MAX_INTERVAL}d",
-                             f'python -c "from create_entropy_score import get_entropy; get_entropy(' + "'" + args.tag + "'" + f',{pathes},{entropies},{i * jumps},{use_derivative},{args.entropies_params}, {args.multiscale_object}, {args.multiscale_object_params},{args.use_v},{args.use_s})"',
+                             f'python -c "from create_entropy_score import get_entropy; get_entropy(' + "'" + args.tag + "'" + f',{pathes},{entropies},{i * jumps},{args.use_derivative},{args.entropies_params}, {args.multiscale_object}, {args.multiscale_object_params},{args.use_v},{args.use_s},{args.max_scale})"',
                              **keys)
         print('job sent')
 
