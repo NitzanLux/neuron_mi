@@ -18,11 +18,11 @@ import time
 
 ENTROPY_DATA_BASE_FOLDER = os.path.join(os.getcwd(), 'entropy_data')
 number_of_cpus = multiprocessing.cpu_count()
-MAX_INTERVAL = 750
+MAX_INTERVAL = 300
 print("start job")
 from utils.utils import *
 
-number_of_jobs = number_of_cpus - 1
+number_of_jobs = number_of_cpus//5
 # number_of_jobs=1
 
 
@@ -382,7 +382,7 @@ if __name__ == "__main__":
         # use_voltage = args.sv == 'v'
         print(range(cur_start, min(end_point, len(list_dir_parent))))
 
-        job_factory.send_job(f"entropy_{args.tag}_{i}_{MAX_INTERVAL}d",
+        job_factory.send_job(f"entropy_{args.tag}_{i}_{args.max_scale}d",
                              f'python -c "from create_entropy_score import get_entropy; get_entropy(' + "'" + args.tag + "'" + f',{pathes},{entropies},{i * jumps},{args.use_derivative},{args.entropies_params}, {args.multiscale_object}, {args.multiscale_object_params},{args.use_v},{args.use_s},{args.max_scale})"',
                              **keys)
         print('job sent')
