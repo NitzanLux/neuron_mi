@@ -52,7 +52,7 @@ class CTWManagerInfinite(te.CTWManager):
         insert all possible contexts of the sequence into the tree.
         :param p: pattern
         """
-        for i in tqdm(range(len(p))):
+        for i in tqdm(range(len(p)-1,-1,-1)):
             self.insert_pattern(p[:i+1])
 
         self.tree.update_w()
