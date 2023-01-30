@@ -8,6 +8,7 @@ class CTW(EntropyHandler):
         self.model = CTWManagerInfinite() if D is None else CTWManagerFinite(D, True)
 
     def insert_pattern(self, p):
+        print('inserting patterns',flush=True)
         return self.model.update_by_sequence(p)
 
     def get_entropy(self,l,last_key:int=0):
