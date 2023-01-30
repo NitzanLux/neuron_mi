@@ -157,6 +157,8 @@ class Node():
                     return self, len(self.context_pattern), pattern[:len(pattern)-len(self.context_pattern)]
             assert False,"Edge case!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     def add_child(self, pattern):
+        if pattern[0] is not None:
+            pattern = [None]+pattern
         # assert pattern[-len(self.context_pattern):] == pattern,'' todo cheack that the pattern are different.
         cur_node, index, reminder = self.__travel_to_position(pattern=pattern[:-1])
         if len(reminder) == 0:
