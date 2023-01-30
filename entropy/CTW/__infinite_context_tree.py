@@ -57,3 +57,6 @@ class CTWManagerInfinite(te.CTWManager):
 
         self.tree.update_w()
         print('finished up updating',flush=True)
+
+    def get_entropy(self, l, last_key=0):
+        return -self.tree.get_log_prob_w(last_key) / l
