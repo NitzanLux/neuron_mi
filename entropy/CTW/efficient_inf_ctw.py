@@ -1,13 +1,15 @@
 from __future__ import annotations
 
 from typing import List, Tuple
-
+import sys
+print('recurstion old , ' ,sys.getrecursionlimit())
+sys.setrecursionlimit(10000)
 import mpmath
 from mpmath import mp, mpf
 from .__fractional_precision import FractionPrecition as fp
 from .__print_tree import drawTree2
 from .__print_tree import Node as s_node
-MAX_DENOMINATOR = 10000000000
+MAX_DENOMINATOR = 10000000
 mp.dps = 100
 LETTERS = {0, 1, None}
 
