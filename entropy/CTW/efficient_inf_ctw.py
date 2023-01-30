@@ -146,7 +146,7 @@ class Node():
                 if o == n:
                     continue
                 return self, i, pattern[:len(pattern) - i]
-            assert False, "Edge case!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+            assert False, f"Edge case!!!!!!!!!!!!!!!!!!!!!!!!!!! pattern:{pattern}\n, existing pattern:{self.context_pattern}"
 
         else:
             if self.context_pattern == pattern[len(pattern)-len(self.context_pattern):]:
@@ -155,7 +155,8 @@ class Node():
                         pattern=pattern[:len(pattern)-len(self.context_pattern)])
                 else:
                     return self, len(self.context_pattern), pattern[:len(pattern)-len(self.context_pattern)]
-            assert False,"Edge case!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+            assert False, f"Edge case!!!!!!!!!!!!!!!!!!!!!!!!!!! pattern:{pattern}\n, existing pattern:{self.context_pattern}"
+
     def add_child(self, pattern):
         if pattern[0] is not None:
             pattern = [None]+pattern
