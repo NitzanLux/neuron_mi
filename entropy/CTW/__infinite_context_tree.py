@@ -56,3 +56,4 @@ class CTWManagerInfinite(te.CTWManager):
             self.insert_pattern(p[:i+1])
 
         self.tree.update_w()
+        print('finished up updating',flush=True)
