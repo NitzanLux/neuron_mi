@@ -15,8 +15,8 @@ def create_spike_trains(l,size):
     d[e]=1
     return d
 def simulate_poisson(number):
-    N = [2500,5000,10000]
-    l = np.linspace(1, 2000, 2)
+    N = [2500,5000,10000]#,20000,40000]
+    l = np.linspace(1, 2000,3)#, 100)
     anlytical=[]
     for i in l:
         y = []
@@ -35,4 +35,4 @@ if __name__ == '__main__':
     number=np.random.randint(0,1e+7)
     job_factory = SlurmJobFactory("cluster_logs")
     job_factory.send_job(f"entropy_poiss_{number}",
-                         f'python -c "from simulate_poisson import simulate_poisson; simulate_poisson({number})')
+                         f'python -c "from simulate_poisson import simulate_poisson; simulate_poisson({number})"')
