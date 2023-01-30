@@ -1,7 +1,7 @@
 from ..entropy_factory import EntropyHandler
 from .__finite_context_tree_weighted import CTWManagerFinite
 from .__infinite_context_tree import CTWManagerInfinite
-
+import numpy as np
 
 class CTW(EntropyHandler):
     def __init__(self, D: [int, None]=None):
@@ -9,6 +9,8 @@ class CTW(EntropyHandler):
 
     def insert_pattern(self, p):
         print('inserting patterns',flush=True)
+        if isinstance(p,np.ndarray):
+            p = p.astype(int).tolist()
         return self.model.update_by_sequence(p)
 
     def get_entropy(self,l,last_key:int=0):
