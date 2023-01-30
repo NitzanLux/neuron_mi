@@ -4,7 +4,7 @@ from tqdm import tqdm
 
 NATURAL = np.exp(1)
 BASE_2 = 2
-def DSampEn(Sig, m=2, Logx=NATURAL):
+def DSampEn(Sig, m=2, Logx=BASE_2):
 
 
     """SampEn  estimates the sample entropy of a univariate data sequence.
@@ -43,7 +43,7 @@ def DSampEn(Sig, m=2, Logx=NATURAL):
     assert isinstance(Logx, (int, float)) and (Logx > 0), "Logx:     must be a positive value"
     A = np.zeros((m+1,))
     B = np.zeros((m+1,))
-    for k in tqdm(range(1,m+2)):
+    for k in (range(1,m+2)):
         a,b = count_occurence(Sig,k)
         A[k-1]=a
         B[k-1]=b

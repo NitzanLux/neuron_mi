@@ -11,8 +11,12 @@ import numpy as np
 import pickle as pickle
 import entropy.DSampEN as DSEN
 from typing import List, Dict
+from typing import List, Dict
+from typing import List, Dict
+from typing import List, Dict
 from utils.parse_file import parse_sim_experiment_file
 from tqdm import tqdm
+import entropy
 import os
 import time
 
@@ -40,16 +44,25 @@ class EntropyTypes(Enum):
     # K2_ENTROPY = 'K2En'
     DISCRETE_SAMPLE_ENTROPY = 'DSampEn'
     DISCRETE_APPROXIMATE_ENTROPY = 'DAppEn'
+    CTW_ENTROPY = 'CTW'
 
     def get_return_params(self):
         if self == EntropyTypes.SAMPLE_ENTROPY:
             return ['MSx', 'A', 'B']
         elif self == EntropyTypes.DISCRETE_SAMPLE_ENTROPY or self == EntropyTypes.DISCRETE_APPROXIMATE_ENTROPY:
-            return ['MSx', 'A','template_debugging']
-
+            return ['MSx', 'A','B']
+        elif self==EntropyTypes.CTW_ENTROPY:
+            return ['ent_app']
     def get_function(self):
         if self.value in {'DSampEn'}:
             return getattr(DSEN, 'DSampEn')
+        elif self.value in {'CTW'}:
+            def func(x,*args,**kwargs):
+                b=entropy.CTW()
+                b.insert_pattern(x)
+                return b.get_entropy(len(x))
+            return func
+
         else:
             return getattr(EH, str(self.value))
 
@@ -166,7 +179,8 @@ class EntropyObject():
                 return_params = EntropyTypes.get_by_name(k).get_return_params()
                 for tsv, vsv in v.items():
                     data_dict.update({f'{k}_{tsv}_{kk}': vv for kk, vv in zip(return_params, vsv)})
-                    data_dict[f'{k}_{tsv}_CI'] = data_dict[f'{k}_{tsv}_MSx'].sum()
+                    if f'{k}_{tsv}_MSx' in data_dict:
+                        data_dict[f'{k}_{tsv}_CI'] = np.nansum(data_dict[f'{k}_{tsv}_MSx'])
         return data_dict
 
     def to_dict(self):

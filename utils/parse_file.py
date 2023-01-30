@@ -49,7 +49,7 @@ def parse_sim_experiment_file(sim_experiment_file):
     if not os.path.isfile(sim_experiment_file):
         return parse_sim_experiment_file_ido(sim_experiment_file)
     print('-----------------------------------------------------------------')
-    print("loading file: '" + sim_experiment_file.split("\\")[-1] + "'")
+    print("loading file: '" + sim_experiment_file.__split("\\")[-1] + "'")
     loading_start_time = time.time()
     experiment_dict = pickle.load(open(str(sim_experiment_file).encode('utf-8'), "rb"))
 

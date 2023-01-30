@@ -33,3 +33,34 @@ def count_occurence(sig,length,Logx):
         assert v>0,f'pattern {k} appears zero times....'
         cumulative_sum+=np.log(v*v)/np.log(Logx)
     return cumulative_sum/(sig.shape[0]-length+1)
+
+def count_occurence(sig,length):
+    assert length>0,'length must be positive'
+    if length ==1:
+        cumulative_sum_B = (sig.shape[0] * (sig.shape[0]-1)/2)
+        cumulative_sum_A = np.sum([i*(i-1) for i in np.unique(sig,return_counts=True)[1]])/2
+        return cumulative_sum_A,cumulative_sum_B
+    repeat_dict_A={}
+    repeat_dict_B={}
+    for i in range(sig.shape[0]-length+1):
+        cur_sig_A = tuple(sig[i:i+length])
+        cur_sig_B = tuple(sig[i:i+length-1])
+
+        if cur_sig_B not in repeat_dict_B:
+            repeat_dict_B[cur_sig_B]=1
+        else:
+            repeat_dict_B[cur_sig_B]+=1
+        if cur_sig_A not in repeat_dict_A:
+            repeat_dict_A[cur_sig_A]=1
+        else:
+            repeat_dict_A[cur_sig_A]+=1
+
+    cumulative_sum_B = 0
+    cumulative_sum_A = 0
+    for k,v in repeat_dict_B.items():
+        # assert v>0,f'pattern {k} appears zero times....'
+        cumulative_sum_B += (v)*(v-1)/2
+    for k,v in repeat_dict_A.items():
+        # assert v>0,f'pattern {k} appears zero times....'
+        cumulative_sum_A += (v)*(v-1)/2
+    return cumulative_sum_A ,cumulative_sum_B
