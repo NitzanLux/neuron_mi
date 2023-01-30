@@ -23,7 +23,7 @@ def simulate_poisson(number):
         for j,n in enumerate(N):
             if j==0:
                 anlytical.append(poisson_ent(i))
-            s=create_spike_trains(l,n)
+            s=create_spike_trains(i,n)
             ctw=CTW()
             ctw.insert_pattern(s)
             y.append(ctw.get_entropy(n))
