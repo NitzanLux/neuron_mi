@@ -16,7 +16,7 @@ def create_spike_trains(l,size):
     return d
 def simulate_poisson(number):
     N = [2500,5000,10000]#,20000,40000]
-    l = np.linspace(1, 2000,3)#, 100)
+    l = [1,5,10,2000]#, 100)
     anlytical=[]
     for i in l:
         y = []
