@@ -28,6 +28,7 @@ def simulate_poisson(number):
             ctw.insert_pattern(s)
             y.append(ctw.get_entropy(n))
         plt.plot(l,y,label=f'{str(i)}')
+    plt.legend
     plt.savefig(os.path.join('plots',f'results_{number}.png'))
 
 if __name__ == '__main__':
