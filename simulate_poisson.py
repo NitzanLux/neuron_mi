@@ -22,12 +22,13 @@ def simulate_poisson(number):
         y = []
         for i in l:
             if j==0:
-                anlytical.append(poisson_ent(i))
+                anlytical.append(poisson_ent(i)*i/n)
             s=create_spike_trains(i,n)
             ctw=CTW()
             ctw.insert_pattern(s)
             y.append(ctw.get_entropy(n))
         plt.plot(l,y,label=f'{str(i)}')
+    plt.plot(l,anlytical,label='anlytical')
     plt.legend()
     plt.savefig(os.path.join('plots',f'results_{number}.png'))
 
