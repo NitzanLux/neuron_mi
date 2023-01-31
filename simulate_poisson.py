@@ -18,9 +18,9 @@ def simulate_poisson(number):
     N = [2500,5000,10000]#,20000,40000]
     l = [1,5,10,2000]#, 100)
     anlytical=[]
-    for i in l:
+    for j, n in enumerate(N):
         y = []
-        for j,n in enumerate(N):
+        for i in l:
             if j==0:
                 anlytical.append(poisson_ent(i))
             s=create_spike_trains(i,n)
