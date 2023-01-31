@@ -82,7 +82,11 @@ class Node():
         if len(self.__children) > 0:
             two_to_pow = mp.power(2, len(self.context_pattern))
             factor = mpf(1.) / two_to_pow
-            self.__prob_w = logaddexp(self.prob_e + log(1 - factor), self.__child_prob_w + log(factor))
+            child_prob_w=mpf(0.)
+            for i in self.children.values():
+                child_prob_w+=i.prob_w
+
+            self.__prob_w = logaddexp(self.prob_e + log(1 - factor),child_prob_w + log(factor))
         else:
             self.__prob_w = log(mpf(0.5))
 
@@ -121,6 +125,7 @@ class Node():
         for i,n in enumerate(stack[::-1]):
             # print(i)
             n.__update_prob_w()
+        self.__update_prob_w()
 
     def __update_predictions(self, x: None | int):
         assert x in LETTERS, f"letter {x} is not valid ,can only append {LETTERS}"
@@ -240,4 +245,4 @@ class Node():
         print(out.decode('utf-8-sig'))
 
     def get_log_prob_w(self,*kwars):
-        return self.prob_w / mpmath.log(2)
+        return self.prob_w / mpmath.log(2.)
