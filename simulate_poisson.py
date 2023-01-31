@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from entropy import *
 from scipy.stats import poisson,binom
 import os
-poisson_ent = lambda x: poisson(x).entropy()
+poisson_ent = lambda x: poisson(x).entropy()/x
 binomial_ent = lambda p,n: (1./2.)*np.log(2*np.pi*np.exp(1)*n*p*(1-p))
 # binary_maximum_ent = lambda p: -((1-p)*np.log2(1-p)+(p)*np.log2(p))*n
 # n= 60
