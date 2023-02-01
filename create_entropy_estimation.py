@@ -181,9 +181,6 @@ def create_sample_entropy_file(q, tag, use_v=True, use_s=True):
 
 def get_entropy(tag, pathes, file_index_start, use_v, use_s):
     number_of_jobs = min(number_of_cpus - 1, len(pathes))
-    entropies_list = []
-    # entropy_params_dict={}
-    assert len(entropies_list) > 0, f'No entropy measures, '
     queue = Queue(maxsize=number_of_jobs)
     process = [
         Process(target=create_sample_entropy_file, args=(
