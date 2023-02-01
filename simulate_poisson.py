@@ -47,9 +47,9 @@ def simulate_poisson(number):
     plt.savefig(os.path.join('plots',f'results_{number}.png'))
 
 if __name__ == '__main__':
-    # from utils.slurm_job import SlurmJobFactory
-    # number=np.random.randint(0,1e+7)
-    # job_factory = SlurmJobFactory("cluster_logs")
-    # job_factory.send_job(f"entropy_poiss_{number}",
-    #                      f'python -c "from simulate_poisson import simulate_poisson; simulate_poisson({number})"')
-    simulate_poisson(100)
+    from utils.slurm_job import SlurmJobFactory
+    number=np.random.randint(0,1e+7)
+    job_factory = SlurmJobFactory("cluster_logs")
+    job_factory.send_job(f"entropy_poiss_{number}",
+                         f'python -c "from simulate_poisson import simulate_poisson; simulate_poisson({number})"')
+    # simulate_poisson(100)
