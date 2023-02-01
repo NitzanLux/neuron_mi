@@ -377,6 +377,7 @@ if __name__ == "__main__":
     jumps = len(list_dir_parent) // (number_of_clusters)
     modulu_res = len(list_dir_parent) % (number_of_clusters)
     keys = {}
+    os.makedirs(os.path.join(os.path.join(ENTROPY_DATA_BASE_FOLDER, args.tag),),exist_ok=True)
     print(f'jumps {jumps} c_num = {number_of_clusters}')
     if args.memory > 0:
         keys['mem'] = args.memory
