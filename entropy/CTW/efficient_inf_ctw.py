@@ -105,7 +105,7 @@ class Node():
 
     def __update_prob_w(self):
         if len(self.__children) > 0:
-            two_to_pow = mpf(2.) * len(self.context_pattern)  # mp.power(2, len(self.context_pattern))
+            two_to_pow = mp.power(2, len(self.context_pattern))
             factor = mpf(1.) / two_to_pow
             child_prob_w = mpf(0.)
             for i in self.children.values():
