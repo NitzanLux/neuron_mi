@@ -259,7 +259,7 @@ if __name__ == "__main__":
         # use_voltage = args.sv == 'v'
         print(range(cur_start, min(end_point, len(list_dir_parent))))
 
-        job_factory.send_job(f"entropy_{args.tag}_{i}_{args.max_scale}d",
+        job_factory.send_job(f"entropy_{args.tag}_{i}",
                              f'python -c "from create_entropy_estimation import get_entropy; get_entropy(' + "'" + args.tag + "'" + f',{pathes},{i * jumps}, {args.use_v},{args.use_s})"',
                              **keys)
         print('job sent')
