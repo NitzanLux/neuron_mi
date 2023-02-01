@@ -30,7 +30,7 @@ def create_spike_trains_r(l,size,time_interval=1000):
 
 def simulate_poisson(number):
     N = [2500,5000,10000,20000,40000]
-    l = [1,2.5,5,7.5,10,100]#, 100)
+    l = np.arange(15)#, 100)
     anlytical=[]
     for j, n in enumerate(N):
         y = []
@@ -42,8 +42,10 @@ def simulate_poisson(number):
             ctw.insert_pattern(s)
             y.append(ctw.get_entropy(n))
         plt.plot(l,y,label=f'{str(n)}')
-    plt.plot(l,anlytical,label='anlytical')
-    plt.legend()
+    plt.plot(l,anlytical,label='analytical')
+    plt.legend('Sequence length')
+    plt.xlabel('$lambda$')
+    plt.ylabel('S(x)')
     plt.savefig(os.path.join('plots',f'results_{number}.png'))
 
 if __name__ == '__main__':
