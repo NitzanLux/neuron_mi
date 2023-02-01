@@ -38,8 +38,8 @@ from tqdm import tqdm
 #         self.tree.data.update_probs()
 class CTWManagerInfinite(te.CTWManager):
 
-    def __init__(self):
-        super().__init__(eic.Node.generate_root())
+    def __init__(self,__tree=None):
+        super().__init__(eic.Node.generate_root() if __tree is None else __tree)
 
     def insert_pattern(self, p: List):
         """
@@ -60,3 +60,10 @@ class CTWManagerInfinite(te.CTWManager):
 
     def get_entropy(self, l, last_key=0):
         return -self.tree.get_log_prob_w(last_key) / l
+
+    def to_dict(self):
+        return self.tree.to_dict()
+
+    @staticmethod
+    def from_dict(data_dict):
+        return CTWManagerInfinite(eic.Node.from_dict(data_dict))

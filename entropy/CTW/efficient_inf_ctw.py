@@ -2,13 +2,15 @@ from __future__ import annotations
 
 from typing import List, Tuple
 import sys
-print('recurstion old , ' ,sys.getrecursionlimit())
+
+print('recurstion old , ', sys.getrecursionlimit())
 sys.setrecursionlimit(10000)
 import mpmath
 from mpmath import mp, mpf
 from .__fractional_precision import FractionPrecition as fp
 from .__print_tree import drawTree2
 from .__print_tree import Node as s_node
+import pickle
 MAX_DENOMINATOR = 10000000
 mp.dps = 100
 LETTERS = {0, 1, None}
@@ -35,11 +37,11 @@ def logaddexp(a, b):
 
 class Node():
 
-    def __init__(self, pattern: List[None, int]):
+    def __init__(self, pattern: List[None, int], __children=None, __occurrences=None, __parent=None, ):
         self.__context_pattern: List[None, int] = pattern
-        self.__children = dict()
-        self.__occurrences = 1
-        self.__parent = None
+        self.__children = dict() if __children is None else __children
+        self.__occurrences = 1 if __occurrences is None else __occurrences
+        self.__parent = None if __parent is None else __parent
         # self.a=0
         # self.b=0
         # self.__prob_w =mpf(0.)
@@ -47,29 +49,52 @@ class Node():
         # self.__child_prob_w=0
         # self.update_predictions(pattern[0])
 
-    def __build_params(self, a: None | int = None, b: None | int = None, prob_e: [None, mpf] = None):
+    def __build_params(self, a: None | int = None, b: None | int = None, prob_e: [None, mpf] = None,
+                       __prob_w: [None, mpf] = None):
         conditions = [a is None, b is None, prob_e is None]
         assert all(conditions) or not any(conditions), "a,b and e supposed to be all none or all with value"
 
         self.a = 0 if a is None else a
         self.b = 0 if b is None else b
         self.__prob_e = mpf(0) if prob_e is None else prob_e
-        self.__prob_w = mpf(0.)
-        self.__child_prob_w = mpf(0.)
-        self.__update_prob_w()
+        if __prob_w is None:
+            self.__prob_w = mpf(0.)
+            self.__update_prob_w()
+        else:
+            self.__prob_w = __prob_w
         # self.update_predictions(pattern[0])
 
     def __getitem__(self, item):
-        if isinstance(item,list):
-            item=item[-1]
+        if isinstance(item, list):
+            item = item[-1]
         return self.__children[item]
+
+    def to_dict(self):
+        children_dict = dict()
+        for k, v in self.__children.items():
+            children_dict[k] = v.to_dict()
+        return dict(children = children_dict,
+        constractor = dict(__context_pattern=self.__context_pattern, __occurrences=self.__occurrences,
+             __parent=self.__parent),
+        parameters = dict(a=self.a, b=self.b, prob_e=self.prob_e, __prob_w=self.__prob_w))
+    @staticmethod
+    def from_dict(data_dict):
+        __children=dict()
+        for k,v in data_dict['children']:
+            __children[k]=Node.from_dict(v)
+        data_dict['constractor'][__children]=__children
+        obj = Node(**data_dict['constractor'])
+        obj.__build_params(**data_dict['parameters'])
+        return obj
 
     @property
     def parent(self):
         return self.__parent
+
     @property
     def children(self):
         return self.__children
+
     @property
     def context_pattern(self):
         return self.__context_pattern
@@ -80,13 +105,12 @@ class Node():
 
     def __update_prob_w(self):
         if len(self.__children) > 0:
-            two_to_pow = mp.power(2, len(self.context_pattern))
+            two_to_pow = mpf(2.) * len(self.context_pattern)  # mp.power(2, len(self.context_pattern))
             factor = mpf(1.) / two_to_pow
-            child_prob_w=mpf(0.)
+            child_prob_w = mpf(0.)
             for i in self.children.values():
-                child_prob_w+=i.prob_w
-
-            self.__prob_w = logaddexp(self.prob_e + log(1 - factor),child_prob_w + log(factor))
+                child_prob_w += i.prob_w
+            self.__prob_w = logaddexp(self.prob_e + log(1 - factor), child_prob_w + log(factor))
         else:
             self.__prob_w = log(mpf(0.5))
 
@@ -115,14 +139,14 @@ class Node():
 
     def update_w(self):
         stack = [self]
-        counter=0
-        while len(stack) >counter:
+        counter = 0
+        while len(stack) > counter:
             cur_node = stack[counter]
-            counter+=1
+            counter += 1
             # print(counter,'c')
             stack.extend(cur_node.children.values())
             # print('len ',len(cur_node.get_next_datas()))
-        for i,n in enumerate(stack[::-1]):
+        for i, n in enumerate(stack[::-1]):
             # print(i)
             n.__update_prob_w()
         self.__update_prob_w()
@@ -145,7 +169,7 @@ class Node():
         """
         if self.context_pattern == pattern:  # if equal
             return self, len(pattern), []
-        if len(self.context_pattern) > len(pattern) :  # if pattern is equal to the current node pattern(or even differ)
+        if len(self.context_pattern) > len(pattern):  # if pattern is equal to the current node pattern(or even differ)
 
             i = -1
             for o, n in zip(self.context_pattern[::-1], pattern[::-1]):
@@ -156,12 +180,12 @@ class Node():
             assert False, f"Edge case!!!!!!!!!!!!!!!!!!!!!!!!!!! pattern:{pattern}\n, existing pattern:{self.context_pattern}"
 
         else:
-            if self.context_pattern == pattern[len(pattern)-len(self.context_pattern):]:
-                if pattern[len(pattern)-len(self.context_pattern) - 1] in self.__children:
-                    return self.__children[pattern[len(pattern)-len(self.context_pattern)-1]].__travel_to_position(
-                        pattern=pattern[:len(pattern)-len(self.context_pattern)])
+            if self.context_pattern == pattern[len(pattern) - len(self.context_pattern):]:
+                if pattern[len(pattern) - len(self.context_pattern) - 1] in self.__children:
+                    return self.__children[pattern[len(pattern) - len(self.context_pattern) - 1]].__travel_to_position(
+                        pattern=pattern[:len(pattern) - len(self.context_pattern)])
                 else:
-                    return self, len(self.context_pattern), pattern[:len(pattern)-len(self.context_pattern)]
+                    return self, len(self.context_pattern), pattern[:len(pattern) - len(self.context_pattern)]
             else:
                 i = -1
                 for o, n in zip(self.context_pattern[::-1], pattern[::-1]):
@@ -174,7 +198,7 @@ class Node():
 
     def add_child(self, pattern):
         if pattern[0] is not None:
-            pattern = [None]+pattern
+            pattern = [None] + pattern
         # assert pattern[-len(self.context_pattern):] == pattern,'' todo cheack that the pattern are different.
         cur_node, index, reminder = self.__travel_to_position(pattern=pattern[:-1])
         if len(reminder) == 0:
@@ -187,7 +211,7 @@ class Node():
             cur_node.__children[reminder[-1]] = cur_child
 
         elif len(cur_node.context_pattern) > index:
-            cur_node.__split(len(cur_node.context_pattern)-index-1)
+            cur_node.__split(len(cur_node.context_pattern) - index - 1)
             assert reminder[-1] not in cur_node.__children
             cur_child = cur_node.__create_new_object(pattern=pattern[:-1])
             cur_node.__children[reminder[-1]] = cur_child
@@ -221,7 +245,6 @@ class Node():
         self.__children[new_child.context_pattern[-1]] = new_child
         new_child.__parent = self
 
-
     def __build_v_tree_node(self):
         text = repr(self.context_pattern) + f"[({self.a},{self.b}),pe {float(self.prob_e)},pw {float(self.prob_w)}]"
         children = []
@@ -244,5 +267,5 @@ class Node():
         out = drawTree2(False)(False)(self.__build_v_tree_node()).encode('utf-8-sig')
         print(out.decode('utf-8-sig'))
 
-    def get_log_prob_w(self,*kwars):
+    def get_log_prob_w(self, *kwars):
         return self.prob_w / mpmath.log(2.)
