@@ -29,7 +29,7 @@ def create_spike_trains_r(l,size,time_interval=1000):
     return np.random.binomial(1,float(l)/s,size)
 
 def simulate_poisson(number):
-    N = [2500,5000,10000]
+    N = [2500,5000,10000,20000,40000]
     l = np.arange(15)+1#, 100)
     anlytical=[]
 
@@ -44,7 +44,7 @@ def simulate_poisson(number):
             y.append(ctw.get_entropy(n))
         plt.plot(l,y,label=f'{str(n)}')
     plt.plot(l,anlytical,label='analytical')
-    plt.legend('Sequence length')
+    plt.legend(title='Sequence length')
     plt.xlabel('$lambda$')
     plt.ylabel('S(x)')
     plt.savefig(os.path.join('plots',f'results_{number}.png'))
