@@ -23,7 +23,7 @@ number_of_cpus = multiprocessing.cpu_count()
 MAX_INTERVAL = 300
 print("start job")
 from utils.utils import *
-
+DEBUG_MODE=True
 number_of_jobs = number_of_cpus//5
 # number_of_jobs=1
 
@@ -45,18 +45,18 @@ class EntropyEstimation():
         self.sim_index = sim_index
         self.file_name = file_name
         self.entropy=entropy
-
+        # self.__tree=__tree
 
 
     def build_tree(self):
         b = ent.CTW()
         b.insert_pattern(self.s.astype(int).tolist())
         self.entropy = b.get_entropy(len(self.s.astype(int).tolist()))
-        self.__tree=b.to_dict()
+        # self.__tree=b.to_dict()
 
-    @property
-    def tree(self):
-        return ent.CTW.from_dict(self.__tree)
+    # @property
+    # def tree(self):
+    #     return ent.CTW.from_dict(self.__tree)
 
     def get_number_of_spikes(self):
         spike_number = np.sum(self.s)
@@ -84,10 +84,9 @@ class EntropyEstimation():
                          v=self.v,
                          tag=self.tag,
                          entropy = self.entropy,
-                         file_index=self.file_index,
-                         __tree=self.__tree,
+                         file_index=self.file_index,####__tree=self.__tree,
                          sim_index=self.sim_index,
-                         file_name=self.file_name,)
+                         file_name=self.file_name)
         return data_dict
 
     @staticmethod
@@ -113,8 +112,12 @@ class EntropyEstimation():
                                                                                          'file index '
             path = os.path.join(ENTROPY_DATA_BASE_FOLDER, tag,
                                 EntropyEstimation.generate_file_name_f(file_index, sim_index))
-        with open(path, 'rb') as pfile:
-            obj = pickle.load(pfile)
+        try:
+            with open(path, 'rb') as pfile:
+                obj = pickle.load(pfile)
+        except Exception as e:
+            raise type(e)(str(e)+'\n '+path)
+
         return EntropyEstimation(**obj)
 
     @staticmethod
@@ -124,26 +127,6 @@ class EntropyEstimation():
         for i in tqdm(os.listdir(cur_path)):
             data_list.append(EntropyEstimation.load(os.path.join(cur_path, i)))
         return data_list
-
-    @staticmethod
-    def load_and_save_in_single_file(tag):
-        data_list = EntropyEstimation.load_all_by_tag(tag)
-        data_dict = dict()
-        file_set = set()
-        for i in tqdm(data_list):
-            file_set.add(i.file_index)
-            data_dict[(i.file_index, i.sim_index)] = i
-        file_path = os.path.join(ENTROPY_DATA_BASE_FOLDER, f'{tag}_fnum_{len(file_set)}_snum_{len(data_dict)}.pkl')
-        with open(file_path, 'wb') as file:
-            pickle.dump(data_dict, file)
-
-
-    @staticmethod
-    def load_list(path):
-        with open(path, 'rb') as file:
-            object = pickle.load(file)
-
-        return object
 
 
 def load_file_path(base_dir):
@@ -251,6 +234,7 @@ if __name__ == "__main__":
     for i in range(number_of_clusters):
         end_point = cur_start + jumps + (i < modulu_res)
         pathes = list_dir_parent[cur_start:min(end_point, len(list_dir_parent))]
+        if DEBUG_MODE: pathes=[pathes[0]]
 
         print(len(pathes))
         # use_voltage = args.sv == 'v'
@@ -260,5 +244,6 @@ if __name__ == "__main__":
                              f'python -c "from create_entropy_estimation import get_entropy; get_entropy(' + "'" + args.tag + "'" + f',{pathes},{i * jumps}, {args.use_v},{args.use_s})"',
                              **keys)
         print('job sent')
-
         cur_start = end_point
+
+        if DEBUG_MODE: break
