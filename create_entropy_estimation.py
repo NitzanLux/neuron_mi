@@ -37,7 +37,7 @@ SIMULATIONS_PATH = '/ems/elsc-labs/segev-i/nitzan.luxembourg/projects/dendritic_
 
 
 class EntropyEstimation():
-    def __init__(self, tag, file_name, file_index, sim_index, s, v,entropy=None,_tree=None):
+    def __init__(self, tag, file_name, file_index, sim_index, s, v,entropy=None,__tree=None):
         self.s = s
         self.v = v
         self.tag = tag
@@ -86,7 +86,7 @@ class EntropyEstimation():
                          v=self.v,
                          tag=self.tag,
                          entropy = self.entropy,
-                         file_index=self.file_index,_tree=self.__tree,
+                         file_index=self.file_index,__tree=self.__tree,
                          sim_index=self.sim_index,
                          file_name=self.file_name)
         return data_dict
