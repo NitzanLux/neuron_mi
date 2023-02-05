@@ -84,7 +84,7 @@ class EntropyEstimation():
                          v=self.v,
                          tag=self.tag,
                          entropy = self.entropy,
-                         file_index=self.file_index,####__tree=self.__tree,
+                         file_index=self.file_index,__tree=self.__tree,
                          sim_index=self.sim_index,
                          file_name=self.file_name)
         return data_dict
