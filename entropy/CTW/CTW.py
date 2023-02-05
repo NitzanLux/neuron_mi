@@ -28,4 +28,4 @@ class CTW(EntropyHandler):
         current = CTW(__model= CTWManagerInfinite.from_dict(data_dict))
         return current
     def to_dict(self):
-        return self.model.to_dict
+        return self.model.to_dict()
