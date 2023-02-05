@@ -81,12 +81,12 @@ class EntropyEstimation():
             self.sim_index)
 
 
-    def to_dict(self):
+    def to_dict(self,ignore_tree=True):
         data_dict = dict(s=self.s,
                          v=self.v,
                          tag=self.tag,
                          entropy = self.entropy,
-                         file_index=self.file_index,_tree=self.__tree,
+                         file_index=self.file_index,_tree=None if ignore_tree else self.__tree,
                          sim_index=self.sim_index,
                          file_name=self.file_name)
         return data_dict
