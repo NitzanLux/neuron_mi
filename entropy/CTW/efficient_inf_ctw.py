@@ -3,8 +3,7 @@ from __future__ import annotations
 from typing import List, Tuple
 import sys
 
-print('recurstion old , ', sys.getrecursionlimit())
-sys.setrecursionlimit(10000)
+
 import mpmath
 from mpmath import mp, mpf
 from .__fractional_precision import FractionPrecition as fp

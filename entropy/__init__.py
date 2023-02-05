@@ -1,3 +1,6 @@
+import sys
+print('recurstion old , ', sys.getrecursionlimit())
+sys.setrecursionlimit(1000000)
 from .DSampEN import DSampEn
 from .DAppEN import DAppEn
 # from cwtree.ctw import CTW
