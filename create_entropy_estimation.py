@@ -146,6 +146,9 @@ def create_sample_entropy_file(q, tag, use_v=True, use_s=True):
         if y_spike.ndim == 1:
             v = y_soma.astype(np.float64)
             s = y_spike.astype(np.float64)
+            if DEBUG_MODE:
+                v=v[:500]
+                s=s[:500]
             eo = EntropyEstimation(tag, f, f_index, sim_index=0, s=s, v=v)
             eo.build_tree()
             eo.save()
