@@ -45,7 +45,7 @@ class EntropyEstimation():
         self.sim_index = sim_index
         self.file_name = file_name
         self.entropy=entropy
-        self.__tree=__tree
+        self.__tree=tree
 
 
     def build_tree(self):
