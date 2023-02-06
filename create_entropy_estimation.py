@@ -23,7 +23,7 @@ number_of_cpus = multiprocessing.cpu_count()
 MAX_INTERVAL = 300
 print("start job")
 from utils.utils import *
-DEBUG_MODE=True
+DEBUG_MODE=False
 number_of_jobs = number_of_cpus//5
 # number_of_jobs=1
 
