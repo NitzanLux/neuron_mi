@@ -23,7 +23,7 @@ number_of_cpus = multiprocessing.cpu_count()
 MAX_INTERVAL = 300
 print("start job")
 from utils.utils import *
-DEBUG_MODE=False
+DEBUG_MODE=True
 number_of_jobs = number_of_cpus//5
 # number_of_jobs=1
 
@@ -86,7 +86,8 @@ class EntropyEstimation():
                          v=self.v,
                          tag=self.tag,
                          entropy = self.entropy,
-                         file_index=self.file_index,_tree=None if ignore_tree else self.__tree,
+                         file_index=self.file_index,
+                         _tree=None if ignore_tree else self.__tree,
                          sim_index=self.sim_index,
                          file_name=self.file_name)
         return data_dict
@@ -239,7 +240,7 @@ if __name__ == "__main__":
     for i in range(number_of_clusters):
         end_point = cur_start + jumps + (i < modulu_res)
         pathes = list_dir_parent[cur_start:min(end_point, len(list_dir_parent))]
-        if DEBUG_MODE: pathes=[pathes[0]]
+        # if DEBUG_MODE: pathes=[pathes[0]]
 
         print(len(pathes))
         # use_voltage = args.sv == 'v'
