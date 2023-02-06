@@ -12,7 +12,7 @@ import pickle as pickle
 import entropy.DSampEN as DSEN
 import entropy as ent
 from typing import List, Dict
-from .utils.parse_file import parse_sim_experiment_file
+from utils.parse_file import parse_sim_experiment_file
 from tqdm import tqdm
 import os
 
