@@ -20,7 +20,7 @@ import subprocess
 
 parser = argparse.ArgumentParser(description='Regex expression for zipping different files')
 parser.add_argument('-r', dest="regex_expression", type=str,
-                    help='Regex expression for zipping files.', default='.*')
+                    help='Regex expression for zipping files.',required=True)
 parser.add_argument('-d', dest="dir", type=str,
                     help='Destination path', default='entropy_data')
 args = parser.parse_args()
