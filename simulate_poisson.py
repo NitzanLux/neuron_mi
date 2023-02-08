@@ -14,7 +14,7 @@ binomial_ent = lambda p,n: (1./2.)*np.log(2*np.pi*np.exp(1)*n*p*(1-p))
 #     e=e[e<d.shape[0]]
 #     d[e]=1
 #     return d
-def binary_maximum_ent(l,n):
+def binary_ent(l, n):
     p=l/n
     return -((1-p)*np.log2(1-p)+(p)*np.log2(p))
 def create_spike_trains_r(l,size,time_interval=1000):
@@ -37,7 +37,7 @@ def simulate_poisson(number):
         y = []
         for i in l:
             if j==0:
-                anlytical.append(binary_maximum_ent(i,1000))
+                anlytical.append(binary_ent(i, 1000))
             s=create_spike_trains_r(i,n)
             ctw=CTW()
             ctw.insert_pattern(s)
