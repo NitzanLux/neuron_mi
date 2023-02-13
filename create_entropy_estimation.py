@@ -245,6 +245,7 @@ if __name__ == "__main__":
                 new_list.append(i)
         print(len(debug_arr),'debug')
         print(len(new_list),'parent')
+        exit()
         list_dir_parent = new_list
     cur_start = 0
     for i in range(number_of_clusters):
