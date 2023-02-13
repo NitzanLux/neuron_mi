@@ -238,6 +238,7 @@ if __name__ == "__main__":
         debug_arr=[]
         for i in list_dir_parent:
             for j in files_that_exists:
+                print(i,j)
                 if i in j:
                     debug_arr.append(i)
                     break
