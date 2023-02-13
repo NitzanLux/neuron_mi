@@ -93,6 +93,8 @@ PARAMETER {
     synapseID = 0
     verboseLevel = 0
 	GABAB_ratio = 0 (1) : The ratio of GABAB to GABAA
+
+	e_pas (mV)  : whole cell reversal potential
 }
 
 COMMENT
@@ -181,8 +183,8 @@ BREAKPOINT {
         g_GABAA = gmax*(B_GABAA-A_GABAA) :compute time varying conductance as the difference of state variables B_GABAA and A_GABAA
         g_GABAB = gmax*(B_GABAB-A_GABAB) :compute time varying conductance as the difference of state variables B_GABAB and A_GABAB 
         g = g_GABAA + g_GABAB
-        i_GABAA = g_GABAA*(v-e_GABAA) :compute the GABAA driving force based on the time varying conductance, membrane potential, and GABAA reversal
-        i_GABAB = g_GABAB*(v-e_GABAB) :compute the GABAB driving force based on the time varying conductance, membrane potential, and GABAB reversal
+        i_GABAA = g_GABAA*(e_pas-e_GABAA) :compute the GABAA driving force based on the time varying conductance, membrane potential, and GABAA reversal
+        i_GABAB = g_GABAB*(e_pas-e_GABAB) :compute the GABAB driving force based on the time varying conductance, membrane potential, and GABAB reversal
         i = i_GABAA + i_GABAB
 }
 

@@ -88,6 +88,8 @@ PARAMETER {
         gamma = 0.062 (/mV)
         
 	   NMDA_ratio = 0.71 (1) : The ratio of NMDA to AMPA
+
+	   e_pas (mV)  : whole cell reversal potential
 }
 
 COMMENT
@@ -163,8 +165,8 @@ BREAKPOINT {
         g_AMPA = B_AMPA-A_AMPA :compute time varying conductance as the difference of state variables B_AMPA and A_AMPA
         g_NMDA = (B_NMDA-A_NMDA) * mggate :compute time varying conductance as the difference of state variables B_NMDA and A_NMDA and mggate kinetics
         g = g_AMPA + g_NMDA
-        i_AMPA = g_AMPA*(v-e) :compute the AMPA driving force based on the time varying conductance, membrane potential, and AMPA reversal
-        i_NMDA = g_NMDA*(v-e) :compute the NMDA driving force based on the time varying conductance, membrane potential, and NMDA reversal
+        i_AMPA = g_AMPA*(e_pas-e) :compute the AMPA driving force based on the time varying conductance, membrane potential, and AMPA reversal
+        i_NMDA = g_NMDA*(e_pas-e) :compute the NMDA driving force based on the time varying conductance, membrane potential, and NMDA reversal
         i = i_AMPA + i_NMDA
 }
 
