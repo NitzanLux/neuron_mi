@@ -241,6 +241,9 @@ if __name__ == "__main__":
             else:
                 new_list.append(i)
         list_dir_parent = new_list
+        if len(list_dir_parent)==0:
+            print('no missing files, exiting...')
+            exit(0)
     if number_of_clusters<=0: number_of_clusters=len(list_dir_parent)
     number_of_clusters=min(len(list_dir_parent),number_of_clusters)
     jumps = len(list_dir_parent) // (number_of_clusters)
