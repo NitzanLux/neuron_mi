@@ -239,6 +239,7 @@ if __name__ == "__main__":
         for i in list_dir_parent:
             for j in files_that_exists:
                 print(i,j)
+                temp_i = os.path.basename(i)
                 if i in j:
                     debug_arr.append(i)
                     break
