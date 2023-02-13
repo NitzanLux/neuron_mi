@@ -15,7 +15,7 @@ NEURON {
         POINT_PROCESS ProbUDFsyn2  
         RANGE tau_r, tau_d
         RANGE Use, u, Dep, Fac, u0
-        RANGE i, g, e, gmax
+        RANGE i, g, e, gmax, e_pas
         NONSPECIFIC_CURRENT i
 		POINTER rng
 }
