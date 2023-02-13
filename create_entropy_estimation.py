@@ -232,8 +232,8 @@ if __name__ == "__main__":
         print("Mem:", args.memory)
     if args.files_that_do_not_exist:
         files_that_exists = []
-        for i in enumerate(os.listdir(os.path.join(ENTROPY_DATA_BASE_FOLDER, args.tag))):
-            files_that_exists.append(i)
+        for i,f in enumerate(os.listdir(os.path.join(ENTROPY_DATA_BASE_FOLDER, args.tag))):
+            files_that_exists.append(f)
         new_list=[]
         debug_arr=[]
         for i in list_dir_parent:
