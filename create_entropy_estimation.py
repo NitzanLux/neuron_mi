@@ -223,10 +223,8 @@ if __name__ == "__main__":
         parent_dir_path = os.path.join(SIMULATIONS_PATH, parent_dir_path)
     list_dir_parent = os.listdir(parent_dir_path)
     list_dir_parent = [os.path.join(parent_dir_path, i) for i in list_dir_parent]
-    jumps = len(list_dir_parent) // (number_of_clusters)
-    modulu_res = len(list_dir_parent) % (number_of_clusters)
+
     keys = {}
-    print(f'jumps {jumps} c_num = {number_of_clusters}')
     if args.memory > 0:
         keys['mem'] = args.memory
         print("Mem:", args.memory)
@@ -235,20 +233,20 @@ if __name__ == "__main__":
         for i,f in enumerate(os.listdir(os.path.join(ENTROPY_DATA_BASE_FOLDER, args.tag))):
             files_that_exists.append(f)
         new_list=[]
-        debug_arr=[]
         for i in list_dir_parent:
             for j in files_that_exists:
                 temp_i = os.path.basename(i)
-                print(temp_i,j)
                 if temp_i in j:
-                    debug_arr.append(i)
                     break
             else:
                 new_list.append(i)
-        print(len(debug_arr),'debug')
-        print(len(new_list),'parent')
-        exit()
         list_dir_parent = new_list
+    if number_of_clusters<=0: number_of_clusters=len(list_dir_parent)
+    number_of_clusters=min(len(list_dir_parent),number_of_clusters)
+    jumps = len(list_dir_parent) // (number_of_clusters)
+    modulu_res = len(list_dir_parent) % (number_of_clusters)
+    print(f'jumps {jumps} c_num = {number_of_clusters}')
+
     cur_start = 0
     for i in range(number_of_clusters):
         end_point = cur_start + jumps + (i < modulu_res)
