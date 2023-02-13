@@ -75,9 +75,9 @@ class EntropyEstimation():
         keys = {}
         return v, s, keys
 
-    def generate_file_name(self, remove_suffix_from_file=None):
+    def generate_file_name(self):
         return self.generate_file_name_f(
-            self.file_name[:-len(remove_suffix_from_file)] if remove_suffix_from_file is not None else self.file_name,
+            self.file_index,
             self.sim_index)
 
 
@@ -93,8 +93,8 @@ class EntropyEstimation():
         return data_dict
 
     @staticmethod
-    def generate_file_name_f(file_name, sim_index):
-        return f'{file_name}_{sim_index}.pkl'
+    def generate_file_name_f(file_index, sim_index):
+        return f'{file_index}_{sim_index}.pkl'
 
     def save(self):
         current_path = ENTROPY_DATA_BASE_FOLDER
@@ -233,9 +233,15 @@ if __name__ == "__main__":
     if args.files_that_do_not_exist:
         files_that_exists = []
         for i in enumerate(os.listdir(os.path.join(ENTROPY_DATA_BASE_FOLDER, args.tag))):
-            assert False, 'implement'
-            pass  # todo implemnt
-
+            files_that_exists.append(i)
+        new_list=[]
+        for i in list_dir_parent:
+            for j in files_that_exists:
+                if i in j:
+                    break
+            else:
+                new_list.append(i)
+        list_dir_parent = new_list
     cur_start = 0
     for i in range(number_of_clusters):
         end_point = cur_start + jumps + (i < modulu_res)
