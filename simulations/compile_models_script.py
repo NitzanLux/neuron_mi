@@ -7,9 +7,9 @@ cur_path = os.path.join(base_path,'neuron_models')
 for i in os.listdir(cur_path):
     # try:
     cwd_path=os.path.join('~',cur_path,i)
-    if os.path.exists(os.path.join('.','mechanisms')):
+    if os.path.exists(os.path.join(cwd_path,'mechanisms')):
         command = "nrnivmodl "+os.path.join('.','mechanisms')
-    elif os.path.exists(os.path.join('.','mods')):
+    elif os.path.exists(os.path.join(cwd_path,'mods')):
         command = "nrnivmodl " + os.path.join('.', 'mods')
     else:
         logging.error(f'cannot find mod/mechanisms directory for {i}')
