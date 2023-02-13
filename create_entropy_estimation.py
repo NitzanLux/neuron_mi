@@ -235,9 +235,11 @@ if __name__ == "__main__":
         for i in enumerate(os.listdir(os.path.join(ENTROPY_DATA_BASE_FOLDER, args.tag))):
             files_that_exists.append(i)
         new_list=[]
+        debug_arr=[]
         for i in list_dir_parent:
             for j in files_that_exists:
                 if i in j:
+                    debug_arr.append(i)
                     break
             else:
                 new_list.append(i)
