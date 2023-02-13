@@ -69,7 +69,7 @@ NEURON {
         POINT_PROCESS ProbAMPANMDA_EMS
         RANGE tau_r_AMPA, tau_d_AMPA, tau_r_NMDA, tau_d_NMDA
         RANGE Use, u, Dep, Fac, u0, mg, Rstate, tsyn_fac, u
-        RANGE i, i_AMPA, i_NMDA, g_AMPA, g_NMDA, g, e, NMDA_ratio
+        RANGE i, i_AMPA, i_NMDA, g_AMPA, g_NMDA, g, e, NMDA_ratio, e_pas
         RANGE A_AMPA_step, B_AMPA_step, A_NMDA_step, B_NMDA_step
         NONSPECIFIC_CURRENT i
         POINTER rng

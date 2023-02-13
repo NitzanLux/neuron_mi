@@ -14,7 +14,7 @@ NEURON {
         POINT_PROCESS ProbAMPANMDA2
         RANGE tau_r_AMPA, tau_d_AMPA, tau_r_NMDA, tau_d_NMDA
         RANGE Use, u, Dep, Fac, u0, weight_NMDA
-        RANGE i, i_AMPA, i_NMDA, g_AMPA, g_NMDA, e, gmax
+        RANGE i, i_AMPA, i_NMDA, g_AMPA, g_NMDA, e, gmax, e_pas
         NONSPECIFIC_CURRENT i_AMPA,i_NMDA
 		POINTER rng
 }
