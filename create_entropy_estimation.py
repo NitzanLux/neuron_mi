@@ -204,7 +204,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
 
-
+    print(args)
     print("continue?y/n")
     response = input()
     while response not in {'y', 'n'}:
