@@ -42,7 +42,27 @@ PARAMETER_SETS = {
         'GABAA_default_conductance':0.0007,
 
         'celsius':34.0,
-    },
+    }
+    ,
+    'rat_current_injection_synapse': {
+        'AMPANMDA_e': 0,
+        'tau_r_AMPA': 0.2,
+        'tau_d_AMPA': 1.7,
+        'tau_r_NMDA': 8.019,
+        'tau_d_NMDA': 34.9884,
+        'gamma': 0.0765685,
+        'NMDA_ratio': 0.0005 / 0.0007,
+        'AMPA_default_conductance': 0.0007,
+        'e_pas':-70.,
+        'GABAA_e': -80,
+        'tau_r_GABAA': 0.2,
+        'tau_d_GABAA': 8,
+        'GABAB_ratio': 0,
+        'GABAA_default_conductance': 0.0007,
+
+        'celsius': 34.0,
+    }
+    ,
 
     'rat_david':{
         'AMPANMDA_e': 0,
@@ -107,7 +127,11 @@ def create_synapses(parameter_set_name):
     inh_netcons =[]
     for seg in all_segments:
         if 'old_impl' in params and params['old_impl']:
-            AMPANMDA = h.ProbAMPANMDA2(seg)
+            if parameter_set_name =='rat_current_injection_synapse':
+                AMPANMDA = h.ProbAMPANMDA2_current(seg)
+                AMPANMDA.e_pas = params['e_pas']
+            else:
+                AMPANMDA = h.ProbAMPANMDA2(seg)
             AMPANMDA.tau_r_AMPA = params['tau_r_AMPA']
             AMPANMDA.tau_d_AMPA = params['tau_d_AMPA']
             AMPANMDA.tau_r_NMDA = params['tau_r_NMDA']
@@ -127,7 +151,10 @@ def create_synapses(parameter_set_name):
             else:
                 AMPANMDA_ncon.weight[0] = params['AMPA_default_conductance']
         else:
-            AMPANMDA = h.AMPANMDA_EMS(seg)
+            if parameter_set_name =='rat_current_injection_synapse':
+                assert False, 'no current version exists for AMPANMDA_EMS'
+            else:
+                AMPANMDA = h.AMPANMDA_EMS(seg)
             AMPANMDA.e = params['AMPANMDA_e']
             AMPANMDA.tau_r_AMPA = params['tau_r_AMPA']
             AMPANMDA.tau_d_AMPA = params['tau_d_AMPA']
@@ -144,7 +171,11 @@ def create_synapses(parameter_set_name):
     # for naming, it is better to run it twice
     for seg in all_segments:
         if 'old_impl' in params and params['old_impl']:
-            GABAAB = h.ProbUDFsyn2(seg)
+            if parameter_set_name =='rat_current_injection_synapse':
+                GABAAB = h.ProbUDFsyn2_current(seg)
+                GABAAB.e_pas = params['e_pas']
+            else:
+                GABAAB = h.ProbUDFsyn2(seg)
             GABAAB.tau_r = params['tau_r_GABAA']
             GABAAB.tau_d = params['tau_d_GABAA']
             GABAAB.e = params['GABAA_e']
@@ -162,7 +193,10 @@ def create_synapses(parameter_set_name):
             else:
                 GABAAB_ncon.weight[0] = params['GABAA_default_conductance']
         else:
-            GABAAB = h.GABAAB_EMS(seg)
+            if parameter_set_name =='rat_current_injection_synapse':
+                assert False, 'no current version exists for AMPANMDA_EMS'
+            else:
+                GABAAB = h.GABAAB_EMS(seg)
             GABAAB.e_GABAA = params['GABAA_e']
             GABAAB.tau_r_GABAA = params['tau_r_GABAA']
             GABAAB.tau_d_GABAA = params['tau_d_GABAA']
