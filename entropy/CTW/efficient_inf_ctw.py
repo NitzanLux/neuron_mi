@@ -11,7 +11,7 @@ from .__print_tree import drawTree2
 from .__print_tree import Node as s_node
 import pickle
 MAX_DENOMINATOR = 10000000
-mp.dps = 100
+mp.dps = 50
 LETTERS = {0, 1, None}
 
 
