@@ -15,6 +15,9 @@ from typing import List, Dict
 from utils.parse_file import parse_sim_experiment_file
 from tqdm import tqdm
 import os
+import cProfile
+
+
 
 import time
 from entropy.CTW.efficient_inf_ctw import Node

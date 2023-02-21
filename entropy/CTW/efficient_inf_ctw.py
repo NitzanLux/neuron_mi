@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+
 from typing import List, Tuple
 import sys
-
 
 import mpmath
 from mpmath import mp, mpf
