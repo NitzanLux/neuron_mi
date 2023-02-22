@@ -48,7 +48,7 @@ for f in files:
 
     plt.plot(y_soma[args.start_time:args.start_time+args.interval_length])
     x = np.where(y_spike[args.start_time:args.start_time+args.interval_length] == 1)[0]
-    plt.scatter(x,y_soma[x],color = 'red')
+    plt.scatter(x,y_soma[args.start_time:args.start_time+args.interval_length][x],color = 'red')
     cur_dir=f'{cur_sim}_{args.start_time}_{args.interval_length}'
     os.makedirs(cur_dir,exist_ok=True)
     plt.savefig(os.path.join(cur_dir,f'{f}.png'))
