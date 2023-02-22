@@ -9,7 +9,7 @@ parser = argparse.ArgumentParser(description='Regex expression for zipping diffe
 parser.add_argument('-r', dest="regex_expression", type=str,
                     help='Regex expression for zipping files.',required=True)
 parser.add_argument('-d', dest="dir", type=str,
-                    help='Destination path', default='entropy_data')
+                    help='Destination path', default=os.path.join('simulations','data'))
 parser.add_argument('-f', dest="index", type=int,
                     help='file_index',default=0)
 parser.add_argument('-i', dest="interval_length", type=int,
