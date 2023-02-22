@@ -48,5 +48,7 @@ for f in files:
     cur_dir=f'{cur_sim}_{args.start_time}_{args.interval_length}'
     os.makedirs(cur_dir,exist_ok=True)
     plt.savefig(os.path.join(cur_dir,f'{f}.png'))
+    plt.close()
+
     # p = subprocess.Popen(f"zip -r {i}.zip {i}", stdout=subprocess.PIPE, shell=True)
     # print(p.communicate())
