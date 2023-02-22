@@ -34,6 +34,7 @@ for f in files:
     else:
         data_set = data_set.intersection(set( simulations_data))
 assert len(data_set)>0,"joint files were not found"
+print(data_set)
 cur_sim=list(data_set)[args.index]
 print('current simulation: ',cur_sim)
 cwd = os.getcwd()
