@@ -39,6 +39,7 @@ cwd = os.getcwd()
 cur_working_dir=os.path.join(cwd,args.dir)
 # os.chdir(os.path.join(cwd,args.dir))
 for f in files:
+    print(f)
     f_path = os.path.join(cur_working_dir,f,cur_sim+f)
     _, y_spike, y_soma = parse_sim_experiment_file(f_path)
     x = np.where(y_spike==1)[0]
