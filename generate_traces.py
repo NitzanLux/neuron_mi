@@ -33,7 +33,7 @@ for f in files:
     else:
         data_set = data_set.intersection(set( simulations_data))
 assert len(data_set)>0,"joint files were not found"
-cur_sim=list(data_set)[args.file_index]
+cur_sim=list(data_set)[args.index]
 
 cwd = os.getcwd()
 cur_working_dir=os.path.join(cwd,args.dir)
