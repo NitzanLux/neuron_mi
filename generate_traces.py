@@ -45,9 +45,10 @@ for f in files:
     print(f)
     f_path = os.path.join(cur_working_dir,f,cur_sim+f)
     _, y_spike, y_soma = parse_sim_experiment_file(f_path)
-    x = np.where(y_spike==1)[0]
+
     plt.plot(y_soma[args.start_time:args.start_time+args.interval_length])
-    plt.scatter(x,y_soma[args.start_time:args.start_time+args.interval_length][x],colort = 'red')
+    x = np.where(y_spike[args.start_time:args.start_time+args.interval_length] == 1)[0]
+    plt.scatter(x,y_soma[x],colort = 'red')
     cur_dir=f'{cur_sim}_{args.start_time}_{args.interval_length}'
     os.makedirs(cur_dir,exist_ok=True)
     plt.savefig(os.path.join(cur_dir,f'{f}.png'))
