@@ -29,6 +29,7 @@ data_set=None
 for f in files:
     print(f)
     simulations_data=[i.replace(f,'') for i in os.path.join(args.dir,f)]
+    print(simulations_data)
     if data_set is None:
         data_set=set( simulations_data)
     else:
