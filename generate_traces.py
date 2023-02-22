@@ -47,8 +47,8 @@ for f in files:
     _, y_spike, y_soma = parse_sim_experiment_file(f_path)
 
     plt.plot(y_soma[args.start_time:args.start_time+args.interval_length])
-    x = np.where(y_spike == 1)[0]
-    plt.scatter(x[args.start_time:args.start_time+args.interval_length],y_soma[x][args.start_time:args.start_time+args.interval_length],color = 'red')
+    x = np.where(y_spike[args.start_time:args.start_time+args.interval_length] == 1)[0]
+    plt.scatter(x,y_soma[args.start_time:args.start_time+args.interval_length][x],color = 'red',alpha=0.7)
     cur_dir=os.path.join('traces',f'{cur_sim}_{args.start_time}_{args.interval_length}')
     os.makedirs(cur_dir,exist_ok=True)
     plt.savefig(os.path.join(cur_dir,f'{f}.png'))
