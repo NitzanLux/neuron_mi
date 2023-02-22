@@ -21,12 +21,13 @@ args = parser.parse_args()
 m = re.compile(args.regex_expression)
 files=[]
 for i in os.listdir(args.dir):
-    if m.match(i) and os.path.isdir(os.path.join(args.dir,i)):
+    if m.match(i) and os.path.isdir(os.path.join(args.dir,i)) and i!='inputs':
         files.append(i)
 
 data_set=None
 # f_dict=dict()
 for f in files:
+    print(f)
     simulations_data=[i.replace(f,'') for i in os.path.join(args.dir,f)]
     if data_set is None:
         data_set=set( simulations_data)
