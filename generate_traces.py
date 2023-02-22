@@ -27,10 +27,11 @@ for i in os.listdir(args.dir):
 data_set=None
 # f_dict=dict()
 for f in files:
+    simulations_data=[i.replace(f,'') for i in os.path.join(args.dir,f)]
     if data_set is None:
-        data_set=set( os.listdir(os.path.join(args.dir,f)))
+        data_set=set( simulations_data)
     else:
-        data_set = data_set.intersection(set( os.listdir(os.path.join(args.dir,f))))
+        data_set = data_set.intersection(set( simulations_data))
 assert len(data_set)>0,"joint files were not found"
 cur_sim=list(data_set)[args.file_index]
 
@@ -38,7 +39,7 @@ cwd = os.getcwd()
 cur_working_dir=os.path.join(cwd,args.dir)
 # os.chdir(os.path.join(cwd,args.dir))
 for f in files:
-    f_path = os.path.join(cur_working_dir,f,cur_sim)
+    f_path = os.path.join(cur_working_dir,f,cur_sim+f)
     _, y_spike, y_soma = parse_sim_experiment_file(f_path)
     x = np.where(y_spike==1)[0]
     plt.plot(y_soma[args.start_time:args.start_time+args.interval_length])
