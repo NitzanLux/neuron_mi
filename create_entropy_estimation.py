@@ -78,11 +78,10 @@ class EntropyEstimation():
         keys = {}
         return v, s, keys
 
-    def generate_file_name(self):
+    def generate_file_name(self,remove_suffix_from_file=None):
         return self.generate_file_name_f(
-            self.file_index,
+            self.file_name[:-len(remove_suffix_from_file)] if remove_suffix_from_file is not None else self.file_name,
             self.sim_index)
-
 
     def to_dict(self,ignore_tree=True):
         data_dict = dict(s=self.s,
