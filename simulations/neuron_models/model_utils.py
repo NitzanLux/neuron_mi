@@ -63,6 +63,25 @@ PARAMETER_SETS = {
         'celsius': 34.0,
     }
     ,
+    'rat_current_injection_synapse_noNMDA': {
+        'AMPANMDA_e': 0,
+        'tau_r_AMPA': 0.2,
+        'tau_d_AMPA': 1.7,
+        'tau_r_NMDA': 8.019,
+        'tau_d_NMDA': 34.9884,
+        'gamma': 0.0765685,
+        'NMDA_ratio': 0/ 0.0007,
+        'AMPA_default_conductance': 0.0007,
+        'e_pas': -70.,
+        'GABAA_e': -80,
+        'tau_r_GABAA': 0.2,
+        'tau_d_GABAA': 8,
+        'GABAB_ratio': 0,
+        'GABAA_default_conductance': 0.0007,
+
+        'celsius': 34.0,
+    }
+    ,
 
     'rat_david':{
         'AMPANMDA_e': 0,
