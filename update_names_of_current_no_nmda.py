@@ -1,6 +1,6 @@
 import os
 import re
-compile_pattern=re.compile('(_((?:[0-9]-[0-9])|([0-9]))_c_noNMDA)')
+compile_pattern=re.compile('.*(_((?:[0-9]-[0-9])|([0-9]))_c_noNMDA)')
 cur_path = os.path.join('simulations','data')
 def rename(cur_path):
     for i in os.listdir(cur_path):
