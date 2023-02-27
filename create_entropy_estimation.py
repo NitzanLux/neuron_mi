@@ -230,7 +230,7 @@ if __name__ == "__main__":
     if args.memory > 0:
         keys['mem'] = args.memory
         print("Mem:", args.memory)
-    if args.files_that_do_not_exist:
+    if args.files_that_do_not_exist and os.path.exists(os.path.join(ENTROPY_DATA_BASE_FOLDER, args.tag)):
         files_that_exists = []
         for i,f in enumerate(os.listdir(os.path.join(ENTROPY_DATA_BASE_FOLDER, args.tag))):
             files_that_exists.append(f)
