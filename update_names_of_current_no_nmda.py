@@ -8,8 +8,9 @@ def rename(cur_path):
         # print(i)
         if m:
             print(m)
-            os.rename(os.path.join(cur_path,i),os.path.join(cur_path,i.replace(m.group(1),'_noNMDA_'+m.group(2))))
             if os.path.isdir(os.path.join(cur_path,i)):
                 rename(os.path.join(cur_path,i))
+            os.rename(os.path.join(cur_path,i),os.path.join(cur_path,i.replace(m.group(1),'_noNMDA_'+m.group(2))))
+
 
 rename(cur_path)
