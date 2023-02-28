@@ -7,7 +7,7 @@ import json
 
 logger = logging.getLogger(__name__)
 
-timelimit_argument_str = "-t 2-12:00:00"
+timelimit_argument_str = "-t 1-12:00"
 # timelimit_argument_str = "-t 2-23:00:00"
 GPU_argument_str = "--gres=gpu:1"
 CPU_argument_str = "-c 1"
