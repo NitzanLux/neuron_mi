@@ -264,7 +264,7 @@ if __name__ == "__main__":
 
         job_factory.send_job(f"entropy_{args.tag}_{i}",
                              f'python -c "from create_entropy_estimation import get_entropy; get_entropy(' + "'" + args.tag + "'" + f',{pathes},{i * jumps}, {args.use_v},{args.use_s})"',
-                             **keys,timelimit=True)
+                             **keys,timelimit=False)
         print('job sent')
         cur_start = end_point
 
