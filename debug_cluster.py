@@ -14,4 +14,4 @@ def demo_run():
 if __name__ == '__main__':
     job_factory= SlurmJobFactory("cluster_logs")
     job_factory.send_job(f"demo_debug",
-                         f'python -c "from debug_cluster import demo_run; demo_run()')
+                         f'python -c "from debug_cluster import demo_run; demo_run()',timelimit=True)
