@@ -7,7 +7,7 @@ def demo_run():
     prev_time = None
     while True:
         cur_time = datetime.datetime.fromtimestamp(time.time())
-        if prev_time is None or (cur_time-prev_time).seconds>=300:
+        if prev_time is None or (cur_time-prev_time).seconds>=600:
             prev_time=cur_time
             print(prev_time)
 
