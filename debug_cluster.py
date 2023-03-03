@@ -4,10 +4,10 @@ from utils.slurm_job import SlurmJobFactory
 value = datetime.datetime.fromtimestamp(time.time())
 print(value)
 def demo_run():
-    prev_time = datetime.datetime.fromtimestamp(time.time())
+    prev_time = None
     while True:
         cur_time = datetime.datetime.fromtimestamp(time.time())
-        if (prev_time-cur_time).seconds>=300:
+        if prev_time is None or (prev_time-cur_time).seconds>=300:
             prev_time=cur_time
             print(prev_time)
 
