@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-
 from typing import List, Tuple
 import sys
 
@@ -10,6 +9,7 @@ from .__fractional_precision import FractionPrecition as fp
 from .__print_tree import drawTree2
 from .__print_tree import Node as s_node
 import pickle
+
 MAX_DENOMINATOR = 10000000
 mp.dps = 50
 LETTERS = {0, 1, None}
@@ -72,16 +72,17 @@ class Node():
         children_dict = dict()
         for k, v in self.__children.items():
             children_dict[k] = v.to_dict()
-        return dict(children = children_dict,
-        constractor = dict(__context_pattern=self.__context_pattern, __occurrences=self.__occurrences,
-             __parent=self.__parent),
-        parameters = dict(a=self.a, b=self.b, prob_e=self.prob_e, __prob_w=self.__prob_w))
+        return dict(children=children_dict,
+                    constractor=dict(__context_pattern=self.__context_pattern, __occurrences=self.__occurrences,
+                                     __parent=self.__parent),
+                    parameters=dict(a=self.a, b=self.b, prob_e=self.prob_e, __prob_w=self.__prob_w))
+
     @staticmethod
     def from_dict(data_dict):
-        __children=dict()
-        for k,v in data_dict['children']:
-            __children[k]=Node.from_dict(v)
-        data_dict['constractor'][__children]=__children
+        __children = dict()
+        for k, v in data_dict['children']:
+            __children[k] = Node.from_dict(v)
+        data_dict['constractor'][__children] = __children
         obj = Node(**data_dict['constractor'])
         obj.__build_params(**data_dict['parameters'])
         return obj
@@ -203,7 +204,6 @@ class Node():
         if len(reminder) == 0:
             cur_node.__occurrences += 1
             return
-
         prediction = pattern[-1]
         if len(cur_node.context_pattern) == index:
             cur_child = cur_node.__create_new_object(pattern=pattern[:-1])
