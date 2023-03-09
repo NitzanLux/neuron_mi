@@ -70,8 +70,8 @@ class SlurmJob:
                 fh.writelines("#SBATCH %s\n" %(GPU_partition_argument_str))
                 fh.writelines("#SBATCH %s\n" %(GPU_argument_str))
             else:
+                fh.writelines("#SBATCH %s\n" % (CPU_partition_argument_str))
                 if not CPU_exclude_nodes_str is  None:
-                    fh.writelines("#SBATCH %s\n" % (CPU_partition_argument_str))
                     fh.writelines("#SBATCH %s\n" %(CPU_exclude_nodes_str))
 
             if self.timelimit:
