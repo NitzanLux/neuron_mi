@@ -217,7 +217,6 @@ class Node():
         else:
             assert False, "Edge case!!!!!!!!!!!!!!!!!!!!!!!!!!!"
         cur_child.__update_predictions(prediction)
-        print(pattern)
 
     def __create_new_object(self, pattern: List[None, int]) -> 'Node':
         # assert pattern[len(pattern) - len(self.context_pattern):] == self.context_pattern, "pattern are not match"
