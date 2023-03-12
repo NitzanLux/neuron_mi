@@ -138,7 +138,7 @@ def load_file_path(base_dir):
     return os.listdir(base_dir)
 
 
-def create_sample_entropy_file(q, tag, use_v=True, use_s=True):
+def create_sample_entropy_file_multiprocessing(q, tag, use_v=True, use_s=True):
     while True:
         if q.empty():
             return
@@ -168,22 +168,49 @@ def create_sample_entropy_file(q, tag, use_v=True, use_s=True):
                 eo.save()
                 t = time.time()
                 print(f"current sample number {f} {index}  total: {time.time() - t} seconds", flush=True)
-
+def create_sample_entropy_file(data, tag, use_v=True, use_s=True):
+    f_path, f_index = data
+    _, y_spike, y_soma = parse_sim_experiment_file(f_path)
+    path, f = ntpath.split(f_path)
+    if y_spike.ndim == 1:
+        v = y_soma.astype(np.float64)
+        s = y_spike.astype(np.float64)
+        if DEBUG_MODE:
+            v=v[:500]
+            s=s[:500]
+        eo = EntropyEstimation(tag, f, f_index, sim_index=0, s=s, v=v)
+        eo.build_tree()
+        eo.save()
+        t = time.time()
+        print(f"current sample number {f} {0}  total: {time.time() - t} seconds", flush=True)
+    else:
+        for index in range(y_spike.shape[0]):
+            v = y_soma[index].astype(np.float64) if use_v else None
+            s = y_spike[index].astype(np.float64) if use_s else None
+            eo = EntropyEstimation(tag, f, f_index, sim_index=index, s=s, v=v)
+            eo.build_tree()
+            eo.save()
+            t = time.time()
+            print(f"current sample number {f} {index}  total: {time.time() - t} seconds", flush=True)
 
 def get_entropy(tag, pathes, file_index_start, use_v, use_s):
     number_of_jobs = min(number_of_cpus - 1, len(pathes))
-    queue = Queue(maxsize=number_of_jobs)
-    process = [
-        Process(target=create_sample_entropy_file, args=(
-        queue, tag, use_v, use_s)) for i
-        in range(number_of_jobs)]
-    print('starting')
-    for j, fp in enumerate(pathes):
-        queue.put((fp, j + file_index_start))
-        if j < len(process):
-            process[j].start()
+    if number_of_jobs ==1:
+        create_sample_entropy_file((pathes[0],0+file_index_start), tag, use_v, use_s)
+        return
+    else:
+        queue = Queue(maxsize=number_of_jobs)
+        process = [
+            Process(target=create_sample_entropy_file_multiprocessing, args=(
+            queue, tag, use_v, use_s)) for i
+            in range(number_of_jobs)]
+        print('starting')
+        for j, fp in enumerate(pathes):
+            queue.put((fp, j + file_index_start))
+            if j < len(process):
+                process[j].start()
 
-    if number_of_jobs > 1:
+        # if number_of_jobs > 1:
         for p in process:
             p.join()
 
