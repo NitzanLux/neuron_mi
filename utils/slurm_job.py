@@ -22,8 +22,8 @@ GPU_partition_argument_str = "-p ss-gpu.q,gpu.q"
 CPU_partition_argument_str = "-p ss.q,elsc.q"
 # CPU_partition_argument_str = "-p elsc.q"
 
-CPU_exclude_nodes_str = None
-# CPU_exclude_nodes_str = "--exclude=ielsc-62,ielsc-65,ielsc-68,ielsc-75,ielsc-84,ielsc-85,ielsc-110,ielsc-111,ielsc-112,ielsc-113,ielsc-114,ielsc-115,ielsc-116,ielsc-117"
+# CPU_exclude_nodes_str = None
+CPU_exclude_nodes_str = "--exclude=ielsc-62,ielsc-65,ielsc-68,ielsc-75,ielsc-84,ielsc-85,ielsc-110,ielsc-111,ielsc-112,ielsc-113,ielsc-114,ielsc-115,ielsc-116,ielsc-117"
 # node_list = list(range(100, 108)) + list(range(110,113)) + list(range(114,118)) + list(range(54, 58))
 # CPU_exclude_nodes_str = "--nodelist="
 # for i, node in enumerate(node_list):
