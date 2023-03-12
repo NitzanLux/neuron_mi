@@ -137,7 +137,7 @@ class SlurmJobFactory:
         self.jobs = []
         self.old_jobs = []
 
-    def send_job(self, job_name, run_line, run_on_GPU=False, timelimit=False, mem=DEFAULT_MEM, extra=None,filename_index=None):
+    def send_job(self, job_name, run_line, run_on_GPU=False, timelimit=True, mem=DEFAULT_MEM, extra=None,filename_index=None):
         job = SlurmJob(job_name, self.job_folder, run_line, run_on_GPU, timelimit, mem,filename_index=filename_index)
         job.send()
         self.jobs.append((job, extra))
