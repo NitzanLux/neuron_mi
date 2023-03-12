@@ -195,6 +195,7 @@ def create_sample_entropy_file(data, tag, use_v=True, use_s=True):
 
 def get_entropy(tag, pathes, file_index_start, use_v, use_s):
     number_of_jobs = min(number_of_cpus - 1, len(pathes))
+    print('Number of jobs :',number_of_jobs)
     if number_of_jobs ==1:
         create_sample_entropy_file((pathes[0],0+file_index_start), tag, use_v, use_s)
         return
