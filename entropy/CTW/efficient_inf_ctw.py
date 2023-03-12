@@ -198,6 +198,7 @@ class Node():
             # assert False, f"Edge case!!!!!!!!!!!!!!!!!!!!!!!!!!! pattern:{pattern}\n, existing pattern:{self.context_pattern}"
 
     def add_child(self, pattern):
+        print('last_pattern: ',len(pattern))
         if pattern[0] is not None:
             pattern = [None] + pattern
         # assert pattern[-len(self.context_pattern):] == pattern,'' todo cheack that the pattern are different.
