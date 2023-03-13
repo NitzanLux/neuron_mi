@@ -55,7 +55,7 @@ class EntropyEstimation():
         b = ent.CTW()
         b.insert_pattern(self.s.astype(int).tolist())
         self.entropy = b.get_entropy(len(self.s.astype(int).tolist()))
-        self.__tree=b.to_dict()
+        # self.__tree=b.to_dict()
 
     @property
     def tree(self):
