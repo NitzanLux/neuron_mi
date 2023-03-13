@@ -14,7 +14,7 @@ MAX_DENOMINATOR = 10000000
 mp.dps = 50
 LETTERS = {0, 1, None}
 print('recurstion old , ', sys.getrecursionlimit())
-sys.setrecursionlimit(1000000)
+sys.setrecursionlimit(10000)
 
 def log(a):
     return mpmath.log(a)
