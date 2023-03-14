@@ -6,7 +6,7 @@ from simulations.simulate_neuron import run_within_python_without_slurm
 import re
 namespace_vars=re.compile('Namespace(\([^\n]+\))')
 def high_res_for_model_creator(model_name, input_file_name, destination_path=''):
-    with open(os.path.join('simulations','data',model_name,f'{input_file_name}_{model_name}'),'r') as f:
+    with open(os.path.join('simulations','data',model_name,f'{input_file_name}_{model_name}',f'{input_file_name}_{model_name}.out'),'r') as f:
         args = f.readlines()
     m = namespace_vars.match(args)
     if m:
