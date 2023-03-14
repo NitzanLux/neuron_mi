@@ -1001,7 +1001,9 @@ def run_simulation(args):
         plt.plot(somatic_voltage_low_res)
         plt.savefig(f'{args.simulation_folder}/somatic_voltage.png')
         plt.close('all')
-
+        # if somatic_voltage_low_res.size>1000: todo add it?
+        #     plt.plot(somatic_voltage_high_res[:int(500./args.dt)])
+        # else:
         plt.plot(somatic_voltage_high_res)
         plt.savefig(f'{args.simulation_folder}/somatic_voltage_high_res.png')
         plt.close('all')
