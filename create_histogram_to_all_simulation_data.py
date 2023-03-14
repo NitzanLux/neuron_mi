@@ -33,4 +33,4 @@ def create_histograms():
         plt.show()
 if __name__ == '__main__':
     a=SlurmJobFactory('cluster_logs')
-    a.send_job('hist_maker',f'python -c "from create_histogram_to_all_simulation_data import create_histograms; create_histograms()')
+    a.send_job('hist_maker',f'python -c "from create_histogram_to_all_simulation_data import create_histograms; create_histograms()"')
