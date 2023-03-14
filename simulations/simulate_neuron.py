@@ -1140,7 +1140,7 @@ def get_simulation_args():
     saver.add_argument('--default_weighted', type=str2bool, nargs='?', const=True, default=False) # a shortcut
     return saver
 
-def get_args():
+def get_args(args_by_command=None,args_add_dict=None):
     parser = argparse.ArgumentParser(description='Simulate a neuron')
     parser.add_argument('--amount',type=int,default=1) #for general runinng
     parser.add_argument('--neuron_model_folder')
@@ -1154,11 +1154,16 @@ def get_args():
     saver.add_to_parser(parser,exclude='amount')
 
     parser.add_argument('--save_plots', type=str2bool, nargs='?', const=True, default=True)
-    return parser.parse_args()
+    args=parser.parse_args()
+    if args_add_dict is not None:
+        for k,v in args_add_dict.items():
+            setattr(args,k,v)
 
-def main(args=None):
-    if args is None:
-        args = get_args()
+    return parser.parse_args(args_by_command,namespace=c)
+
+def main(args_by_command=None,args_add_dict=None):
+    args = get_args(args_by_command=args_by_command,args_add_dict=args_add_dict)
+
     TeeAll(args.outfile)
     logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', level=logging.INFO, datefmt='%Y-%m-%d %H:%M:%S')
 
@@ -1166,14 +1171,13 @@ def main(args=None):
     run_simulation(args)
     logger.info(f"Goodbye from neuron simulator! running on {os.uname()} (pid={os.getpid()}, ppid={os.getppid()})")
 
-def run_within_python_without_slurm():
+def run_within_python_without_slurm(args):
     input_path = args_v.input_file
     ID = os.path.basename(input_path)
-
     ID_name = f'{ID}_{sim_name}'
     cur_args = args.replace(args_v.simulation_folder, os.path.join(args_v.simulation_folder, ID_name))
     print(f'Send job with {ID_name}')
-    main(cur_args)
+    main()
 
 
 if __name__ == "__main__":

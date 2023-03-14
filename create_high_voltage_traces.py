@@ -2,8 +2,17 @@ import os
 import numpy as np
 from threading import Thread
 import shlex, subprocess
-def high_res_for_model_creator(model_name, input_file_path='', destination_path=''):
-    # args = shlex.split(f'python -m dummy_scripy.py --simulation_folder {model_name}')
+from simulations.simulate_neuron import run_within_python_without_slurm
+import re
+namespace_vars=re.compile('Namespace(\([^\n]+\))')
+def high_res_for_model_creator(model_name, input_file_name='', destination_path=''):
+    with open(os.path.join('simulations','data',model_name,f'{input_file_name}_{model_name}'),'r') as f:
+        args = f.readlines()
+    m = namespace_vars.match(args)
+    if m:
+        print(m.group(1))
+
+    args = shlex.split(f'python -m dummy_scripy.py --simulation_folder {model_name}')
     print('wattt')
 def high_res_maneger(input_file_path=''):
     # input_file_name=os.path.basename(input_file_path)
