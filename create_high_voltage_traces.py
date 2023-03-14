@@ -48,8 +48,7 @@ def high_res_maneger(input_file_name):
             models.append(model_name)
     s=SlurmJobFactory('cluster_logs')
     for i in models:
-        s.send_job_for_function(f'high_res_{i}_{input_file_name}','create_high_voltage_traces','high_res_for_model_creator',)
-        high_res_for_model_creator(i, input_file_name, os.path.join(dest_path,i))
+        s.send_job_for_function(f'high_res_{i}_{input_file_name}','create_high_voltage_traces','high_res_for_model_creator',[i, input_file_name, os.path.join(dest_path,i)])
 
 if __name__ == '__main__':
     high_res_maneger("ID_0_512971")
