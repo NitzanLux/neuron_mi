@@ -5,7 +5,7 @@ import shlex, subprocess
 from simulations.simulate_neuron import run_within_python_without_slurm
 import re
 namespace_vars=re.compile('Namespace(\([^\n]+\))')
-def high_res_for_model_creator(model_name, input_file_name='', destination_path=''):
+def high_res_for_model_creator(model_name, input_file_name, destination_path=''):
     with open(os.path.join('simulations','data',model_name,f'{input_file_name}_{model_name}'),'r') as f:
         args = f.readlines()
     m = namespace_vars.match(args)
@@ -14,8 +14,7 @@ def high_res_for_model_creator(model_name, input_file_name='', destination_path=
 
     args = shlex.split(f'python -m dummy_scripy.py --simulation_folder {model_name}')
     print('wattt')
-def high_res_maneger(input_file_path=''):
-    # input_file_name=os.path.basename(input_file_path)
+def high_res_maneger(input_file_name):
     base_path=os.path.join('simulations', 'data')
     # dest_path=os.path.join('simulations','high_res_input',input_file_name)
     # os.makedirs(dest_path,exist_ok=True)
@@ -36,7 +35,7 @@ def high_res_maneger(input_file_path=''):
         if dir_flag:
             models.append(model_name)
     for i in models:
-        high_res_for_model_creator(i)
+        high_res_for_model_creator(i,input_file_name)
 
 if __name__ == '__main__':
-    high_res_maneger()
+    high_res_maneger("ID_0_512971")
