@@ -12,16 +12,16 @@ def high_res_for_model_creator(model_name, input_file_name, destination_path='')
         out_data = f.readlines()
     out_data = '\n'.join(out_data)
     m = namespace_vars.search(out_data)
+    args=None
     if m:
         args = m.group(1)
         args = args.replace('Namespace','dict')
-        command=f"args = {args} ;print('sklaklsdkld',flush=True)"
+        command=f"args = {args}"
         exec(command,globals(),locals())
-        print(type(args),command)
     else:
         return
     args = shlex.split(f'python -m dummy_scripy.py --simulation_folder {model_name}')
-    print('wattt')
+    print('wattt',type(args))
 def high_res_maneger(input_file_name):
     base_path=os.path.join('simulations', 'data')
     # dest_path=os.path.join('simulations','high_res_input',input_file_name)
