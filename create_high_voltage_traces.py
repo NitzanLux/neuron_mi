@@ -1,11 +1,15 @@
 import os
 import numpy as np
+from threading import Thread
 
-def create(input_file_path=''):
-    # input_file_name=os.path.basename(input_file_path)
+def high_res_for_model_creator(model_name, input_file_path='', destination_path=''):
+    exec(f'python dummy_scripy.py --simulation_folder {model_name}')
+    print('wattt')
+def high_res_maneger(input_file_path):
+    input_file_name=os.path.basename(input_file_path)
     base_path=os.path.join('simulations', 'data')
-    # dest_path=os.path.join('simulations','high_res_input',input_file_name)
-    # os.makedirs(dest_path,exist_ok=True)
+    dest_path=os.path.join('simulations','high_res_input',input_file_name)
+    os.makedirs(dest_path,exist_ok=True)
     models=[]
     for model_name in os.listdir(base_path):
         print(f'Start {model_name}')
@@ -23,6 +27,8 @@ def create(input_file_path=''):
             dir_flag=True
         if dir_flag:
             models.append(model_name)
-    print('\n'.join(models))
+    for i in models:
+        high_res_for_model_creator(i)
+
 if __name__ == '__main__':
     create()
