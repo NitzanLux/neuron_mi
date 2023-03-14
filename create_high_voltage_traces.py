@@ -13,7 +13,7 @@ def high_res_for_model_creator(model_name, input_file_name, destination_path='')
     out_data = '\n'.join(out_data)
     m = namespace_vars.search(out_data)
     if m:
-        print(m.group(2))
+        print(m.group(1))
 
     args = shlex.split(f'python -m dummy_scripy.py --simulation_folder {model_name}')
     print('wattt')
