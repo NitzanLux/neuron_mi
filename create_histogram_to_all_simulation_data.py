@@ -23,7 +23,8 @@ for model_name in os.listdir(base_path):
         data.append(1000.*np.sum(y_spike)/y_spike.size)
     if len(data)==0:
         continue
+    data = np.array(data)
     plt.hist(data, density=True)
     plt.xlabel('rate')
-    plt.title(f'{model_name} (n = {len(data)})')
+    plt.title(f'{model_name} std = {np.round(np.std(data),3)} \n mean = {np.round(np.mean(data),2)} (n = {len(data)}) ')
     plt.savefig(os.path.join(dest_path,f'{model_name}_rate_histogram.png'))
