@@ -1159,7 +1159,7 @@ def get_args(args_by_command=None,args_add_dict=None):
         for k,v in args_add_dict.items():
             setattr(args,k,v)
 
-    return parser.parse_args(args_by_command,namespace=c)
+    return parser.parse_args(args_by_command,namespace=args)
 
 def main(args_by_command=None,args_add_dict=None):
     args = get_args(args_by_command=args_by_command,args_add_dict=args_add_dict)
