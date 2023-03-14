@@ -54,7 +54,7 @@ class CTWManagerInfinite(te.CTWManager):
         """
         for i in tqdm(range(len(p)-1,-1,-1)):
         # for i in range(len(p)):
-            print('inserting patterns infcontexttree  -  ',i ,flush=True )
+        #     print('inserting patterns infcontexttree  -  ',i ,flush=True )
             self.insert_pattern(p[:i+1])
         self.tree.update_w()
         print('finished up updating',flush=True)

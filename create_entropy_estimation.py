@@ -59,8 +59,10 @@ class EntropyEstimation():
 
     @property
     def tree(self):
-        # if self.__tree is not None:
-        return self.__tree
+        if self.__tree is not None:
+            return self.__tree
+        else:
+            pass
         # return ent.CTW.from_dict(self.__tree)
 
     def get_number_of_spikes(self):

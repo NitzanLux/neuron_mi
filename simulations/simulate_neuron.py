@@ -36,13 +36,13 @@ def generate_input_spike_rates_for_simulation(args, sim_duration_ms, count_exc_n
     # randomly sample inst rate (with some uniform noise) smoothing sigma
     keep_inst_rate_const_for_ms = args.inst_rate_sampling_time_interval_options_ms[np.random.randint(len(args.inst_rate_sampling_time_interval_options_ms))]
     keep_inst_rate_const_for_ms += int(2 * args.inst_rate_sampling_time_interval_jitter_range * np.random.rand() - args.inst_rate_sampling_time_interval_jitter_range)
-    
+
     # randomly sample smoothing sigma (with some uniform noise)
     temporal_inst_rate_smoothing_sigma = args.temporal_inst_rate_smoothing_sigma_options_ms[np.random.randint(len(args.temporal_inst_rate_smoothing_sigma_options_ms))]
     temporal_inst_rate_smoothing_sigma += int(2 * args.temporal_inst_rate_smoothing_sigma_jitter_range * np.random.rand() - args.temporal_inst_rate_smoothing_sigma_jitter_range)
-    
+
     count_inst_rate_samples = int(np.ceil(float(sim_duration_ms) / keep_inst_rate_const_for_ms))
-    
+
     # create the coarse inst rates with units of "total spikes per tree per 100 ms"
     count_exc_spikes_per_100ms   = np.random.uniform(low=args.effective_count_exc_spikes_per_synapse_per_100ms_range[0] * count_exc_netcons, high=args.effective_count_exc_spikes_per_synapse_per_100ms_range[1] * count_exc_netcons, size=(1,count_inst_rate_samples))
     count_inh_spikes_per_100ms  = np.random.uniform(low=args.effective_count_inh_spikes_per_synapse_per_100ms_range[0] * count_inh_netcons, high=args.effective_count_inh_spikes_per_synapse_per_100ms_range[1] * count_inh_netcons, size=(1,count_inst_rate_samples))
@@ -50,11 +50,11 @@ def generate_input_spike_rates_for_simulation(args, sim_duration_ms, count_exc_n
     # convert to units of "per_netcon_per_1ms"
     exc_spike_rate_per_netcon_per_1ms   = count_exc_spikes_per_100ms   / (count_exc_netcons  * 100.0)
     inh_spike_rate_per_netcon_per_1ms  = count_inh_spikes_per_100ms  / (count_inh_netcons  * 100.0)
-            
+
     # kron by space (uniform distribution across branches per tree)
     exc_spike_rate_per_netcon_per_1ms   = np.kron(exc_spike_rate_per_netcon_per_1ms  , np.ones((count_exc_netcons,1)))
     inh_spike_rate_per_netcon_per_1ms  = np.kron(inh_spike_rate_per_netcon_per_1ms , np.ones((count_inh_netcons,1)))
-        
+
     # vstack basal and apical
     exc_spike_rate_per_netcon_per_1ms  = np.vstack((exc_spike_rate_per_netcon_per_1ms))
     inh_spike_rate_per_netcon_per_1ms = np.vstack((inh_spike_rate_per_netcon_per_1ms))
@@ -64,7 +64,7 @@ def generate_input_spike_rates_for_simulation(args, sim_duration_ms, count_exc_n
         inh_spatial_multiplicative_randomness_delta = exc_spatial_multiplicative_randomness_delta
     else:
         inh_spatial_multiplicative_randomness_delta = np.random.uniform(args.inh_spatial_multiplicative_randomness_delta_range[0], args.inh_spatial_multiplicative_randomness_delta_range[1])
-    
+
     # add some spatial multiplicative randomness (that will be added to the sampling noise)
     exc_spike_rate_per_netcon_per_1ms  = np.random.uniform(low=1 - exc_spatial_multiplicative_randomness_delta, high=1 + exc_spatial_multiplicative_randomness_delta, size=exc_spike_rate_per_netcon_per_1ms.shape) * exc_spike_rate_per_netcon_per_1ms
     inh_spike_rate_per_netcon_per_1ms = np.random.uniform(low=1 - inh_spatial_multiplicative_randomness_delta, high=1 + inh_spatial_multiplicative_randomness_delta, size=inh_spike_rate_per_netcon_per_1ms.shape) * inh_spike_rate_per_netcon_per_1ms
@@ -72,7 +72,7 @@ def generate_input_spike_rates_for_simulation(args, sim_duration_ms, count_exc_n
     # kron by time (crop if there are leftovers in the end) to fill up the time to 1ms time bins
     exc_spike_rate_per_netcon_per_1ms  = np.kron(exc_spike_rate_per_netcon_per_1ms , np.ones((1,keep_inst_rate_const_for_ms)))[:,:sim_duration_ms]
     inh_spike_rate_per_netcon_per_1ms = np.kron(inh_spike_rate_per_netcon_per_1ms, np.ones((1,keep_inst_rate_const_for_ms)))[:,:sim_duration_ms]
-    
+
     # filter the inst rates according to smoothing sigma
     smoothing_window = signal.gaussian(1.0 + args.temporal_inst_rate_smoothing_sigma_mult * temporal_inst_rate_smoothing_sigma, std=temporal_inst_rate_smoothing_sigma)[np.newaxis,:]
     smoothing_window /= smoothing_window.sum()
@@ -97,7 +97,7 @@ def generate_input_spike_rates_for_simulation(args, sim_duration_ms, count_exc_n
 
         exc_temporal_profile = exc_synchronization_profile_mult * np.sin(2 * np.pi * time_ms / exc_synchronization_period) + 1.0
         inh_temporal_profile = inh_synchronization_profile_mult * np.sin(2 * np.pi * time_ms / inh_synchronization_period) + 1.0
-        
+
         temp_exc_mult_factor = np.tile(exc_temporal_profile[np.newaxis], (netcon_inst_rate_exc_smoothed.shape[0], 1))
         temp_inh_mult_factor = np.tile(inh_temporal_profile[np.newaxis], (netcon_inst_rate_inh_smoothed.shape[0], 1))
 
@@ -167,7 +167,7 @@ def generate_input_spike_rates_for_simulation(args, sim_duration_ms, count_exc_n
         exc_count_active_clusters = int(exc_count_spatial_clusters * np.random.uniform(args.active_exc_spatial_cluster_ratio_range[0], args.active_exc_spatial_cluster_ratio_range[1]))
         exc_active_clusters = np.random.choice(np.unique(exc_curr_clustering_row), size=exc_count_active_clusters, replace=False)
         exc_spatial_mult_factor = np.tile(np.isin(exc_curr_clustering_row, exc_active_clusters)[:,np.newaxis], (1, netcon_inst_rate_exc_smoothed.shape[1]))
-        
+
         if np.random.rand() >= args.no_exc_spatial_clustering_prob:
             auxiliary_information['exc_curr_clustering_row'] = exc_curr_clustering_row
             auxiliary_information['exc_count_spatial_clusters'] = exc_count_spatial_clusters
@@ -185,7 +185,7 @@ def generate_input_spike_rates_for_simulation(args, sim_duration_ms, count_exc_n
         else:
             inh_cluster_sizes = np.random.uniform(args.inh_spatial_cluster_size_ratio_range[0] * count_inh_netcons, args.inh_spatial_cluster_size_ratio_range[1] * count_inh_netcons, count_inh_netcons).astype(int)
             inh_cluster_sizes = inh_cluster_sizes[:np.argmax(np.cumsum(inh_cluster_sizes)>count_inh_netcons)+1]
-                
+
             if np.random.rand() < args.random_inh_spatial_clusters_prob:
                 inh_curr_clustering_row = np.array(list(range(count_inh_netcons)))
                 all_indices = np.array(list(range(count_inh_netcons)))
@@ -212,7 +212,7 @@ def generate_input_spike_rates_for_simulation(args, sim_duration_ms, count_exc_n
             auxiliary_information['inh_count_active_clusters'] = inh_count_active_clusters
             auxiliary_information['inh_spatial_mult_factor'] = inh_spatial_mult_factor
             netcon_inst_rate_inh_smoothed  = inh_spatial_mult_factor * netcon_inst_rate_inh_smoothed
-        
+
         logger.info(f'on spatial clustering mode, with {exc_count_active_clusters} active exc clusters out of {exc_count_spatial_clusters} total, and {inh_count_active_clusters} active inh clusters out of {inh_count_spatial_clusters} total')
 
     if netcon_inst_rate_exc_smoothed.shape == netcon_inst_rate_inh_smoothed.shape and np.random.rand() < args.same_exc_inh_inst_rate_prob:
@@ -224,10 +224,10 @@ def sample_spikes_from_rates(args, netcon_inst_rate_ex, netcon_inst_rate_inh):
     # sample the instantanous spike prob and then sample the actual spikes
     exc_inst_spike_prob = np.random.exponential(scale=netcon_inst_rate_ex)
     exc_spikes_bin      = np.random.rand(exc_inst_spike_prob.shape[0], exc_inst_spike_prob.shape[1]) < exc_inst_spike_prob
-    
+
     inh_inst_spike_prob = np.random.exponential(scale=netcon_inst_rate_inh)
     inh_spikes_bin      = np.random.rand(inh_inst_spike_prob.shape[0], inh_inst_spike_prob.shape[1]) < inh_inst_spike_prob
-    
+
     # This accounts also for shared connections
     same_exc_inh_spikes_bin_prob = args.same_exc_inh_spikes_bin_prob
     if args.exc_weights_ratio_range[0] < args.exc_weights_ratio_range[1] or args.inh_weights_ratio_range[0] < args.inh_weights_ratio_range[1]:
@@ -247,7 +247,7 @@ def generate_input_spike_trains_for_simulation_new(args, sim_duration_ms, count_
     auxiliary_information = {}
 
     inst_rate_exc, inst_rate_inh, original_spike_rates_information = generate_input_spike_rates_for_simulation(args, sim_duration_ms, count_exc_netcons, count_inh_netcons)
-    
+
     auxiliary_information['original_spike_rates_information'] = original_spike_rates_information
 
     special_interval_added_edge_indicator = np.zeros(sim_duration_ms)
@@ -663,7 +663,7 @@ def generate_spike_times_and_weights(args, syns):
 
     simulation_duration_in_seconds = args.simulation_duration_in_seconds
     simulation_duration_in_ms = simulation_duration_in_seconds * 1000
-    
+
     return generate_spike_times_and_weights_for_kernel_based_weights(args, syns, simulation_duration_in_ms)
 
 input_exc_sptimes = {}
@@ -839,11 +839,11 @@ def run_actual_simulation(args):
         dendritic_voltages_high_res = None
 
     output_spike_indexes = peakutils.indexes(somatic_voltage_high_res, thres=args.spike_threshold_for_computation, thres_abs=True)
-    
+
     output_spike_times = recording_time_high_res[output_spike_indexes].astype(int)
     output_firing_rate = len(output_spike_times)/(simulation_duration_in_ms/1000.0)
     output_isi = np.diff(output_spike_times)
-    
+
     output_spike_times_after_initialization = output_spike_times[output_spike_times > args.simulation_initialization_duration_in_ms]
     output_firing_rate_after_initialization = len(output_spike_times_after_initialization)/((simulation_duration_in_ms - args.simulation_initialization_duration_in_ms)/1000.0)
     output_isi_after_initialization = np.diff(output_spike_times)
@@ -880,13 +880,13 @@ def run_actual_simulation(args):
     output_data['input_average_weighted_inh_spikes_per_super_synapse_per_second'] = auxiliary_information['average_weighted_inh_spikes_per_super_synapse_per_second']
 
     output_data['average_exc_initial_neuron_weight'] = auxiliary_information['average_exc_initial_neuron_weight']
-    output_data['average_inh_initial_neuron_weight'] = auxiliary_information['average_inh_initial_neuron_weight']    
+    output_data['average_inh_initial_neuron_weight'] = auxiliary_information['average_inh_initial_neuron_weight']
 
     if 'input_dict' in auxiliary_information:
         output_data['input_dict'] = auxiliary_information['input_dict']
     else:
         output_data['input_dict'] = {}
-    
+
     # TODO: possibly also as a h5 file if spike counts are big enough? (most of the time they are too small)
     output_data['output_spike_times'] = output_spike_times
 
@@ -895,11 +895,11 @@ def run_actual_simulation(args):
     output_data['output_spike_times_after_initialization'] = output_spike_times_after_initialization
     output_data['output_firing_rate_after_initialization'] = output_firing_rate_after_initialization
     output_data['output_isi_after_initialization'] = output_isi_after_initialization
-    
+
     output_data['simulation_duration_in_ms'] = simulation_duration_in_ms
     output_data['average_somatic_voltage'] = average_somatic_voltage
     output_data['average_clipped_somatic_voltage'] = average_clipped_somatic_voltage
-    
+
     if args.save_auxiliary_information:
         output_data['auxiliary_information'] = auxiliary_information
 
@@ -949,7 +949,7 @@ def run_simulation(args):
 
     logger.info("About to import neuron...")
     logger.info(f"current dir: {pathlib.Path(__file__).parent.absolute()}")
-    
+
     global neuron
     global h
     global gui
@@ -983,6 +983,8 @@ def run_simulation(args):
 
     f = h5py.File(f'{args.simulation_folder}/voltage.h5','w')
     f.create_dataset('somatic_voltage', data=somatic_voltage_low_res)
+    if args.save_high_res_somatic_voltage:
+        f.create_dataset('somatic_voltage_high_res', data=somatic_voltage_low_res)
     if args.record_dendritic_voltages:
         f.create_dataset('dendritic_voltage', data=dendritic_voltages_low_res)
     f.close()
@@ -1031,6 +1033,7 @@ def get_simulation_args():
     saver.add_argument('--simulation_initialization_duration_in_ms', default=500, type=int)
     saver.add_argument('--count_samples_for_high_res', default=8, type=int)
     saver.add_argument('--record_dendritic_voltages', type=str2bool, nargs='?', const=True, default=False)
+    saver.add_argument('--save_high_res_somatic_voltage', type=str2bool, nargs='?', const=True, default=False)
     saver.add_argument('--save_auxiliary_information', type=str2bool, nargs='?', const=True, default=False)
     saver.add_argument('--dt', default=0.025, type=float)
     saver.add_argument('--v_init', default=-76.0, type=float)
@@ -1043,10 +1046,10 @@ def get_simulation_args():
     # number of spike ranges for the simulation
     saver.add_argument('--count_exc_spikes_per_synapse_per_100ms_range', nargs='+', type=float, default=[0, 0.2]) # up to average 2Hz
     saver.add_argument('--count_inh_spikes_per_synapse_per_100ms_range', nargs='+', type=float, default=[0, 0.2]) # up to average 2Hz
-    
+
     saver.add_argument('--count_trials_for_nonzero_output_firing_rate', default=1, type=int)
     saver.add_argument('--force_multiply_count_spikes_per_synapse_per_100ms_range_by_average_segment_length', type=str2bool, nargs='?', const=True, default=False)
-    
+
     # define inst rate between change interval and smoothing sigma options (two rules of thumb:)
     # (A) increasing sampling time interval increases firing rate (more cumulative spikes at "lucky high rate" periods)
     # (B) increasing smoothing sigma reduces output firing rate (reduce effect of "lucky high rate" periods due to averaging)
@@ -1114,7 +1117,7 @@ def get_simulation_args():
     # weight generation parameters
     saver.add_argument('--exc_weights_ratio_range', nargs='+', type=float, default=[1.0, 1.0])
     saver.add_argument('--inh_weights_ratio_range', nargs='+', type=float, default=[1.0, 1.0])
-    
+
     # multiple connections parameters
     saver.add_argument('--exc_multiple_connections_upperbound', type=float, default=30)
     saver.add_argument('--inh_multiple_connections_upperbound', type=float, default=30)
@@ -1143,10 +1146,11 @@ def get_args():
     parser.add_argument('--simulation_folder', action=AddOutFileAction)
     parser.add_argument('--weights_file', default=None)
     parser.add_argument('--input_file', default=None)
+    parser.add_argument('--input_dir', default=None)
     parser.add_argument('--weight_scale_factor',type=float, default=1.)
     saver = get_simulation_args()
     saver.add_to_parser(parser,exclude='amount')
-    
+
     parser.add_argument('--save_plots', type=str2bool, nargs='?', const=True, default=True)
     return parser.parse_args()
 
@@ -1167,17 +1171,28 @@ if __name__ == "__main__":
     sim_name= os.path.basename(args_v.simulation_folder)
     initial_idx=0
     input_path = None
-    if args_v.input_file is not None:
-        input_path = args_v.input_file
-        l = os.listdir(args_v.input_file)
+    assert (args_v.input_file is None) != (
+            args_v.input_dir is None), "cannot insert input file and input directory togther"
+
+    if args_v.input_dir is not None:
+        input_path = args_v.input_dir
+        l = os.listdir(args_v.input_dir)
         for i in l:
             ID=i
             cur_input_file=os.path.join(input_path,ID)
             ID_name = f'{ID}_{sim_name}'
             cur_args = args.replace(args_v.simulation_folder, os.path.join(args_v.simulation_folder, ID_name))
-            cur_args = cur_args.replace(args_v.input_file, os.path.join(args_v.input_file,ID))
+            cur_args = cur_args.replace(args_v.input_dir, os.path.join(args_v.input_dir,ID))
             s.send_job(f"simulation_{ID_name}",f"python3 -c 'from simulations.simulate_neuron import main; main()' {cur_args}")
             print(f'Send job with {ID_name}')
+    elif args_v.input_file:
+        input_path = args_v.input_file
+        ID=os.path.basename(input_path)
+        cur_input_file=os.path.join(input_path,ID)
+        ID_name = f'{ID}_{sim_name}'
+        cur_args = args.replace(args_v.simulation_folder, os.path.join(args_v.simulation_folder, ID_name))
+        s.send_job(f"simulation_{ID_name}",f"python3 -c 'from simulations.simulate_neuron import main; main()' {cur_args}")
+        print(f'Send job with {ID_name}')
     else:
         if os.path.exists(args_v.simulation_folder):
             initial_idx+=len(os.listdir(args_v.simulation_folder))
