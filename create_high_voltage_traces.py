@@ -5,7 +5,7 @@ import shlex, subprocess
 from simulations.simulate_neuron import run_within_python_without_slurm
 import re
 namespace_vars=re.compile('(Namespace\([^\n]+\))')
-def high_res_for_model_creator(model_name, input_file_name, destination_path=''):
+def high_res_for_model_creator(model_name, input_file_name, destination_path):
     if not os.path.exists(os.path.join('simulations','data',model_name,f'{input_file_name}_{model_name}',f'{input_file_name}_{model_name}.out')):
         return
     with open(os.path.join('simulations','data',model_name,f'{input_file_name}_{model_name}',f'{input_file_name}_{model_name}.out'),'r') as f:
@@ -20,13 +20,15 @@ def high_res_for_model_creator(model_name, input_file_name, destination_path='')
         # print(args)
         command=f" {args}"
         args=eval(command,globals(),locals())
+        args['simulation_folder']=destination_path
+        run_within_python_without_slurm(['--save_high_res_somatic_voltage','True'],args)
     else:
         return
-    print(args)
+
 def high_res_maneger(input_file_name):
     base_path=os.path.join('simulations', 'data')
-    # dest_path=os.path.join('simulations','high_res_input',input_file_name)
-    # os.makedirs(dest_path,exist_ok=True)
+    dest_path=os.path.join('simulations','high_res_input',input_file_name)
+    os.makedirs(dest_path,exist_ok=True)
     models=[]
     for model_name in os.listdir(base_path):
         if os.path.isfile(model_name):
@@ -44,7 +46,7 @@ def high_res_maneger(input_file_name):
         if dir_flag:
             models.append(model_name)
     for i in models:
-        high_res_for_model_creator(i,input_file_name)
+        high_res_for_model_creator(i,input_file_name,os.path.join(dest_path,i))
 
 if __name__ == '__main__':
     high_res_maneger("ID_0_512971")

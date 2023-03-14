@@ -1171,13 +1171,14 @@ def main(args_by_command=None,args_add_dict=None):
     run_simulation(args)
     logger.info(f"Goodbye from neuron simulator! running on {os.uname()} (pid={os.getpid()}, ppid={os.getppid()})")
 
-def run_within_python_without_slurm(args):
-    input_path = args_v.input_file
-    ID = os.path.basename(input_path)
-    ID_name = f'{ID}_{sim_name}'
-    cur_args = args.replace(args_v.simulation_folder, os.path.join(args_v.simulation_folder, ID_name))
+def run_within_python_without_slurm(args_by_command=None,args_add_dict=None):
+
+    # input_path = args_v.input_file
+    # ID = os.path.basename(input_path)
+    # ID_name = f'{ID}_{sim_name}'
+    # cur_args = args.replace(args_v.simulation_folder, os.path.join(args_v.simulation_folder, ID_name))
     print(f'Send job with {ID_name}')
-    main()
+    main(args_by_command,args_add_dict)
 
 
 if __name__ == "__main__":
