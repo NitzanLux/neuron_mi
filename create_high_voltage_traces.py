@@ -13,16 +13,17 @@ def high_res_for_model_creator(model_name, input_file_name, destination_path='')
     out_data = '\n'.join(out_data)
     m = namespace_vars.search(out_data)
     args=None
+    d=None
     if m:
         args = m.group(1)
         args = args.replace('Namespace','dict')
         print(args)
-        command=f"args = {args}"
+        command=f"d = {args}"
         exec(command,globals(),locals())
     else:
         return
     # args = shlex.split(f'python -m dummy_scripy.py --simulation_folder {model_name}')
-    print('wattt',type(args))
+    print('wattt',type(d))
 def high_res_maneger(input_file_name):
     base_path=os.path.join('simulations', 'data')
     # dest_path=os.path.join('simulations','high_res_input',input_file_name)
