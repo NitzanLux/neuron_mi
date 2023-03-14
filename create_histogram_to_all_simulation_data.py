@@ -2,15 +2,18 @@ import os
 from utils.parse_file import parse_sim_experiment_file
 import numpy as np
 import matplotlib.pyplot as plt
+from tqdm import tqdm
+
 base_path=os.path.join('simulations', 'data')
 dest_path=os.path.join('simulations','rate_hists')
 os.makedirs(dest_path,exist_ok=True)
 for model_name in os.listdir(base_path):
+    print(f'Start {model_name}')
     if os.path.isfile(model_name):
         continue
     model_path = os.path.join(base_path, model_name)
     data=[]
-    for i in os.listdir(model_path):
+    for i in tqdm(os.listdir(model_path)):
         cur_path=os.path.join(model_path,i)
         if os.path.isfile(cur_path):
             continue
