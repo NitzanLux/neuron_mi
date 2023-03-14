@@ -19,7 +19,7 @@ def high_res_for_model_creator(model_name, input_file_name, destination_path='')
         args = args.replace('Namespace','dict')
         print(args)
         command=f"d = {args}"
-        exec(command,globals(),locals())
+        eval(command,globals(),locals())
     else:
         return
     # args = shlex.split(f'python -m dummy_scripy.py --simulation_folder {model_name}')
