@@ -8,7 +8,9 @@ namespace_vars=re.compile('Namespace(\([^\n]+\))')
 def high_res_for_model_creator(model_name, input_file_name, destination_path=''):
     with open(os.path.join('simulations','data',model_name,f'{input_file_name}_{model_name}',f'{input_file_name}_{model_name}.out'),'r') as f:
         out_data = f.readlines()
-    '\n'.join(out_data)
+    print(out_data)
+    out_data = '\n'.join(out_data)
+    print(out_data)
     m = namespace_vars.match(out_data)
     if m:
         print(m.group(1))
