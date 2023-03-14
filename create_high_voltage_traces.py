@@ -15,8 +15,8 @@ def high_res_for_model_creator(model_name, input_file_name, destination_path='')
     if m:
         args = m.group(1)
         args = args.replace('Namespace','dict')
-        command=f"args = {args}"
-        exec(command)
+        command=f"args = {args} ;print('sklaklsdkld')"
+        exec(command,globals(),locals())
         print(type(args),command)
     else:
         return
