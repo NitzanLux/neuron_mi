@@ -16,6 +16,7 @@ def high_res_for_model_creator(model_name, input_file_name, destination_path='')
     if m:
         args = m.group(1)
         args = args.replace('Namespace','dict')
+        print(args)
         command=f"args = {args}"
         exec(command,globals(),locals())
     else:
