@@ -12,7 +12,6 @@ def high_res_maneger(input_file_path=''):
     # os.makedirs(dest_path,exist_ok=True)
     models=[]
     for model_name in os.listdir(base_path):
-        print(f'Start {model_name}')
         if os.path.isfile(model_name):
             continue
         model_path = os.path.join(base_path, model_name)

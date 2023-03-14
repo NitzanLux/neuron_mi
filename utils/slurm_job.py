@@ -141,7 +141,10 @@ class SlurmJobFactory:
         job = SlurmJob(job_name, self.job_folder, run_line, run_on_GPU, timelimit, mem,filename_index=filename_index)
         job.send()
         self.jobs.append((job, extra))
-
+    def send_job_for_function(self, job_name, file_name,function_name,args, run_on_GPU=False, timelimit=True, mem=DEFAULT_MEM, extra=None,filename_index=None):
+        job = SlurmJob(job_name, self.job_folder, f'python -c "from {file_name} import {function_name};{function_name}({args})"', run_on_GPU, timelimit, mem,filename_index=filename_index)
+        job.send()
+        self.jobs.append((job, extra))
     def join_all(self, on_join=None):
         states = []
         remaining_indexes = list(range(len(self.jobs)))
