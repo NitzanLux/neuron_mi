@@ -27,7 +27,8 @@ def create_histograms():
         data = np.array(data)
         plt.hist(data, density=True)
         plt.xlabel('rate')
-        plt.title(f'{model_name} std = {np.round(np.std(data),3)} \n mean = {np.round(np.mean(data),2)} (n = {len(data)}) ')
+        plt.xlabel('Probability')
+        plt.title(f'{model_name} \n std = {np.round(np.std(data),3)} mean = {np.round(np.mean(data),2)} med = {np.round(np.median(data),2)} (n = {len(data)}) ')
         plt.savefig(os.path.join(dest_path,f'{model_name}_rate_histogram.png'))
 if __name__ == '__main__':
     a=SlurmJobFactory('cluster_logs')
