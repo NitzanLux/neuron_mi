@@ -34,6 +34,7 @@ def create_histograms():
         ax.set_title(f'{model_name} \n std = {np.round(np.std(data),3)} mean = {np.round(np.mean(data),2)} med = {np.round(np.median(data),2)} (n = {len(data)}) ')
         plt.savefig(os.path.join(dest_path,f'{model_name}_rate_histogram.png'))
         plt.show()
+        plt.close()
 if __name__ == '__main__':
     a=SlurmJobFactory('cluster_logs')
     a.send_job('hist_maker',f'python -c "from create_histogram_to_all_simulation_data import create_histograms; create_histograms()"')
