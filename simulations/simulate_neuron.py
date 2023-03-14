@@ -1156,14 +1156,24 @@ def get_args():
     parser.add_argument('--save_plots', type=str2bool, nargs='?', const=True, default=True)
     return parser.parse_args()
 
-def main():
-    args = get_args()
+def main(args=None):
+    if args is None:
+        args = get_args()
     TeeAll(args.outfile)
     logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', level=logging.INFO, datefmt='%Y-%m-%d %H:%M:%S')
 
     logger.info(f"Welcome to neuron simulator! running on {os.uname()} (pid={os.getpid()}, ppid={os.getppid()})")
     run_simulation(args)
     logger.info(f"Goodbye from neuron simulator! running on {os.uname()} (pid={os.getpid()}, ppid={os.getppid()})")
+
+def run_within_python_without_slurm():
+    input_path = args_v.input_file
+    ID = os.path.basename(input_path)
+
+    ID_name = f'{ID}_{sim_name}'
+    cur_args = args.replace(args_v.simulation_folder, os.path.join(args_v.simulation_folder, ID_name))
+    print(f'Send job with {ID_name}')
+    main(cur_args)
 
 
 if __name__ == "__main__":

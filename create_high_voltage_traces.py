@@ -1,9 +1,9 @@
 import os
 import numpy as np
 from threading import Thread
-
+import shlex, subprocess
 def high_res_for_model_creator(model_name, input_file_path='', destination_path=''):
-    exec(f'python -m dummy_scripy.py --simulation_folder {model_name}')
+    # args = shlex.split(f'python -m dummy_scripy.py --simulation_folder {model_name}')
     print('wattt')
 def high_res_maneger(input_file_path=''):
     # input_file_name=os.path.basename(input_file_path)
