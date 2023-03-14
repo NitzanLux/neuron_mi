@@ -27,10 +27,11 @@ def create_histograms():
         if len(data)==0:
             continue
         data = np.array(data)
-        plt.hist(data, density=True)
-        plt.xlabel('rate(Hrz)')
-        plt.xlabel('Probability')
-        plt.title(f'{model_name} \n std = {np.round(np.std(data),3)} mean = {np.round(np.mean(data),2)} med = {np.round(np.median(data),2)} (n = {len(data)}) ')
+        ax=plt.subplot()
+        ax.hist(data, density=True)
+        ax.set_xlabel('rate(Hrz)')
+        ax.set_xlabel('Probability')
+        ax.set_title(f'{model_name} \n std = {np.round(np.std(data),3)} mean = {np.round(np.mean(data),2)} med = {np.round(np.median(data),2)} (n = {len(data)}) ')
         plt.savefig(os.path.join(dest_path,f'{model_name}_rate_histogram.png'))
         plt.show()
 if __name__ == '__main__':
