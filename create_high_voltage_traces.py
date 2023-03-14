@@ -2,6 +2,7 @@ import os
 import numpy as np
 from threading import Thread
 import shlex, subprocess
+from utils.slurm_job import SlurmJobFactory
 from simulations.simulate_neuron import run_within_python_without_slurm
 import re
 namespace_vars=re.compile('(Namespace\([^\n]+\))')
@@ -45,8 +46,10 @@ def high_res_maneger(input_file_name):
             dir_flag=True
         if dir_flag:
             models.append(model_name)
+    s=SlurmJobFactory('cluster_logs')
     for i in models:
-        high_res_for_model_creator(i,input_file_name,os.path.join(dest_path,i))
+        s.send_job_for_function(f'high_res_{i}_{input_file_name}','create_high_voltage_traces','high_res_for_model_creator',)
+        high_res_for_model_creator()
 
 if __name__ == '__main__':
     high_res_maneger("ID_0_512971")
