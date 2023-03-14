@@ -30,7 +30,7 @@ def create_histograms():
         ax=plt.subplot()
         ax.hist(data, density=True)
         ax.set_xlabel('rate(Hrz)')
-        ax.set_xlabel('Probability')
+        ax.set_ylabel('Probability')
         ax.set_title(f'{model_name} \n std = {np.round(np.std(data),3)} mean = {np.round(np.mean(data),2)} med = {np.round(np.median(data),2)} (n = {len(data)}) ')
         plt.savefig(os.path.join(dest_path,f'{model_name}_rate_histogram.png'))
         plt.show()
