@@ -13,6 +13,8 @@ def create_histograms():
         if os.path.isfile(model_name):
             continue
         model_path = os.path.join(base_path, model_name)
+        if model_name=='inputs':
+            continue
         data=[]
         for i in tqdm(os.listdir(model_path)):
             cur_path=os.path.join(model_path,i)
