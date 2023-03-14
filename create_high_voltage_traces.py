@@ -13,7 +13,10 @@ def create(input_file_path=''):
             continue
         model_path = os.path.join(base_path, model_name)
         dir_flag=False
+        if model_name=='inputs':
+            continue
         for i in os.listdir(model_path):
+
             cur_path=os.path.join(model_path,i)
             if os.path.isfile(cur_path):
                 continue
