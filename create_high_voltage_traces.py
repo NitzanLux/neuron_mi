@@ -21,3 +21,5 @@ def create(input_file_path=''):
         if dir_flag:
             models.append(model_name)
     print('\n'.join(models))
+if __name__ == '__main__':
+    create()
