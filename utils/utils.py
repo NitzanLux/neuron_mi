@@ -53,8 +53,12 @@ class ArgumentSaver:
         for arg_name, (args, kwargs) in self.arguments.items():
             if exclude is not None and arg_name in exclude:
                 continue
-            parser.add_argument(*args, **kwargs)
-
+            try:
+                parser.add_argument(*args, **kwargs)
+            except Exception as e:
+                print(args)
+                print(kwargs)
+                raise e
 class AddOutFileAction(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
         setattr(namespace, self.dest, values)
