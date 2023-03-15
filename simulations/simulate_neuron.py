@@ -677,6 +677,8 @@ def run_actual_simulation(args):
 
     logger.info("About to create cell...")
     cell, syns = tm.create_cell()
+    if args.DC_shift is None:
+        cell.e_pas=args.DC_shift
     logger.info("cell created fine.")
 
     np_seg_lens = np.array(syns.seg_lens)
@@ -1042,6 +1044,7 @@ def get_simulation_args():
     saver.add_argument('--v_init', default=-76.0, type=float)
     saver.add_argument('--spike_threshold_for_computation', default=-20, type=float)
     saver.add_argument('--spike_threshold', default=-55, type=float)
+    saver.add_argument('--DC_shift', default=None, type=[float,None])
 
     saver.add_argument('--use_rounded_weight', type=str2bool, nargs='?', const=True, default=True)
     saver.add_argument('--weight_rounding_precision', default=5, type=int)
@@ -1120,6 +1123,8 @@ def get_simulation_args():
     # weight generation parameters
     saver.add_argument('--exc_weights_ratio_range', nargs='+', type=float, default=[1.0, 1.0])
     saver.add_argument('--inh_weights_ratio_range', nargs='+', type=float, default=[1.0, 1.0])
+    saver.add_argument('--weight_scale_factor',type=float, default=1.)
+
 
     # multiple connections parameters
     saver.add_argument('--exc_multiple_connections_upperbound', type=float, default=30)
@@ -1150,7 +1155,7 @@ def get_args(args_by_command=None,args_add_dict=None):
     parser.add_argument('--weights_file', default=None)
     parser.add_argument('--input_file', default=None)
     parser.add_argument('--input_dir', default=None)
-    parser.add_argument('--weight_scale_factor',type=float, default=1.)
+
     saver = get_simulation_args()
     saver.add_to_parser(parser,exclude='amount')
 
