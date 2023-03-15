@@ -1029,9 +1029,9 @@ def run_simulation(args):
     run_simulation_duration_in_seconds = time.time() - run_simulation_start_time
     logger.info(f"run simulation finished!, it took {run_simulation_duration_in_seconds/60.0:.3f} minutes")
 def float_or_none(x):
-    if (isinstance(x, float) or x is None):
+    if (x is None):
         return x
-    raise False
+    return float(x)
 def get_simulation_args():
     saver = ArgumentSaver()
     saver.add_argument('--simulation_duration_in_seconds', default=10, type=int)
