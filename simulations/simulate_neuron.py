@@ -1028,7 +1028,10 @@ def run_simulation(args):
 
     run_simulation_duration_in_seconds = time.time() - run_simulation_start_time
     logger.info(f"run simulation finished!, it took {run_simulation_duration_in_seconds/60.0:.3f} minutes")
-
+def float_or_none(x):
+    if (isinstance(x, float) or x is None):
+        return x
+    raise False
 def get_simulation_args():
     saver = ArgumentSaver()
     saver.add_argument('--simulation_duration_in_seconds', default=10, type=int)
@@ -1044,7 +1047,7 @@ def get_simulation_args():
     saver.add_argument('--v_init', default=-76.0, type=float)
     saver.add_argument('--spike_threshold_for_computation', default=-20, type=float)
     saver.add_argument('--spike_threshold', default=-55, type=float)
-    saver.add_argument('--DC_shift', default=None, type=[float,None])
+    saver.add_argument('--DC_shift', default=None, type=float_or_none )
 
     saver.add_argument('--use_rounded_weight', type=str2bool, nargs='?', const=True, default=True)
     saver.add_argument('--weight_rounding_precision', default=5, type=int)
