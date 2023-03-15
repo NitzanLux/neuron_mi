@@ -985,7 +985,7 @@ def run_simulation(args):
     f.create_dataset('somatic_voltage', data=somatic_voltage_low_res)
     if args.save_high_res_somatic_voltage:
         f_high = h5py.File(f'{args.simulation_folder}/somatic_voltage_high_res.h5', 'w')
-        f_high.create_dataset('somatic_voltage_high_res', data=somatic_voltage_low_res)
+        f_high.create_dataset('somatic_voltage', data=somatic_voltage_high_res)
     if args.record_dendritic_voltages:
         f.create_dataset('dendritic_voltage', data=dendritic_voltages_low_res)
     f.close()
