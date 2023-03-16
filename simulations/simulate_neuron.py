@@ -551,6 +551,7 @@ def generate_spike_times_and_weights_from_input_file(args, syns):
     auxiliary_information = {}
 
     sim_folder = args.input_file
+    print('sim folder: ',args.input_file)
     exc_weighted_spikes = sparse.load_npz(os.path.join(sim_folder, "exc_weighted_spikes.npz")).A*args.weight_scale_factor
     inh_weighted_spikes = sparse.load_npz(os.path.join(sim_folder, "inh_weighted_spikes.npz")).A*args.weight_scale_factor
     weighted_spikes = np.concatenate([exc_weighted_spikes, inh_weighted_spikes], axis=0)
