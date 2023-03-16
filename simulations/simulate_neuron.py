@@ -1191,11 +1191,12 @@ if __name__ == "__main__":
     sim_name= os.path.basename(args_v.simulation_folder)
     initial_idx=0
     input_path = None
-    assert (args_v.input_file is None) != (
-            args_v.input_dir is None), "cannot insert input file and input directory togther"
+    # assert (args_v.input_file is None) != (
+    #         args_v.input_dir is None), "cannot insert input file and input directory togther"
 
     if args_v.input_dir is not None:
         input_path = args_v.input_dir
+        args_v.input_file=None
         l = os.listdir(args_v.input_dir)
         for i in l:
             ID=i
@@ -1206,6 +1207,7 @@ if __name__ == "__main__":
             s.send_job(f"simulation_{ID_name}",f"python3 -c 'from simulations.simulate_neuron import main; main()' {cur_args}")
             print(f'Send job with {ID_name}')
     elif args_v.input_file:
+        args_v.input_dir=None
         input_path = args_v.input_file
         ID=os.path.basename(input_path)
         cur_input_file=os.path.join(input_path,ID)
