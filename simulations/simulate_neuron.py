@@ -679,7 +679,7 @@ def run_actual_simulation(args):
 
     logger.info("About to create cell...")
     cell, syns = tm.create_cell()
-    if args.DC_shift is None:
+    if args.DC_shift is not None:
         cell.e_pas=args.DC_shift
     logger.info("cell created fine.")
 
