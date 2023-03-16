@@ -614,7 +614,7 @@ def generate_spike_times_and_weights_from_input_file(args, syns):
     auxiliary_information['average_exc_initial_neuron_weight'] = average_exc_initial_neuron_weight
 
     logger.info(f'average exc initial neuron weight is {average_exc_initial_neuron_weight}')
-
+    print('starting weights')
     inh_weighted_spikes = np.zeros((len(inh_netcons), simulation_duration_in_ms))
     inh_ncon_to_input_spike_times = {}
     count_inh_spikes = 0
