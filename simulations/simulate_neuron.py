@@ -1171,12 +1171,14 @@ def get_args(args_by_command=None,args_add_dict=None):
     return parser.parse_args(args_by_command,namespace=args)
 
 def main(args_by_command=None,args_add_dict=None):
+    print('loading args..')
     args = get_args(args_by_command=args_by_command,args_add_dict=args_add_dict)
 
     TeeAll(args.outfile)
     logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', level=logging.INFO, datefmt='%Y-%m-%d %H:%M:%S')
 
     logger.info(f"Welcome to neuron simulator! running on {os.uname()} (pid={os.getpid()}, ppid={os.getppid()})")
+    print('running simulation')
     run_simulation(args)
     logger.info(f"Goodbye from neuron simulator! running on {os.uname()} (pid={os.getpid()}, ppid={os.getppid()})")
 
@@ -1193,7 +1195,6 @@ if __name__ == "__main__":
     input_path = None
     # assert (args_v.input_file is None) != (
     #         args_v.input_dir is None), "cannot insert input file and input directory togther"
-    print(args_v)
     if args_v.input_dir is not None:
         input_path = args_v.input_dir
         args_v.input_file=None
@@ -1208,6 +1209,7 @@ if __name__ == "__main__":
             print(f'Send job with {ID_name}')
     elif args_v.input_file:
         args_v.input_dir=None
+        print('hey')
         input_path = args_v.input_file
         ID=os.path.basename(input_path)
         cur_input_file=os.path.join(input_path,ID)
