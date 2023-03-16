@@ -1193,7 +1193,7 @@ if __name__ == "__main__":
     input_path = None
     # assert (args_v.input_file is None) != (
     #         args_v.input_dir is None), "cannot insert input file and input directory togther"
-
+    print(args_v)
     if args_v.input_dir is not None:
         input_path = args_v.input_dir
         args_v.input_file=None
