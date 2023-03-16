@@ -1188,6 +1188,7 @@ def run_within_python_without_slurm(args_by_command=None,args_add_dict=None):
     main(args_by_command,args_add_dict)
 
 
+
 if __name__ == "__main__":
     s = SlurmJobFactory('cluster_logs')
     args = ' '.join(sys.argv[1:])
@@ -1206,6 +1207,7 @@ if __name__ == "__main__":
         ID_name = f'{ID}_{sim_name}'
         print(input_path)
         cur_args = args.replace(args_v.simulation_folder, os.path.join(args_v.simulation_folder, ID_name))
+        print(cur_args.input_file)
         s.send_job(f"simulation_{ID_name}",f"python3 -c 'from simulations.simulate_neuron import main; main()' {cur_args}")
         print(f'Send job with {ID_name}')
     elif args_v.input_dir is not None:
