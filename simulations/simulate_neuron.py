@@ -1206,7 +1206,7 @@ if __name__ == "__main__":
         # cur_input_file=os.path.join(input_path,ID)
         ID_name = f'{ID}_{sim_name}'
         print(input_path)
-        cur_args = re.sub(f'(.*)(\s{args_v.simulation_folder} )(.*)',f'\\1 {os.path.join(args_v.simulation_folder, ID_name)} \\3',args)
+        cur_args = re.sub(f'(.*)(\s{args_v.simulation_folder}\s)(.*)',f'\\1 {os.path.join(args_v.simulation_folder, ID_name)} \\3',args)
         # cur_args = args.replace(' '+args_v.simulation_folder, ' '+os.path.join(args_v.simulation_folder, ID_name))
         print(cur_args)
         s.send_job(f"simulation_{ID_name}",f"python3 -c 'from simulations.simulate_neuron import main; main()' {cur_args}")
@@ -1221,12 +1221,12 @@ if __name__ == "__main__":
             cur_input_file=os.path.join(input_path,ID)
             ID_name = f'{ID}_{sim_name}'
             # cur_args = args.replace(' '+args_v.simulation_folder,' '+ os.path.join(args_v.simulation_folder, ID_name))
-            cur_args = re.sub(f'(.*)(\s{args_v.simulation_folder})(.*)',
-                              f'\\1 {os.path.join(args_v.simulation_folder, ID_name)}\\3', args)
+            cur_args = re.sub(f'(.*)(\s{args_v.simulation_folder}\s)(.*)',
+                              f'\\1 {os.path.join(args_v.simulation_folder, ID_name)} \\3', args)
 
             # cur_args = cur_args.replace(' '+args_v.input_dir,' '+ os.path.join(args_v.input_dir,ID))
-            cur_args = re.sub(f'(.*)(\s{args_v.input_dir})(.*)',
-                              f'\\1 {os.path.join(args_v.input_dir,ID)}\\3', cur_args)
+            cur_args = re.sub(f'(.*)(\s{args_v.input_dir}\s)(.*)',
+                              f'\\1 {os.path.join(args_v.input_dir,ID)} \\3', cur_args)
 
             s.send_job(f"simulation_{ID_name}",f"python3 -c 'from simulations.simulate_neuron import main; main()' {cur_args}")
             print(f'Send job with {ID_name}')
