@@ -1214,8 +1214,9 @@ if __name__ == "__main__":
         print('hey')
         input_path = args_v.input_file
         ID=os.path.basename(input_path)
-        cur_input_file=os.path.join(input_path,ID)
+        # cur_input_file=os.path.join(input_path,ID)
         ID_name = f'{ID}_{sim_name}'
+        print(input_path)
         cur_args = args.replace(args_v.simulation_folder, os.path.join(args_v.simulation_folder, ID_name))
         s.send_job(f"simulation_{ID_name}",f"python3 -c 'from simulations.simulate_neuron import main; main()' {cur_args}")
         print(f'Send job with {ID_name}')
