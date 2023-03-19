@@ -15,7 +15,8 @@ for m in os.listdir(cur_path):
     for i in os.listdir(os.path.join(cur_path,m)) :
         try:
             _, y_spike, y_soma  = parse_sim_experiment_file(os.path.join(cur_path,m,i))
-            rate.append(1000.*y_spike.sum()/y_spike.size)
+            print(y_spike.sum(),y_spike.size)
+            rate.append(1000.* y_spike.sum() / y_spike.size)
             avarage_somatic_voltage.append(y_soma.mean())
             model_name.append(m)
             sim_name.append(i)
