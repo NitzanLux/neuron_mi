@@ -9,6 +9,7 @@ avarage_somatic_voltage = []
 model_name=[]
 sim_name=[]
 for m in os.listdir(cur_path):
+    print(m)
     if 'input' in m:
         continue
     for i in os.listdir(os.path.join(cur_path,m)) :
