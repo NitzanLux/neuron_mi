@@ -1210,7 +1210,7 @@ if __name__ == "__main__":
         ID_name = f'{ID}_{sim_name}'
         cur_args = re.sub(f'(.*)([\s]{args_v.simulation_folder}[\s])(.*)',f'\\1 {os.path.join(args_v.simulation_folder, ID_name)} \\3',args)
         # cur_args = args.replace(' '+args_v.simulation_folder, ' '+os.path.join(args_v.simulation_folder, ID_name))
-        s.send_job(f"simulation_{ID_name}",f"python3 -c 'from simulations.simulate_neuron import main; main()' {cur_args}")
+        s.send_job(f"simulation_{ID_name}",f"python3 -c 'from simulations.simulate_neuron import main; main()' {cur_args}",mem='64G')
         print(f'Send job with {ID_name}')
     elif args_v.input_dir is not None:
         input_path = args_v.input_dir
@@ -1228,7 +1228,7 @@ if __name__ == "__main__":
             cur_args = re.sub(f'(.*)([\s]{args_v.input_dir}[\s])(.*)',
                               f'\\1 {os.path.join(args_v.input_dir,ID)} \\3', cur_args)
 
-            s.send_job(f"simulation_{ID_name}",f"python3 -c 'from simulations.simulate_neuron import main; main()' {cur_args}")
+            s.send_job(f"simulation_{ID_name}",f"python3 -c 'from simulations.simulate_neuron import main; main()' {cur_args}",mem='64G')
             print(f'Send job with {ID_name}')
     else:
         if os.path.exists(args_v.simulation_folder):
@@ -1236,5 +1236,5 @@ if __name__ == "__main__":
         for i in range(args_v.amount):
             ID= f'ID_{initial_idx+i}_{np.random.randint(1000000)}_{sim_name}'
             cur_args = args.replace(args_v.simulation_folder,os.path.join(args_v.simulation_folder,ID))
-            s.send_job(f"simulation_{ID}",f"python3 -c 'from simulations.simulate_neuron import main; main()' {cur_args}")
+            s.send_job(f"simulation_{ID}",f"python3 -c 'from simulations.simulate_neuron import main; main()' {cur_args}",mem='64G')
             print(f'Send job with {ID}')
