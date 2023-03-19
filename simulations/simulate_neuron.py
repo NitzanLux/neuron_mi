@@ -1193,7 +1193,8 @@ def run_within_python_without_slurm(args_by_command=None,args_add_dict=None):
 import re
 
 if __name__ == "__main__":
-    s = SlurmJobFactory('cluster_logs')
+    # os.makedirs(os.path.join('cluster_logs'))
+    s = SlurmJobFactory(os.path.join('cluster_logs','simulation_logs'))
     args = ' '.join(sys.argv[1:])
     args_v = get_args()
     sim_name= os.path.basename(args_v.simulation_folder)

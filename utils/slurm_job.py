@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 timelimit_argument_str = "-t 2-23:00:00"
 GPU_argument_str = "--gres=gpu:1"
 CPU_argument_str = "-c 1"
-DEFAULT_MEM = '32G'
+DEFAULT_MEM = '64G'
 # RAM_argument_str = "--mem 20000"
 
 # TODO: some time add ss-gpu.q also
