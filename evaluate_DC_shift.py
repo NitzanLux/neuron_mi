@@ -4,7 +4,7 @@ from scipy import sparse
 length=6000
 src=os.path.join('simulations','data','inputs')
 dest=  os.path.join('simulations','data','short_inputs')
-os.makedirs(os.path.join('simulations','data','short_inputs'))
+os.makedirs(os.path.join('simulations','data','short_inputs'),exist_ok=True)
 for i in os.listdir(src):
     os.makedirs(os.path.join(dest,i),exist_ok=True)
     exc_weighted_spikes = sparse.load_npz(f'{os.path.join(src,i)}/exc_weighted_spikes.npz').A
