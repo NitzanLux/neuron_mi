@@ -683,7 +683,7 @@ def run_actual_simulation(args):
         for i in [cell.dend, cell.apic, cell.soma, cell.axon]:
             for sec in i:
                 for seg in sec:
-                    seg.e_pas=-args.DC_shift
+                    seg.e_pas=args.DC_shift
     logger.info("cell created fine.")
 
     np_seg_lens = np.array(syns.seg_lens)
