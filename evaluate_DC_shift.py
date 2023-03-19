@@ -1,6 +1,5 @@
 import os
 from scipy import sparse
-from utils.slurm_job import SlurmJobFactory
 from subprocess import Popen
 import sys
 
@@ -15,7 +14,6 @@ def create_short_inputs(length=6000):
         inh_weighted_spikes = sparse.load_npz(f'{os.path.join(src,i)}/inh_weighted_spikes.npz').A
         sparse.save_npz(f'{os.path.join(dest,i)}/inh_weighted_spikes.npz', sparse.csr_matrix(inh_weighted_spikes[:,:length]))
 def create_short_simulations(models,factors, dc_range):
-    s=SlurmJobFactory(os.path.join('cluster_logs','simulation_logs'))
     assert len(factors)==len(models)
     for dc in dc_range:
         for mc,f in zip(models,factors):
