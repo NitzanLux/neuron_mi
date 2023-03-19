@@ -23,4 +23,5 @@ for m in os.listdir(cur_path):
             print(f"Could not load {i} from model {m}")
 df = pd.DataFrame({'model':model_name,'simulation':sim_name,'soma_average_voltage':avarage_somatic_voltage,'rate':rate})
 os.makedirs(os.path.join('simulations','dataframe_data'),exist_ok=True)
-pd.to_pickle(os.path.join('simulations','dataframe_data',f'data_{np.random.randint(100000)}.pkl'))
+with open(os.path.join('simulations','dataframe_data',f'data_{np.random.randint(100000)}.pkl'),'wb') as f:
+    df.to_pickle(f)
