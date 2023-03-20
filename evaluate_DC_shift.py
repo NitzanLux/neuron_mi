@@ -33,9 +33,9 @@ def create_entropy_approximation(models,factors, dc_range):
             # dc=abs(dc)
             f_str=str(f).replace('.','-')
             command=f"python -m create_entropy_estimation -f simulations/data/{mc}_factor_{f_str}_DC_{dc}  -t {mc}_factor_{f_str}_DC_{dc}_CTW -j 0 -e True"
-            print(commend)
+            print(command)
             # s.send_job(f'simulation_{mc}_{dc}_{f}',commend)
-            process = Popen(commend, shell=True)
+            process = Popen(command, shell=True)
             stdout, stderr = process.communicate()
             print(stdout, file=sys.stdout)
             print(stderr, file=sys.stderr)
