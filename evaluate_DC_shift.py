@@ -26,4 +26,4 @@ def create_short_simulations(models,factors, dc_range):
             stdout, stderr = process.communicate()
             print(stdout, file=sys.stdout)
             print(stderr, file=sys.stderr)
-create_short_simulations(['Rat_L5b_PC_2_Hay','Rat_L5b_PC_2_Hay_noNMDA'],[0.2,1],list(range(-110,-20,10)))
+create_short_simulations(['Rat_L5b_PC_2_Hay','Rat_L5b_PC_2_Hay_noNMDA'],[0.2,1],list(range(-90,-30,10)))
