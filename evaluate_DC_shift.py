@@ -19,11 +19,11 @@ def create_short_simulations(models,factors, dc_range):
         for mc,f in zip(models,factors):
             # dc=abs(dc)
             f_str=str(f).replace('.','-')
-            commend = f"python3 -m simulations.simulate_neuron --neuron_model_folder simulations/neuron_models/{mc} --simulation_folder /ems/elsc-labs/segev-i/nitzan.luxembourg/projects/neuron_mi/neuron_mi/simulations/short_data/{mc}_factor_{f_str}_DC_{dc}  --DC_shift {dc}  --weight_scale_factor {f} --save_plots True --simulation_duration_in_seconds 6 --input_dir '/ems/elsc-labs/segev-i/nitzan.luxembourg/projects/neuron_mi/neuron_mi/simulations/short_data/short_inputs/'"
+            commend = f"python3 -m simulations.simulate_neuron --neuron_model_folder simulations/neuron_models/{mc} --simulation_folder /ems/elsc-labs/segev-i/nitzan.luxembourg/projects/neuron_mi/neuron_mi/simulations/data/{mc}_factor_{f_str}_DC_{dc}  --DC_shift {dc}  --weight_scale_factor {f} --save_plots True --simulation_duration_in_seconds 60 --input_dir '/ems/elsc-labs/segev-i/nitzan.luxembourg/projects/neuron_mi/neuron_mi/simulations/data/inputs/'"
             print(commend)
             # s.send_job(f'simulation_{mc}_{dc}_{f}',commend)
             process = Popen(commend, shell=True)
             stdout, stderr = process.communicate()
             print(stdout, file=sys.stdout)
             print(stderr, file=sys.stderr)
-create_short_simulations(['Rat_L5b_PC_2_Hay'],[0.2],list(range(-105,-20,5)))
+create_short_simulations(['Rat_L5b_PC_2_Hay','Rat_L5b_PC_2_Hay_noNMDA'],[0.2,1],list(range(-110,-20,10)))
