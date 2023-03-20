@@ -37,6 +37,6 @@ def create_summery():
     with open(os.path.join('simulations','dataframe_data',f'{data_folder_name}_{np.random.randint(100000)}.pkl'),'wb') as f:
         df.to_pickle(f)
 
-s = SlurmJobFactory('summery_creator')
+s = SlurmJobFactory('cluster_logs')
 
 s.send_job_for_function('summery_creator','summery_creator_data_from_simulations.py',create_summery,sys.argv[1:])
