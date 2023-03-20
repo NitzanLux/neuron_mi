@@ -26,4 +26,17 @@ def create_short_simulations(models,factors, dc_range):
             stdout, stderr = process.communicate()
             print(stdout, file=sys.stdout)
             print(stderr, file=sys.stderr)
-create_short_simulations(['Rat_L5b_PC_2_Hay','Rat_L5b_PC_2_Hay_noNMDA'],[0.2,1],list(range(-90,-30,10)))
+def create_entropy_approximation(models,factors, dc_range):
+    assert len(factors)==len(models)
+    for dc in dc_range:
+        for mc,f in zip(models,factors):
+            # dc=abs(dc)
+            f_str=str(f).replace('.','-')
+            command=f"python -m create_entropy_estimation -f simulations/data/{mc}_factor_{f_str}_DC_{dc}  -t {mc}_factor_{f_str}_DC_{dc}_CTW -j 0 -e True"
+            print(commend)
+            # s.send_job(f'simulation_{mc}_{dc}_{f}',commend)
+            process = Popen(commend, shell=True)
+            stdout, stderr = process.communicate()
+            print(stdout, file=sys.stdout)
+            print(stderr, file=sys.stderr)
+create_entropy_approximation(['Rat_L5b_PC_2_Hay','Rat_L5b_PC_2_Hay_noNMDA'],[0.2,1],list(range(-90,-30,10)))
