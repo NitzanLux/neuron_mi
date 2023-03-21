@@ -7,12 +7,12 @@ from utils.slurm_job import SlurmJobFactory
 import pandas as pd
 import numpy as np
 import argparse
-def create_summery():
-    parser = argparse.ArgumentParser(description='Add folder name for summery simulation data data')
-    parser.add_argument('-f', dest="data_folder_name", type=str,
-                        help='directory name for evaluation')
-    args = parser.parse_args()
-    data_folder_name = args.data_folder_name
+def create_summery(data_folder_name):
+    # parser = argparse.ArgumentParser(description='Add folder name for summery simulation data data')
+    # parser.add_argument('-f', dest="data_folder_name", type=str,
+    #                     help='directory name for evaluation')
+    # args = parser.parse_args()
+    # data_folder_name = args.data_folder_name
     cur_path = os.path.join('simulations',data_folder_name)
     rate = []
     avarage_somatic_voltage = []
