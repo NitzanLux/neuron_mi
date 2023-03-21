@@ -41,4 +41,4 @@ def create_entropy_approximation(models,factors, dc_range):
             print(stdout, file=sys.stdout)
             print(stderr, file=sys.stderr)
 
-create_short_simulations(['Rat_L5b_PC_2_Hay']*5+['Rat_L5b_PC_2_Hay_noNMDA']*2,[0.05,0.5,0.1,0.15,0.2,1,2],list(range(-90,-30,5)),data_folder='slim_data')
+create_short_simulations(['Rat_L5b_PC_2_Hay']*5+['Rat_L5b_PC_2_Hay_noNMDA']*2,[0.05,0.5,0.1,0.15,0.2,1,2],list(range(-90,-20,20)),data_folder='slim_data')
