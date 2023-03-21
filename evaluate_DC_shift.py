@@ -2,6 +2,7 @@ import os
 from scipy import sparse
 from subprocess import Popen
 import sys
+import numpy as np
 
 def create_short_inputs(length=6000):
     src=os.path.join('simulations','data','inputs')
@@ -39,4 +40,4 @@ def create_entropy_approximation(models,factors, dc_range):
             stdout, stderr = process.communicate()
             print(stdout, file=sys.stdout)
             print(stderr, file=sys.stderr)
-create_short_simulations(['Rat_L5b_PC_2_Hay','Rat_L5b_PC_2_Hay_noNMDA'],[0.1,1],list(range(-90,-30,10)),data_folder='short_data')
+create_short_simulations(['Rat_L5b_PC_2_Hay']*2,[0.25,0.5,0.1],list(range(-90,-30,10)),data_folder='short_data')
