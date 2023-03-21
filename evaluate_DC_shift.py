@@ -40,4 +40,4 @@ def create_entropy_approximation(models,factors, dc_range):
             stdout, stderr = process.communicate()
             print(stdout, file=sys.stdout)
             print(stderr, file=sys.stderr)
-create_short_simulations(['Rat_L5b_PC_2_Hay']*2,[0.25,0.5,0.1],list(range(-90,-30,10)),data_folder='short_data')
+create_short_simulations(['Rat_L5b_PC_2_Hay']*2,[0.05,0.5,0.1],list(range(-90,-30,10)),data_folder='short_data')
