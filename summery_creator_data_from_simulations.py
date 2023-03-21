@@ -39,4 +39,4 @@ def create_summery():
 
 s = SlurmJobFactory('cluster_logs')
 
-s.send_job_for_function('summery_creator','summery_creator_data_from_simulations.py',create_summery,sys.argv[1:])
+s.send_job_for_function('summery_creator','summery_creator_data_from_simulations.py','create_summery',sys.argv[1:])
