@@ -552,8 +552,8 @@ def generate_spike_times_and_weights_from_input_file(args, syns):
 
     sim_folder = args.input_file
     print('sim folder: ',args.input_file)
-    exc_weighted_spikes = sparse.load_npz(os.path.join(sim_folder, "exc_weighted_spikes.npz")).A*args.weight_scale_factor
-    inh_weighted_spikes = sparse.load_npz(os.path.join(sim_folder, "inh_weighted_spikes.npz")).A*args.weight_scale_factor
+    exc_weighted_spikes = sparse.load_npz(os.path.join(sim_folder, "exc_weighted_spikes.npz")).A*args.weight_scale_factor*args.exc_weight_scale_factor
+    inh_weighted_spikes = sparse.load_npz(os.path.join(sim_folder, "inh_weighted_spikes.npz")).A*args.weight_scale_factor*args.inh_weight_scale_factor
     weighted_spikes = np.concatenate([exc_weighted_spikes, inh_weighted_spikes], axis=0)
     print('sim folder: ',args.input_file)
 
@@ -1132,6 +1132,8 @@ def get_simulation_args():
     saver.add_argument('--exc_weights_ratio_range', nargs='+', type=float, default=[1.0, 1.0])
     saver.add_argument('--inh_weights_ratio_range', nargs='+', type=float, default=[1.0, 1.0])
     saver.add_argument('--weight_scale_factor',type=float, default=1.)
+    saver.add_argument('--inh_weight_scale_factor',type=float, default=1.)
+    saver.add_argument('--exc_weight_scale_factor',type=float, default=1.)
 
 
     # multiple connections parameters
