@@ -7,8 +7,8 @@ os.makedirs(dest_path)
 for m in os.listdir(src_path):
     temp_path = os.path.join(src_path, m)
     for o_sim in os.listdir(os.path.join(temp_path)):
-        sim=o_sim.replace(m,'')
-        os.makedirs(os.path.join(dest_path,sim),exist_ok=True)
+        sim=o_sim.replace('_'+m,'')
+        # os.makedirs(os.path.join(dest_path,sim),exist_ok=True)
         for f in os.listdir(os.path.join(temp_path,o_sim)):
             if '.h5' in f:
                 os.makedirs(os.path.join(dest_path, sim, m), exist_ok=True)
