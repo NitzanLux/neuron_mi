@@ -13,6 +13,7 @@ for m in os.listdir(src_path):
         for f in os.listdir(os.path.join(temp_path,o_sim)):
             if '.h5' in f:
                 shutil.copyfile(os.path.join(src_path,m,o_sim,f),os.path.join(dest_path,sim,m,f))
+                print(os.path.join(src_path,m,o_sim,f),os.path.join(dest_path,sim,m,f))
 shutil.make_archive(f'{dest_path}', 'zip', dest_path)
 shutil.rmtree(dest_path)
 
