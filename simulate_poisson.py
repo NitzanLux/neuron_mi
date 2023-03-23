@@ -30,8 +30,9 @@ def create_spike_trains_r(l,size,time_interval=1000):
 
 def simulate_poisson(number):
     N = [2500,5000,10000,20000,40000]
-    l = np.arange(0,1000,50)#, 100)
-    l[0]=1
+    # l = np.arange(0,1000,50)#, 100)
+    # l[0]=1
+    l=[1,2.5,5,7.5,10,15,20,25,50,75,100]
     anlytical=[]
 
     for j, n in enumerate(N):
