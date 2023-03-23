@@ -32,7 +32,7 @@ def simulate_poisson(number):
     N = [2500,5000,10000,20000,40000]
     # l = np.arange(0,1000,50)#, 100)
     # l[0]=1
-    l=[1,2.5,5,7.5,10,15,20,25,50,75,100]
+    l=[1,5,10,20,50,100]
     anlytical=[]
 
     for j, n in enumerate(N):
