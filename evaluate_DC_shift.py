@@ -17,7 +17,7 @@ def create_short_inputs(length=6000):
 def create_short_simulations(models,factors, dc_range,data_folder='data',input_dir='inputs',inh_factor:np.ndarray=np.array([1])):
     assert len(factors)==len(models)
     if isinstance(inh_factor,float):
-        inh_factor=[inh_factor]*len(factors)
+        inh_factor=[inh_factor]*len(models)
     for dc in dc_range:
         for mc,f,inh_f in zip(models,factors,inh_factor):
             print(mc,dc)
