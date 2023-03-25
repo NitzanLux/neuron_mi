@@ -38,7 +38,10 @@ def create_entropy_approximation(models,factors, dc_range,inh_factor:[float,np.n
     for dc in dc_range:
         for mc,f in zip(models,factors):
             # dc=abs(dc)
-            f_str=str(f).replace('.','-')
+            if f==int(f):
+                f_str=str(int(f))
+            else:
+                f_str=str(f).replace('.','-')
             # if inh_f != 1:
             #     inh_f_str = '_inh_factor_' + str(inh_f).replace('.', '-')
             # else:
