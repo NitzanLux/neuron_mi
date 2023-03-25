@@ -14,7 +14,7 @@ def create_short_inputs(length=6000):
         sparse.save_npz(f'{os.path.join(dest,i)}/exc_weighted_spikes.npz', sparse.csr_matrix(exc_weighted_spikes[:,:length]))
         inh_weighted_spikes = sparse.load_npz(f'{os.path.join(src,i)}/inh_weighted_spikes.npz').A
         sparse.save_npz(f'{os.path.join(dest,i)}/inh_weighted_spikes.npz', sparse.csr_matrix(inh_weighted_spikes[:,:length]))
-def create_short_simulations(models,factors, dc_range,data_folder='data',input_dir='inputs',inh_factor:np.ndarray=np.array([1])):
+def create_short_simulations(models,factors, dc_range,data_folder='data',input_dir='inputs',inh_factor=1):
     assert len(factors)==len(models)
     if isinstance(inh_factor,float):
         inh_factor=[inh_factor]*len(models)
