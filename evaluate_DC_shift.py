@@ -20,6 +20,7 @@ def create_short_simulations(models,factors, dc_range,data_folder='data',input_d
         inh_factor=[inh_factor]*len(factors)
     for dc in dc_range:
         for mc,f,inh_f in zip(models,factors,inh_factor):
+            print(mc,dc)
             # dc=abs(dc)
             inh_f_str = ''
             if f == int(f):
