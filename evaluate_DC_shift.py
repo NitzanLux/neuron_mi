@@ -21,8 +21,11 @@ def create_short_simulations(models,factors, dc_range,data_folder='data',input_d
     for dc in dc_range:
         for mc,f,inh_f in zip(models,factors,inh_factor):
             # dc=abs(dc)
-
-            f_str=str(f).replace('.','-')
+            inh_f_str = ''
+            if f == int(f):
+                f_str = str(int(f))
+            else:
+                f_str = str(f).replace('.', '-')
 
             commend = f"python3 -m simulations.simulate_neuron --neuron_model_folder simulations/neuron_models/{mc} --simulation_folder /ems/elsc-labs/segev-i/nitzan.luxembourg/projects/neuron_mi/neuron_mi/simulations/{data_folder}/{mc}_factor_{f_str}{inh_f_str}_DC_{dc}  --DC_shift {dc}  --weight_scale_factor {f} --inh_weight_scale_factor {inh_f} --save_plots True --simulation_duration_in_seconds 60 --input_dir '/ems/elsc-labs/segev-i/nitzan.luxembourg/projects/neuron_mi/neuron_mi/simulations/{data_folder}/{input_dir}/'"
             print(commend)
