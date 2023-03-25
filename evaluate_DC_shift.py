@@ -19,7 +19,7 @@ def create_short_simulations(models,factors, dc_range,data_folder='data',input_d
     if isinstance(inh_factor,float):
         inh_factor=[inh_factor]*len(models)
     for dc in dc_range:
-        for mc,f,inh_f in zip(models,factors,inh_factor):
+        for mc,f in zip(models,factors):
             print(mc,dc)
             # dc=abs(dc)
             inh_f_str = ''
