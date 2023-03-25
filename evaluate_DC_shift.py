@@ -23,10 +23,7 @@ def create_short_simulations(models,factors, dc_range,data_folder='data',input_d
             # dc=abs(dc)
 
             f_str=str(f).replace('.','-')
-            if inh_f!=1:
-                inh_f_str='_inh_factor_'+str(inh_f).replace('.','-')
-            else:
-                inh_f_str = ''
+
             commend = f"python3 -m simulations.simulate_neuron --neuron_model_folder simulations/neuron_models/{mc} --simulation_folder /ems/elsc-labs/segev-i/nitzan.luxembourg/projects/neuron_mi/neuron_mi/simulations/{data_folder}/{mc}_factor_{f_str}{inh_f_str}_DC_{dc}  --DC_shift {dc}  --weight_scale_factor {f} --inh_weight_scale_factor {inh_f} --save_plots True --simulation_duration_in_seconds 60 --input_dir '/ems/elsc-labs/segev-i/nitzan.luxembourg/projects/neuron_mi/neuron_mi/simulations/{data_folder}/{input_dir}/'"
             print(commend)
             # s.send_job(f'simulation_{mc}_{dc}_{f}',commend
@@ -42,6 +39,10 @@ def create_entropy_approximation(models,factors, dc_range,inh_factor:[float,np.n
         for mc,f in zip(models,factors):
             # dc=abs(dc)
             f_str=str(f).replace('.','-')
+            # if inh_f != 1:
+            #     inh_f_str = '_inh_factor_' + str(inh_f).replace('.', '-')
+            # else:
+            #     inh_f_str = ''
             command=f"python -m create_entropy_estimation -f simulations/data/{mc}_factor_{f_str}_DC_{dc}  -t {mc}_factor_{f_str}_DC_{dc}_CTW -j 0 -e True"
             print(command)
             # s.send_job(f'simulation_{mc}_{dc}_{f}',commend)
@@ -50,4 +51,5 @@ def create_entropy_approximation(models,factors, dc_range,inh_factor:[float,np.n
             print(stdout, file=sys.stdout)
             print(stderr, file=sys.stderr)
 
-create_short_simulations(['Rat_L5b_PC_2_Hay_noNMDA','Rat_L5b_PC_2_Hay'],[1.,0.2],list(range(-20,30,20)),data_folder='slim_data',inh_factor=np.array([1.]))
+# create_short_simulations(['Rat_L5b_PC_2_Hay_noNMDA','Rat_L5b_PC_2_Hay'],[1.,0.2],list(range(-110,-20,20)),data_folder='slim_data',inh_factor=np.array([1.]))
+create_entropy_approximation(['Rat_L5b_PC_2_Hay_noNMDA','Rat_L5b_PC_2_Hay'],[1.,0.2],list(range(-110,-20,20)),data_folder='slim_data',inh_factor=np.array([1.]))
