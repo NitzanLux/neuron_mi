@@ -1,9 +1,10 @@
 from zipfile import ZipFile
 import os
 import shutil
-src_path =os.path.join('simulations', 'slim_data')
-dest_path='slim_data'
+src_path =os.path.join('simulations', 'data')
+dest_path='data'
 os.makedirs(dest_path)
+sims = ["ID_66_97136","ID_84_148396","ID_22_66248","ID_74_556493"]
 for m in os.listdir(src_path):
     temp_path = os.path.join(src_path, m)
     for o_sim in os.listdir(os.path.join(temp_path)):
