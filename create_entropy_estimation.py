@@ -231,7 +231,7 @@ if __name__ == "__main__":
                         help='set memory', default=-1)
     parser.add_argument('-v', dest="use_v", help='use voltage', type=str2bool, default=True)
     parser.add_argument('-s', dest="use_s", help='use spike data', type=str2bool, default=True)
-    parser.add_argument('-ex', dest="files_that_do_not_exist", type=bool,
+    parser.add_argument('-ex', dest="files_that_do_not_exist",  type=str2bool,
                         help='simulate only files that do not exist', default=False)
     args = parser.parse_args()
 
