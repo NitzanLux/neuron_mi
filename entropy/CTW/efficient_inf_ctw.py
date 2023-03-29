@@ -106,12 +106,14 @@ class Node():
 
     def __update_prob_w(self):
         if len(self.__children) > 0:
-            two_to_pow = mp.power(2, len(self.context_pattern))
-            factor = mpf(1.) / two_to_pow
+            # two_to_pow = mp.power(2, len(self.context_pattern))
+            # factor = mpf(1.) / two_to_pow
+            # factor = mpf(1.) / 2
             child_prob_w = mpf(0.)
             for i in self.children.values():
                 child_prob_w += i.prob_w
-            self.__prob_w = logaddexp(self.prob_e + log(1 - factor), child_prob_w + log(factor))
+            # self.__prob_w = logaddexp(self.prob_e + log(1 - factor), child_prob_w + log(factor))
+            self.__prob_w = logaddexp(self.prob_e + log(0.5), child_prob_w + log(0.5))
         else:
             self.__prob_w = log(mpf(0.5))
 
