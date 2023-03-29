@@ -114,6 +114,7 @@ class Node():
                 child_prob_w += i.prob_w
             if len(self.children)<3:
                 child_prob_w+=  log(mpf(0.5))*(3-len(self.children))
+
             # self.__prob_w = logaddexp(self.prob_e + log(1 - factor), child_prob_w + log(factor))
             self.__prob_w = logaddexp(self.prob_e + log(0.5), child_prob_w + log(0.5))
         else:
