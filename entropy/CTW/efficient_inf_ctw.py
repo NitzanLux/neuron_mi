@@ -123,7 +123,7 @@ class Node():
             # self.__prob_w = logaddexp(self.prob_e + log(0.5), child_prob_w + log(0.5))
         else:
             self.__prob_w = log(mpf(0.5))
-        if self.__prob_w<=log(1):
+        if self.__prob_w>0:
             raise UnboundProbabilityException(f'w log probability is unbound for {self} with {self.__prob_w}')
 
 
@@ -149,7 +149,7 @@ class Node():
             self.__prob_e = log(0.5)
             del self.a
             del self.b
-        if self.__prob_e<=log(1):
+        if self.__prob_e>0:
             raise UnboundProbabilityException(f'e log probability is unbound for {updated_key} with {self.__prob_e}')
 
     def update_w(self):
