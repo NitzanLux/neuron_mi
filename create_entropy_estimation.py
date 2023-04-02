@@ -59,7 +59,7 @@ class EntropyEstimation():
             b.insert_pattern(self.s.astype(int).tolist())
         except UnboundProbabilityException as e:
             with open('entropy_unbound_log.txt', 'a') as file:
-                file.write(f'{self.tag}\t{self.file_name}\t{str(e)}')
+                file.write(f'{self.tag}\t{self.file_name}\t{str(e)}\n')
             raise e
         self.entropy = b.get_entropy(len(self.s.astype(int).tolist()))
         # self.__tree=b.to_dict()
@@ -122,7 +122,7 @@ class EntropyEstimation():
         with open(current_path, 'wb') as pfile:
             pickle.dump(self.to_dict(), pfile)
         with open('saved_entropy.txt', 'a') as file:
-            file.write(f'{self.tag}\t{self.file_name}')
+            file.write(f'{self.tag}\t{self.file_name}\n')
     @staticmethod
     def load(path=None, tag=None, file_index=None, sim_index=None):
         if path is None:
