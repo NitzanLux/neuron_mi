@@ -16,6 +16,10 @@ LETTERS = {0, 1, None}
 print('recurstion old , ', sys.getrecursionlimit())
 sys.setrecursionlimit(10000)
 
+class UnboundProbabilityException(Exception):
+    def __init__(self,m):
+        super().__init__(m)
+
 def log(a):
     return mpmath.log(a)
 
@@ -119,7 +123,8 @@ class Node():
             # self.__prob_w = logaddexp(self.prob_e + log(0.5), child_prob_w + log(0.5))
         else:
             self.__prob_w = log(mpf(0.5))
-        assert  self.__prob_w<=log(1),f'e log probability is unbound for {self} with {self.__prob_e}'
+        if self.__prob_w<=log(1):
+            raise UnboundProbabilityException(f'w log probability is unbound for {self} with {self.__prob_w}')
 
 
     @property
@@ -144,7 +149,8 @@ class Node():
             self.__prob_e = log(0.5)
             del self.a
             del self.b
-        assert  self.__prob_e<=log(1),f'e log probability is unbound for {updated_key} with {self.__prob_e}'
+        if self.__prob_e<=log(1):
+            raise UnboundProbabilityException(f'e log probability is unbound for {updated_key} with {self.__prob_e}')
 
     def update_w(self):
         stack = [self]
