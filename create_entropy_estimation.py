@@ -249,13 +249,13 @@ if __name__ == "__main__":
 
 
     print(args)
-    print("continue?y/n")
-    response = input()
-    while response not in {'y', 'n'}:
-        print("continue?y/n")
-        response = input()
-    if response == 'n':
-        exit(0)
+    # print("continue?y/n")
+    # response = input()
+    # while response not in {'y', 'n'}:
+    #     print("continue?y/n")
+    #     response = input()
+    # if response == 'n':
+    #     exit(0)
 
     from utils.slurm_job import *
 
