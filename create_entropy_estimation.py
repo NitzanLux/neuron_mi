@@ -11,11 +11,13 @@ import numpy as np
 import pickle as pickle
 import entropy.DSampEN as DSEN
 import entropy as ent
+from entropy.CTW.CTW import UnboundProbabilityException
 from typing import List, Dict
 from utils.parse_file import parse_sim_experiment_file
 from tqdm import tqdm
 import os
 import cProfile
+
 
 
 
@@ -53,7 +55,12 @@ class EntropyEstimation():
 
     def build_tree(self):
         b = ent.CTW()
-        b.insert_pattern(self.s.astype(int).tolist())
+        try:
+            b.insert_pattern(self.s.astype(int).tolist())
+        except UnboundProbabilityException as e:
+            with open('entropy_unbound_log.txt', 'a') as file:
+                file.write(f'{self.tag}\t{self.file_name}\t{str(e)}')
+            raise e
         self.entropy = b.get_entropy(len(self.s.astype(int).tolist()))
         # self.__tree=b.to_dict()
 

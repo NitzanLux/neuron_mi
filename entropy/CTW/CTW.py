@@ -2,7 +2,7 @@ from ..entropy_factory import EntropyHandler
 from .__finite_context_tree_weighted import CTWManagerFinite
 from .__infinite_context_tree import CTWManagerInfinite
 import numpy as np
-
+from .efficient_inf_ctw import UnboundProbabilityException
 class CTW(EntropyHandler):
     def __init__(self, D: [int, None]=None,__model=None):
         self.model = (CTWManagerInfinite(__model) if D is None else CTWManagerFinite(D, True)) if __model is None else __model
