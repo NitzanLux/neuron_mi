@@ -121,7 +121,8 @@ class EntropyEstimation():
         current_path = os.path.join(current_path, self.generate_file_name())
         with open(current_path, 'wb') as pfile:
             pickle.dump(self.to_dict(), pfile)
-
+        with open('saved_entropy.txt', 'a') as file:
+            file.write(f'{self.tag}\t{self.file_name}')
     @staticmethod
     def load(path=None, tag=None, file_index=None, sim_index=None):
         if path is None:
@@ -305,7 +306,7 @@ if __name__ == "__main__":
 
         job_factory.send_job(f"entropy_{args.tag}_{i}",
                              f'python -c "from create_entropy_estimation import get_entropy; get_entropy(' + "'" + args.tag + "'" + f',{pathes},{i * jumps}, {args.use_v},{args.use_s})"',
-                             **keys,mem='128G')
+                             **keys,mem='32G')
         print('job sent')
         cur_start = end_point
 
