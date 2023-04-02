@@ -58,6 +58,10 @@ class EntropyEstimation():
         # self.__tree=b.to_dict()
 
     @property
+    def log_prob(self):
+        return -self.entropy*len(self.s.astype(int).tolist())
+
+    @property
     def tree(self):
         if self.__tree is not None:
             return self.__tree

@@ -106,19 +106,21 @@ class Node():
 
     def __update_prob_w(self):
         if len(self.__children) > 0:
-            # two_to_pow = mp.power(2, len(self.context_pattern))
-            # factor = mpf(1.) / two_to_pow
+            two_to_pow = mp.power(2, len(self.context_pattern))
+            factor = mpf(1.) / two_to_pow
             # factor = mpf(1.) / 2
             child_prob_w = mpf(0.)
             for i in self.children.values():
                 child_prob_w += i.prob_w
-            if len(self.children)<3:
-                child_prob_w+=  log(mpf(0.5))*(3-len(self.children))
+            # if len(self.children)<3:
+            #     child_prob_w+=  log(mpf(0.5))*(3-len(self.children))
 
-            # self.__prob_w = logaddexp(self.prob_e + log(1 - factor), child_prob_w + log(factor))
-            self.__prob_w = logaddexp(self.prob_e + log(0.5), child_prob_w + log(0.5))
+            self.__prob_w = logaddexp(self.prob_e + log(1 - factor), child_prob_w + log(factor))
+            # self.__prob_w = logaddexp(self.prob_e + log(0.5), child_prob_w + log(0.5))
         else:
             self.__prob_w = log(mpf(0.5))
+        assert  self.__prob_w<=log(1),f'e log probability is unbound for {self} with {self.__prob_e}'
+
 
     @property
     def prob_e(self):
@@ -142,6 +144,7 @@ class Node():
             self.__prob_e = log(0.5)
             del self.a
             del self.b
+        assert  self.__prob_e<=log(1),f'e log probability is unbound for {updated_key} with {self.__prob_e}'
 
     def update_w(self):
         stack = [self]
@@ -274,4 +277,4 @@ class Node():
         print(out.decode('utf-8-sig'))
 
     def get_log_prob_w(self, *kwars):
-        return self.prob_w / mpmath.log(2.)
+        return self.prob_w / log(2.)
