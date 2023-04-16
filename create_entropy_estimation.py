@@ -61,12 +61,12 @@ class EntropyEstimation():
             with open('entropy_unbound_log.txt', 'a') as file:
                 file.write(f'{self.tag}\t{self.file_name}\t{str(e)}\n')
             raise e
-        self.entropy = b.get_entropy(len(self.s.astype(int).tolist()))
+        self.entropy = b.get_entropy(self.s.size)
         # self.__tree=b.to_dict()
 
     @property
     def log_prob(self):
-        return -self.entropy*len(self.s.astype(int).tolist())
+        return -self.entropy*self.s.size
 
     @property
     def tree(self):
