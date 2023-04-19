@@ -11,6 +11,8 @@ def pack_data():
         temp_path = os.path.join(src_path, m)
         for o_sim in os.listdir(os.path.join(temp_path)):
             sim=o_sim.replace('_'+m,'')
+            if sim not in sims:
+                continue
             # os.makedirs(os.path.join(dest_path,sim),exist_ok=True)
             for f in os.listdir(os.path.join(temp_path,o_sim)):
                 if '.h5' in f:
