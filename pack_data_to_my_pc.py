@@ -21,6 +21,7 @@ def pack_data():
                     print(os.path.join(src_path,m,o_sim,f),os.path.join(dest_path,sim,m,f))
     shutil.make_archive(f'{dest_path}', 'zip', dest_path)
     shutil.rmtree(dest_path)
+if __name__ == '__main__':
 
-s = SlurmJobFactory('cluster_logs')
-s.send_job_for_function('packing_data..','pack_data_to_my_pc','pack_data',[])
+    s = SlurmJobFactory('cluster_logs')
+    s.send_job_for_function('packing_data..','pack_data_to_my_pc','pack_data',[])
