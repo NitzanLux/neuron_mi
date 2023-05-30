@@ -6,9 +6,9 @@ import pickle
 from utils.parse_file import parse_sim_experiment_file
 data = dict()
 # for r,d,_ in os.walk(os.path.join("simulation","data")):
-for r,_,_ in os.walk(os.path.join("simulation","data")):
+for r,p,_ in os.walk(os.path.join("simulation","data")):
     data[r]=dict()
-    print(r)
+    print(p)
 
     for f in r:
         _, s, v = parse_sim_experiment_file(f)
