@@ -12,7 +12,7 @@ for r,_,_ in os.walk(base_path):
     data[r]=dict()
     print(r)
     for f in r:
-        _, s, v = parse_sim_experiment_file(f)
+        _, s, v = parse_sim_experiment_file(os.path.join(base_path,f))
         # print(s)
         data[r][f] = s
 with open('spikes_datar.pkl','wb') as f:
