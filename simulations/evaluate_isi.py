@@ -21,7 +21,7 @@ for _,d,_ in os.walk(base_path):
                     _, s, v = parse_sim_experiment_file(os.path.join(r_d,d_ff))
                 # print(s)
                     data[d_m][d_ff] = s
-                except:
+                except FileNotFoundError:
                     continue
 with open('spikes_datar.pkl','wb') as f:
     pickle.dump(data,f)
