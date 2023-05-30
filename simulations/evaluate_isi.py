@@ -16,8 +16,11 @@ for _,d,_ in os.walk(base_path):
         for r_d,d_f,_ in os.walk(os.path.join(base_path,d_m)):
             for d_ff in d_f:
                 # for r,d_a,f in os.walk(os.path.join(base_path,d_f)):
-                _, s, v = parse_sim_experiment_file(os.path.join(r_d,d_ff))
+                try:
+                    _, s, v = parse_sim_experiment_file(os.path.join(r_d,d_ff))
                 # print(s)
-                data[d_m][d_ff] = s
+                    data[d_m][d_ff] = s
+                except:
+                    continue
 with open('spikes_datar.pkl','wb') as f:
     pickle.dump(data,f)
