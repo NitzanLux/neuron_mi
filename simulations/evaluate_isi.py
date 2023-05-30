@@ -9,7 +9,7 @@ data = dict()
 for r,_,_ in os.walk(os.path.join("simulation","data")):
     data[r]=dict()
     for f in r:
-        _, s, v = parse_sim_experiment_file
+        _, s, v = parse_sim_experiment_file(f)
         data[r][f] = s
 with open('spikes_datar.pkl','wb') as f:
     pickle.dump(data,f)
