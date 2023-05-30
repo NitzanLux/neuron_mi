@@ -30,4 +30,4 @@ def pack():
 
 if __name__ == '__main__':
     s= SlurmJobFactory("cluster_logs")
-    s.send_job_for_function("isi_stat",'evaluate_isi','pack')
+    s.send_job_for_function("isi_stat",'evaluate_isi','pack',[])
