@@ -8,12 +8,15 @@ data = dict()
 # for r,d,_ in os.walk(os.path.join("simulation","data")):
 # print([(i,p,j) for i,p,j in os.walk(os.path.join("simulations","data"))])
 base_path = os.path.join("simulations","data")
-for r,d,_ in os.walk(base_path):
+for _,d,_ in os.walk(base_path):
     data[d]=dict()
     print(d)
-    for f in d:
-        _, s, v = parse_sim_experiment_file(os.path.join(base_path,f))
-        # print(s)
-        data[d][f] = s
+    for d_m in d:
+        for r_d,d_f,_ in os.walk(os.path.join(base_path,d_m)):
+            for d_ff in d_f:
+                # for r,d_a,f in os.walk(os.path.join(base_path,d_f)):
+                _, s, v = parse_sim_experiment_file(os.path.join(r_d,d_ff))
+                # print(s)
+                data[d_f][d_f] = s
 with open('spikes_datar.pkl','wb') as f:
     pickle.dump(data,f)
