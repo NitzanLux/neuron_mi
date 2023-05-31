@@ -43,7 +43,12 @@ def parse_sim_experiment_file_ido(sim_experiment_folder, print_logs=False):
     output_spikes_for_window[spike_times.astype(int)] = 1
     return all_weighted_spikes_for_window, output_spikes_for_window, somatic_voltage
 
-
+def get_spikes(sim_experiment_folder):
+    if not os.path.exists(f'{sim_experiment_folder}/summary.pkl'):
+        return
+    summary = pickle.load(open(f'{sim_experiment_folder}/summary.pkl', 'rb'))
+    spike_times = summary['output_spike_times']
+    return spike_times
 
 def parse_sim_experiment_file(sim_experiment_file):
     if not os.path.isfile(sim_experiment_file):

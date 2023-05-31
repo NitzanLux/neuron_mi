@@ -4,7 +4,7 @@ import os
 import pickle
 # from .. import utils as u
 from tqdm import tqdm
-from utils.parse_file import parse_sim_experiment_file
+from utils.parse_file import get_spikes
 from utils.slurm_job import SlurmJobFactory
 def pack():
     data = dict()
@@ -18,13 +18,11 @@ def pack():
 
             for r_d,d_f,_ in os.walk(os.path.join(base_path,d_m)):
                 for d_ff in tqdm(d_f):
-                    # for r,d_a,f in os.walk(os.path.join(base_path,d_f)):
-                    try:
-                        _, s, v = parse_sim_experiment_file(os.path.join(r_d,d_ff))
-                    # print(s)
+
+                    s = get_spikes(os.path.join(r_d,d_ff))
+                    if s is not None:
                         data[d_m][d_ff] = s
-                    except FileNotFoundError:
-                        continue
+
     with open('spikes_datar.pkl','wb') as f:
         pickle.dump(data,f)
 
