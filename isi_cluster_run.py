@@ -46,7 +46,7 @@ def create_graphs():
     plt.savefig(os.path.join(cur_path,"isi_eval_cv_graph.png"))
     plt.show()
     spike_arr = []
-    spike_np = np.cumsum(r_arr)
+    spike_np = [np.cumsum(i) for i in r_arr]
     plt.eventplot(spike_np)  # , color=colorCodes, linelengths=lineSize)
     plt.title('Spike raster plot')
     plt.xlabel('Neuron')
@@ -72,4 +72,4 @@ def create_graphs():
     plt.show()
 if __name__ == '__main__':
     s= SlurmJobFactory("cluster_logs")
-    s.send_job_for_function("cv_vs_en","isi_cluster_run","create_graphs",[])
+    s.send_job_for_function(f"cv_vs_en_{np.random.randint(0,10000)}","isi_cluster_run","create_graphs",[])
