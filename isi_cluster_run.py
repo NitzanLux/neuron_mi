@@ -25,7 +25,7 @@ def create_graphs():
     max_x=max(x)
     middel_x_f=lambda p:(max_x-min_x)*p+min_x
     traces_to_plot=[min_x,middel_x_f(0.25),middel_x_f(0.5),middel_x_f(0.75),max_x]
-
+    plt.clf()
     for i in x:
         r= genereate_less_regular(i)
         r_a=np.array(r).cumsum()
@@ -45,6 +45,8 @@ def create_graphs():
 
     plt.savefig(os.path.join(cur_path,"isi_eval_cv_graph.png"))
     plt.show()
+    plt.clf()
+
     spike_arr = []
     spike_np = [np.cumsum(i) for i in r_arr]
     plt.eventplot(spike_np)  # , color=colorCodes, linelengths=lineSize)
@@ -53,6 +55,8 @@ def create_graphs():
     plt.ylabel('Spike')
     plt.savefig(os.path.join(cur_path, "spikes_raster.png"))
     plt.show()
+    plt.clf()
+
     print(np.argmin(np.abs(np.array(cv_arr)-1)))
     r_ent=[]
     for x_v,r in zip(x,r_arr):
@@ -70,6 +74,8 @@ def create_graphs():
 
     plt.savefig(os.path.join(cur_path,"isi_eval_cv_graph.png"))
     plt.show()
+    plt.clf()
+
 if __name__ == '__main__':
     s= SlurmJobFactory("cluster_logs")
     s.send_job_for_function(f"cv_vs_en_{np.random.randint(0,10000)}","isi_cluster_run","create_graphs",[])
