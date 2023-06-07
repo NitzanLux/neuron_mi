@@ -10,7 +10,7 @@ from utils.slurm_job import SlurmJobFactory
 def create_graphs():
     size=6000
     jumps=100
-    cur_path=os.path.join("plots","cv_vs_ent_plots",f"plots_{size}_{jumps}_{np.ranom.randint(0,10000)}")
+    cur_path=os.path.join("plots","cv_vs_ent_plots",f"plots_{size}_{jumps}_{np.random.randint(0,10000)}")
     os.makedirs(cur_path,exist_ok=True)
     a_regular = np.zeros((size,))+jumps
     print(a_regular.std() / a_regular.mean())
