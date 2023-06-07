@@ -1,6 +1,6 @@
 import glob
 import os
-from project_path import *
+# from project_path import *
 from typing import List, Tuple
 import re
 # import neuron_network.node_network.recursive_neuronal_model as recursive_neuronal_model
