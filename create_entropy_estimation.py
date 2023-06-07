@@ -217,7 +217,7 @@ def get_entropy(tag, pathes, file_index_start, use_v, use_s):
         queue = Queue(maxsize=number_of_jobs)
         process = [
             Process(target=create_sample_entropy_file_multiprocessing, args=(
-            queue, tag, use_v, use_s)) for i
+            queue, tag, use_v, use_s),daemon=False) for i
             in range(number_of_jobs)]
         print('starting')
         for j, fp in enumerate(pathes):

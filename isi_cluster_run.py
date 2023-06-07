@@ -1,0 +1,74 @@
+import os
+
+import matplotlib.pyplot as plt
+
+import entropy as ent
+from entropy.CTW.CTW import UnboundProbabilityException
+from tqdm import tqdm
+import numpy as np
+from utils.slurm_job import SlurmJobFactory
+def create_graphs():
+    size=6000
+    jumps=100
+    cur_path=os.path.join("plots","cv_vs_ent_plots",f"plots_{size}_{jumps}_{np.ranom.randint(0,10000)}")
+    os.makedirs(cur_path,exist_ok=True)
+    a_regular = np.zeros((size,))+jumps
+    print(a_regular.std() / a_regular.mean())
+
+    genereate_less_regular = lambda x: a_regular+np.random.randint(0,x,size=size) if x>0 else a_regular
+    c_cv = lambda x:x.std()/x.mean()
+    cv_arr = []
+    max_length=0
+    r_arr=[]
+    x=list(range(size//4))
+    min_x=min(x)
+    max_x=max(x)
+    middel_x_f=lambda p:(max_x-min_x)*p+min_x
+    traces_to_plot=[min_x,middel_x_f(0.25),middel_x_f(0.5),middel_x_f(0.75),max_x]
+
+    for i in x:
+        r= genereate_less_regular(i)
+        r_a=np.array(r).cumsum()
+        # r_a=r_a-r_a[0]
+        mask=size-r_a
+        mask[mask<0]=None
+        r = r[:np.nanargmin(np.abs(mask))]
+        max_length=max(max_length,r_a[r.shape[0]])
+        r_arr.append(r)
+        # print(r.sum())
+        cv_arr.append(c_cv(r))
+    print(max_length)
+    plt.scatter(x,cv_arr,s=0.1)
+    plt.title("CV as function of jitter")
+    plt.xlabel("Jitter")
+    plt.ylabel("CV")
+
+    plt.savefig(os.path.join(cur_path,"isi_eval_cv_graph.png"))
+    plt.show()
+
+    print(np.argmin(np.abs(np.array(cv_arr)-1)))
+    r_ent=[]
+    for x_v,r in zip(x,r_arr):
+        z=np.zeros((int(max_length+1),))
+        r=np.cumsum(r).astype(int)
+        z[r]=1
+        print(x_v)
+        if x_v in traces_to_plot:
+            plt.plot(z)
+            plt.title(f"Trace with jitter: {int(x_v)}")
+            plt.savefig(os.path.join(cur_path, f"trace_jitter_{int(x_v)}.png"))
+            plt.show()
+        b = ent.CTW()
+        tqdm(b.insert_pattern(z.astype(int).tolist()), disable=True)
+        r_ent.append(b.get_entropy(max_length))
+
+    plt.plot(x,r_ent)
+    plt.title("Entropy as function of jitter")
+    plt.xlabel("Jitter")
+    plt.ylabel("Entropy")
+
+    plt.savefig(os.path.join(cur_path,"isi_eval_cv_graph.png"))
+    plt.show()
+if __name__ == '__main__':
+    s= SlurmJobFactory("cluster_logs")
+    s.send_job_for_function("cv_vs_en","isi_cluster_run","create_graphs",[])
