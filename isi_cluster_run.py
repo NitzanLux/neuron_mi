@@ -45,19 +45,20 @@ def create_graphs():
 
     plt.savefig(os.path.join(cur_path,"isi_eval_cv_graph.png"))
     plt.show()
-
+    spike_arr = []
+    spike_np = np.cumsum(r_arr)
+    plt.eventplot(spike_np)  # , color=colorCodes, linelengths=lineSize)
+    plt.title('Spike raster plot')
+    plt.xlabel('Neuron')
+    plt.ylabel('Spike')
+    plt.savefig(os.path.join(cur_path, "spikes_raster.png"))
+    plt.show()
     print(np.argmin(np.abs(np.array(cv_arr)-1)))
     r_ent=[]
     for x_v,r in zip(x,r_arr):
-        z=np.zeros((int(max_length+1),))
-        r=np.cumsum(r).astype(int)
+        z = np.zeros((int(max_length+1),))
+        r = np.cumsum(r).astype(int)
         z[r]=1
-        print(x_v)
-        if x_v in traces_to_plot:
-            plt.plot(z)
-            plt.title(f"Trace with jitter: {int(x_v)}")
-            plt.savefig(os.path.join(cur_path, f"trace_jitter_{int(x_v)}.png"))
-            plt.show()
         b = ent.CTW()
         tqdm(b.insert_pattern(z.astype(int).tolist()), disable=True)
         r_ent.append(b.get_entropy(max_length))
