@@ -21,4 +21,4 @@ data = {
 df = pd.DataFrame(data)
 
 # Save the DataFrame into an Excel file
-df.to_excel("table.xlsx", index=False)
+df.to_csv("table.xlsx", index=False)

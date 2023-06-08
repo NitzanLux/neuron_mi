@@ -20,7 +20,7 @@ def create_graphs():
     cv_arr = []
     max_length=0
     r_arr=[]
-    x=list(range(size//4))
+    x=list(range(jumps*2))
     min_x=min(x)
     max_x=max(x)
     middel_x_f=lambda p:(max_x-min_x)*p+min_x
@@ -72,7 +72,7 @@ def create_graphs():
     plt.xlabel("Jitter")
     plt.ylabel("Entropy")
 
-    plt.savefig(os.path.join(cur_path,"isi_eval_cv_graph.png"))
+    plt.savefig(os.path.join(cur_path,"isi_eval_ent_graph.png"))
     plt.show()
     plt.clf()
 
