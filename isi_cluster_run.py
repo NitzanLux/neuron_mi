@@ -50,7 +50,7 @@ def create_graphs():
 
     spike_arr = []
     spike_np = [np.cumsum(i) for i in r_arr]
-    plt.eventplot(spike_np)  # , color=colorCodes, linelengths=lineSize)
+    plt.scatter(x,spike_np)  # , color=colorCodes, linelengths=lineSize)
     plt.title('Spike raster plot')
     plt.xlabel('Neuron')
     plt.ylabel('Spike')
