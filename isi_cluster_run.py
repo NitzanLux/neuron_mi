@@ -8,7 +8,7 @@ from tqdm import tqdm
 import numpy as np
 from utils.slurm_job import SlurmJobFactory
 def create_graphs():
-    size=6000
+    size=1000
     jumps=100
     cur_path=os.path.join("plots","cv_vs_ent_plots",f"plots_{size}_{jumps}_{np.random.randint(0,10000)}")
     os.makedirs(cur_path,exist_ok=True)
@@ -30,9 +30,9 @@ def create_graphs():
         r= genereate_less_regular(i)
         r_a=np.array(r).cumsum()
         # r_a=r_a-r_a[0]
-        mask=size-r_a
-        mask[mask<0]=None
-        r = r[:np.nanargmin(np.abs(mask))]
+        # mask=size-r_a
+        # mask[mask<0]=None
+        # r = r[:np.nanargmin(np.abs(mask))]
         max_length=max(max_length,r_a[r.shape[0]])
         r_arr.append(r)
         # print(r.sum())
@@ -76,6 +76,10 @@ def create_graphs():
     plt.show()
     plt.clf()
 
+# if __name__ == '__main__':
+#     s= SlurmJobFactory("cluster_logs")
+#     s.send_job_for_function(f"cv_vs_en_{np.random.randint(0,10000)}","isi_cluster_run","create_graphs",[])
+#
 if __name__ == '__main__':
-    s= SlurmJobFactory("cluster_logs")
-    s.send_job_for_function(f"cv_vs_en_{np.random.randint(0,10000)}","isi_cluster_run","create_graphs",[])
+
+    create_graphs()
