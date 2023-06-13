@@ -33,7 +33,8 @@ def create_graphs():
         # mask=size-r_a
         # mask[mask<0]=None
         # r = r[:np.nanargmin(np.abs(mask))]
-        max_length=max(max_length,r_a[r.shape[0]])
+        # max_length=max(max_length,r_a[r.shape[0]])
+        max_length=max(max_length,r_a[-1])
         r_arr.append(r)
         # print(r.sum())
         cv_arr.append(c_cv(r))
