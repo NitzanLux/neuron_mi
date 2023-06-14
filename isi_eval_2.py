@@ -107,6 +107,6 @@ def create_graphs():
 
 if __name__ == '__main__':
     s= SlurmJobFactory("cluster_logs")
-    s.send_job_for_function(f"cv_vs_en_{np.random.randint(0,10000)}","isi_cluster_run","create_graphs",[])
+    s.send_job_for_function(f"cv_vs_en_{np.random.randint(0,10000)}","isi_eval_2","create_graphs",[])
 
 
