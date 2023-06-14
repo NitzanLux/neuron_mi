@@ -88,7 +88,7 @@ def create_graphs():
     i=0
     for x_v, r in zip(parameters, ):
         template = np.zeros((max_val - min_val,))
-        template_pos = s_data_c[, :]
+        template_pos = s_data_c[i, :]
         template[template_pos - min_val] = 1
         # template_pos[r] = 1
         b = ent.CTW()
