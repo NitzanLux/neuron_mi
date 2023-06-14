@@ -69,7 +69,7 @@ def create_graphs():
     print(s_data.shape)
     # x_scatter = np.repeat(np.arange(r_arr.shape[1])[np.newaxis,:],r_arr.shape[0],axis=0)
     # np.cumsum(s_data,axis=1)
-    plt.eventplot(np.cumsum(s_data, axis=1),linewidths=0.4)
+    plt.scatter(np.cumsum(s_data, axis=1),linewidths=0.4)
     plt.yticks(np.arange(0, s_data.shape[0], s_data.shape[0] // 10), parameters[::s_data.shape[0] // 10].astype(int))
     plt.title('Spike raster plot')
     plt.xlabel('Neuron')
