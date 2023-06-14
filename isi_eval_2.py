@@ -85,8 +85,8 @@ def create_graphs():
     max_val=np.max(s_data_c)
 
     r_ent = []
-    i=0
-    for x_v, r in zip(parameters, ):
+    # i=0
+    for i,p in enumerate(parameters):
         template = np.zeros((max_val - min_val,))
         template_pos = s_data_c[i, :]
         template[template_pos - min_val] = 1
@@ -94,7 +94,7 @@ def create_graphs():
         b = ent.CTW()
         tqdm(b.insert_pattern(template.astype(int).tolist()), disable=True)
         r_ent.append(b.get_entropy(max_val-min_val))
-        i+=1
+        # i+=1
 
     plt.plot(parameters, r_ent)
     plt.title("Entropy as function of jitter")
