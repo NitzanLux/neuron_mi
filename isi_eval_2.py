@@ -87,7 +87,7 @@ def create_graphs():
     r_ent = []
     # i=0
     for i,p in enumerate(parameters):
-        template = np.zeros((max_val - min_val,))
+        template = np.zeros((max_val - min_val+1,))
         template_pos = s_data_c[i, :]
         template[template_pos - min_val] = 1
         # template_pos[r] = 1
