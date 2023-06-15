@@ -52,6 +52,7 @@ def create_graphs():
     # Plot CVs
     plt.ylim([0.95 * min(predicted_cvs), 1.05 * max(predicted_cvs)])
     plt.scatter(parameters, cvs, s=10, label='Data')
+
     plt.plot(parameters, predicted_cvs, color='red', linewidth=2, label=f'Fit: y={slope:.2f}x+{intercept:.2f}')
     plt.title('Coefficient of Variation as a Function of Parameter')
     plt.xlabel('Parameter')
@@ -69,7 +70,13 @@ def create_graphs():
     print(s_data.shape)
     x_scatter = np.repeat(np.arange(s_data.shape[0])[np.newaxis,:],s_data.shape[1],axis=0)
     # np.cumsum(s_data,axis=1)
-    plt.scatter(x_scatter,np.cumsum(s_data, axis=1),s=0.3)
+    for i in range(s_data.shape[0]):
+        plt.scatter(np.cumsum(s_data[i, :]), i + np.zeros_like(s_data[i, :]), linewidths=0.4, marker='|')
+
+    plt.yticks(np.arange(0, s_data.shape[0], s_data.shape[0] // 10), parameters[::s_data.shape[0] // 10].astype(int))
+    # plt.title('Scatter Eventplot')
+    # plt.show()
+    # plt.scatter(x_scatter,np.cumsum(s_data, axis=1),s=0.3)
     plt.yticks(np.arange(0, s_data.shape[0], s_data.shape[0] // 10), parameters[::s_data.shape[0] // 10].astype(int))
     plt.title('Spike raster plot')
     plt.xlabel('Neuron')
