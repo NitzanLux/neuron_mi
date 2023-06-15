@@ -16,7 +16,7 @@ from utils.slurm_job import SlurmJobFactory
 def create_graphs():
     # Set parameters
     mean = 100
-    num_samples = 300
+    num_samples = 100
     max_param_value = 300
     num_steps = 20
     cur_path = os.path.join("plots", "cv_vs_ent_plots", f"plots_s_{num_samples}_m_{mean}_mv_{max_param_value}_ns_{num_steps}_{np.random.randint(0, 10000)}")
