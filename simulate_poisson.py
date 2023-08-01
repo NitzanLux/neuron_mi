@@ -29,12 +29,14 @@ def create_spike_trains_r(l,size,time_interval=1000):
     return np.random.binomial(1,float(l)/s,size)
 
 def simulate_poisson(number):
-    N = [2500,5000,10000,40000]
+    N = [2500,5000]#,10000,40000]
     l = np.arange(0,1000,100)#, 100)
     # l[0]=1
     # l=[1,5,10,20,50,100]
     anlytical=[]
-
+    fig, ax = plt.subplots(1)
+    fig.set_figwidth(16)
+    fig.set_figheight(16)
     for j, n in enumerate(N):
         y = []
         for i in l:
@@ -44,12 +46,10 @@ def simulate_poisson(number):
             ctw=CTW()
             ctw.insert_pattern(s)
             y.append(ctw.get_entropy(n))
-        plt.plot(l,y,label=f'{str(n)}',alpha=0.5)
-    fig, ax = plt.subplots(1)
-    fig.set_figwidth(16)
-    fig.set_figheight(16)
+        ax.plot(l,y,label=f'{str(n)}',alpha=0.5)
+
     ax.plot(l,anlytical,label='analytical')
-    ax.legend(title='CTW Entropy Approximation as Function of Sequence length')
+    plt.title('CTW Entropy Approximation as Function of Sequence length')
     ax.set_xlabel('$lambda$')
     ax.set_ylabel('Entropy')
     plt.savefig(os.path.join('plots',f'results_{number}.png'))
