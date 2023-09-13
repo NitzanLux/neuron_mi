@@ -42,7 +42,7 @@ SIMULATIONS_PATH = '/ems/elsc-labs/segev-i/nitzan.luxembourg/projects/dendritic_
 
 
 class EntropyEstimation():
-    def __init__(self, tag, file_name, file_index, sim_index, s, v,entropy=None,_tree=None):
+    def __init__(self, tag, file_name, file_index, sim_index, s, v,entropy=None,_tree=None,uniform_sample=None,mixture_sample=None,entropy_mixture_sample=None,entropy_uniform_sample=None):
         self.s = s
         self.v = v
         self.tag = tag
@@ -50,10 +50,35 @@ class EntropyEstimation():
         self.sim_index = sim_index
         self.file_name = file_name
         self.entropy=entropy
+        self.entropy_mixture_sample=entropy_mixture_sample
+        self.entropy_uniform_sample=entropy_uniform_sample
         self.__tree=_tree
+        self.uniform_sample, self.mixture_sample = uniform_sample, mixture_sample
+        if uniform_sample is None and mixture_sample is None:
+            self.generate_y_z(s)
+    def generate_y_z(self,X):
+        X=X.astype(int).tolist()
+        n = len(X)
+        s = sum(X)
+        # Ensure s is valid
+        if s > n:
+            raise ValueError("s cannot be greater than the length of X")
+        # Generate a sample for Y with s ones
+        Y = np.zeros(n, dtype=int)
+        ones_positions = np.random.choice(n, s, replace=False)
+        Y[ones_positions] = 1
 
+        # Calculate Z based on X and Y
+        Z = np.zeros(n, dtype=int)
+        for i in range(n):
+            if X[i] == Y[i]:
+                Z[i] = X[i]
+            else:
+                Z[i] = np.random.choice([X[i], Y[i]])
+        self.uniform_sample = Y
+        self.mixture_sample = Z
 
-    def build_tree(self):
+    def build_tree(self,include_mixture=True,include_uniform=True):
         b = ent.CTW()
         try:
             b.insert_pattern(self.s.astype(int).tolist())
@@ -62,6 +87,24 @@ class EntropyEstimation():
                 file.write(f'{self.tag}\t{self.file_name}\t{str(e)}\n')
             raise e
         self.entropy = b.get_entropy(self.s.size)
+        if include_mixture:
+            b = ent.CTW()
+            try:
+                b.insert_pattern(self.mixture_sample.astype(int).tolist())
+            except UnboundProbabilityException as e:
+                with open('entropy_unbound_log.txt', 'a') as file:
+                    file.write(f'{self.tag}\t{self.file_name}\t{str(e)}\n mixture_sample')
+                raise e
+            self.entropy_mixture_sample = b.get_entropy(self.mixture_sample.size)
+        if include_uniform:
+            b = ent.CTW()
+            try:
+                b.insert_pattern(self.uniform_sample.astype(int).tolist())
+            except UnboundProbabilityException as e:
+                with open('entropy_unbound_log.txt', 'a') as file:
+                    file.write(f'{self.tag}\t{self.file_name}\t{str(e)}\n uniform_sample')
+                raise e
+            self.entropy_uniform_sample = b.get_entropy(self.uniform_sample.size)
         # self.__tree=b.to_dict()
 
     @property
@@ -104,6 +147,10 @@ class EntropyEstimation():
                          file_index=self.file_index,
                          _tree=None if ignore_tree else self.__tree,
                          sim_index=self.sim_index,
+                         mixture_sample=self.mixture_sample,
+                         uniform_sample=self.uniform_sample,
+                         entropy_mixture_sample=self.entropy_mixture_sample,
+                         entropy_uniform_sample=self.entropy_uniform_sample,
                          file_name=self.file_name)
         return data_dict
 
