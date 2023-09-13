@@ -88,6 +88,7 @@ class EntropyEstimation():
             raise e
         self.entropy = b.get_entropy(self.s.size)
         if include_mixture:
+            print("building mixture")
             b = ent.CTW()
             try:
                 b.insert_pattern(self.mixture_sample.astype(int).tolist())
@@ -96,6 +97,9 @@ class EntropyEstimation():
                     file.write(f'{self.tag}\t{self.file_name}\t{str(e)}\n mixture_sample')
                 raise e
             self.entropy_mixture_sample = b.get_entropy(self.mixture_sample.size)
+        else:
+            print("no mixture")
+
         if include_uniform:
             b = ent.CTW()
             try:
@@ -253,6 +257,7 @@ def create_sample_entropy_file(data, tag, use_v=True, use_s=True):
             eo.save()
             t = time.time()
             print(f"current sample number {f} {index}  total: {time.time() - t} seconds", flush=True)
+
 
 def get_entropy(tag, pathes, file_index_start, use_v, use_s):
     number_of_jobs = min(number_of_cpus - 1, len(pathes))
