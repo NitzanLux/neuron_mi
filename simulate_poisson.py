@@ -42,13 +42,14 @@ def simulate_poisson(number):
         for i in l:
             if j==0:
                 anlytical.append(binary_ent(i, 1000))
+
             s=create_spike_trains_r(i,n)
             ctw=CTW()
             ctw.insert_pattern(s)
             y.append(ctw.get_entropy(n))
-        ax.plot(l,y,label=f'{str(n)}',alpha=0.5)
-    plt.legend(title = "Sequence length")
+        ax.plot([float(i)/float(n) for i in l],y,label=f'{str(n)}',alpha=0.5)
     ax.plot(l,anlytical,label='analytical')
+    plt.legend(title = "Sequence length")
     plt.title('CTW Entropy Approximation as Function of the Poisson Parameter')
     ax.set_xlabel('$lambda$')
     ax.set_ylabel('Entropy')
