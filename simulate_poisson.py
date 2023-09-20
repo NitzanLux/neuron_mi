@@ -30,7 +30,7 @@ def create_spike_trains_r(l,size,time_interval=1000):
 
 def simulate_poisson(number):
     N = [2500,5000,10000]
-    l = np.arange(0,1000,50)#, 100)
+    l = np.arange(0,1001,50)#, 100)
     # l[0]=1
     # l=[1,5,10,20,50,100]
     anlytical=[]
@@ -40,15 +40,15 @@ def simulate_poisson(number):
     for j, n in enumerate(N):
         y = []
         for i in l:
-            if j==0:
-                anlytical.append(binary_ent(i, 1000))
+            # if j==0:
+            #     anlytical.append(binary_ent(i, 1000))
 
-            s=create_spike_trains_r(i,n)
+            s=create_spike_trains_r(i,n,1000)
             ctw=CTW()
             ctw.insert_pattern(s)
             y.append(ctw.get_entropy(n))
         ax.plot([float(i)/float(n) for i in l],y,label=f'{str(n)}',alpha=0.5)
-    ax.plot(l,anlytical,label='analytical')
+    ax.plot(np.linspace(0,1,5000),[binary_ent(i,1000) for i in np.linspace(0,1,5000)],label='analytical')
     plt.legend(title = "Sequence length")
     plt.title('CTW Entropy Approximation as Function of the Poisson Parameter')
     ax.set_xlabel('$lambda$')
