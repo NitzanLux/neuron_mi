@@ -43,7 +43,7 @@ def simulate_poisson(number):
             # if j==0:
             #     anlytical.append(binary_ent(i, 1000))
 
-            s=create_spike_trains_r(i,n,1000)
+            s=create_spike_trains_r(i,1000,n)
             ctw=CTW()
             ctw.insert_pattern(s)
             y.append(ctw.get_entropy(n))
