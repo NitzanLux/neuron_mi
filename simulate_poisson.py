@@ -16,6 +16,8 @@ binomial_ent = lambda p,n: (1./2.)*np.log(2*np.pi*np.exp(1)*n*p*(1-p))
 #     return d
 def binary_ent(l, n):
     p=l/n
+    if p==0 or p==1:
+        return 0
     return -((1-p)*np.log2(1-p)+(p)*np.log2(p))
 def create_spike_trains_r(l,size,time_interval=1000):
     # l = size/l
